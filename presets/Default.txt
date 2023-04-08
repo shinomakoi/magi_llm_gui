@@ -1,0 +1,8 @@
+[Params]
+do_sample=True
+top_p=0.5
+top_k=40
+temperature=0.7
+repetition_penalty=1.5
+typical_p=1.0
+early_stopping=False
