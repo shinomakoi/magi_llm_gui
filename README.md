@@ -1,4 +1,4 @@
-# magi_llm_gui
+# Magi LLM GUI
 A QT GUI for large language models
 
 Currently works with https://github.com/oobabooga/text-generation-webui/
