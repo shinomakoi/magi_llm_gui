@@ -1,7 +1,7 @@
 # Magi LLM GUI
 A QT GUI for large language models
 
-Currently works with https://github.com/oobabooga/text-generation-webui/
+Currently works with https://github.com/oobabooga/text-generation-webui/ and https://github.com/ggerganov/llama.cpp
 
 Launch the WebUi with the ```--listen``` flag to enable the API and add ```--no-stream``` if you don't want to use streaming mode.
 
