@@ -9,6 +9,7 @@ import websockets
 # API non-streaming mode
 def textgen(params, server, prompt='Tea is the best drink there is because'):
 
+# Input prompt
     payload = json.dumps([prompt, params])
 
     response = requests.post(f"http://{server}:7860/run/textgen", json={
@@ -18,7 +19,7 @@ def textgen(params, server, prompt='Tea is the best drink there is because'):
     }).json()
 
     reply = response["data"][0]
-    # print(reply)
+    print(reply)
     return reply
 
 

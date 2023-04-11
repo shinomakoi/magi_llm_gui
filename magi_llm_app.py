@@ -1,12 +1,11 @@
 import asyncio
-# import configparser
 import glob
 import platform
 import sys
 from datetime import datetime
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import QSize, QThread, Signal, Slot
+from PySide6.QtCore import QProcess, QSize, QThread, Signal, Slot
 from PySide6.QtGui import *
 from PySide6.QtWidgets import QApplication
 
@@ -36,7 +35,6 @@ class WorkerThread(QThread):
                     self.resultReady.emit(response)
 
                 # Print final result
-                print('Final response:', response)
                 self.final_resultReady.emit(response)
 
             asyncio.run(get_result())
@@ -44,10 +42,11 @@ class WorkerThread(QThread):
         else:
             response = api_fetch.textgen(
                 self.ooba_params, self.ooba_server_ip, self.message)
-            print('Final response:', response)
 
             self.resultReady.emit(response)
             self.final_resultReady.emit(response)
+
+        print('Final response:', response)
 
 
 class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
@@ -68,7 +67,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             print(preset)
             self.paramsPresetsComboBox.addItem(preset)
             count += 1
-
+# ooba settings
         self.tempSlider.valueChanged.connect(
             lambda: self.tempSliderLabel.setText(str(self.tempSlider.value()/100)))
         self.top_pSlider.valueChanged.connect(
@@ -114,6 +113,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                      QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
+        self.llamacpp_process = None
+
         self.defaultGenerateButton.clicked.connect(
             lambda: self.textgen_switcher('default_mode'))
         self.notebookGenerateButton.clicked.connect(
@@ -123,12 +124,22 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.actionSettings.triggered.connect(
             lambda: self.settings_win.show())
-        self.actionExit.triggered.connect(lambda: app.quit())
+        self.actionExit.triggered.connect(app.exit)
+        self.actionStop.triggered.connect(self.stop_logic)
 
         self.chatPresetComboBox.currentTextChanged.connect(
             lambda: self.chat_preset_set())
 
         self.statusbar.showMessage(f"Status: Idle")
+
+    def stop_logic(self):
+        print('llama.cpp stop')
+        if self.llamacpp_process != None:
+            self.llamacpp_process_terminate()
+        # if self.workerThread.isRunning():
+        #     print('running')
+        # else:
+        #     print('not running')
 
     @Slot(str)
     def handleResult(self, reply):
@@ -146,10 +157,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def final_handleResult(self, reply):
 
         current_date = self.get_chat_date()
-        with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
+        with open(f"logs/chat_ooba_{current_date}.txt", "a", encoding='utf-8') as f:
             f.write('\n'+self.chatHistory.toPlainText())
 
-        self.statusbar.showMessage(f"Status: Generation complete")
+        self.statusbar.showMessage(f"Oobabooga: Generation complete")
 
     def chat_preset_set(self):
 
@@ -192,8 +203,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'length_penalty': self.settings_win.lengthpenaltySlider.value()/10,
             'early_stopping': self.settings_win.earlyStoppingCheck.isChecked(),
             'seed': self.settings_win.seedValue.value(),
+            'add_bos_token': True,
+            'custom_stopping_strings': [],
         }
-        print('Parameters:', ooba_params)
+
+        print('Oobabooga parameters:', ooba_params)
         return ooba_params, ooba_server_ip
 
     def get_chat_date(self):
@@ -208,13 +222,22 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         global textgen_mode
         textgen_mode = pre_textgen_mode
 
+        self.cppCheck.setEnabled(False)
+        self.oobaCheck.setEnabled(False)
+
         if pre_textgen_mode == 'default_mode':
             message = self.defaultTextInput.toPlainText()
-            self.launch_textgen(message)
+            if self.cppCheck.isChecked() == False:
+                self.launch_textgen(message)
+            else:
+                self.launch_llama_cpp(message)
 
         if pre_textgen_mode == 'notebook_mode':
             message = self.notebookHistory.toPlainText()
-            self.launch_textgen(message)
+            if self.cppCheck.isChecked() == False:
+                self.launch_textgen(message)
+            else:
+                self.launch_llama_cpp(message)
 
         if pre_textgen_mode == 'chat_mode':
             message = self.chatInput.toPlainText()
@@ -224,7 +247,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 bot_user_prefix = '### Assistant:'
 
             elif self.chatPresetComboBox.currentText() == 'Alpaca':
-                chat_user_prefix = '### Instruction:\n'
+                chat_user_prefix = '\n### Instruction:\n'
                 bot_user_prefix = '### Response:\n'
 
             elif self.chatPresetComboBox.currentText() == 'Default':
@@ -236,24 +259,31 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 bot_user_prefix = '<|endoftext|><|assistant|>'
 
             elif self.chatPresetComboBox.currentText() == 'Custom':
-                chat_user_prefix = f'{self.customChatUserPrefix.text()}: '
-                bot_user_prefix = f'{self.customChatBotPrefix.text()}:'
+                chat_user_prefix = self.customChatUserPrefix.text()
+                bot_user_prefix = self.customChatBotPrefix.text()
 
             if self.chatPresetComboBox.currentText() == 'Open Assistant':
                 self.chatHistory.append(
                     f"{chat_user_prefix}{message}{bot_user_prefix}")
             else:
-                self.chatHistory.append(f"{chat_user_prefix}{message}")
-                self.chatHistory.append(f"{bot_user_prefix}")
+                self.chatHistory.append(
+                    f"{chat_user_prefix}{message}")
+                self.chatHistory.append(
+                    f"{bot_user_prefix}")
+
+            message = self.chatHistory.toPlainText()
+            # message += '\n'
+
+            if self.cppCheck.isChecked() == False:
+                self.launch_textgen(message)
+            else:
+                self.launch_llama_cpp(message)
 
             self.chatInput.clear()
-            message = self.chatHistory.toPlainText()
-
-            self.launch_textgen(message)
 
     def launch_textgen(self, message):
         ooba_params, ooba_server_ip = self.get_params()
-        self.statusbar.showMessage(f"Status: Generating...")
+        self.statusbar.showMessage(f"Oobabooga: Generating...")
 
         self.workerThread = WorkerThread(
             ooba_params, ooba_server_ip, message, self.streamEnabledCheck.isChecked())
@@ -263,6 +293,79 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.workerThread.finished.connect(self.workerThread.deleteLater)
         # Start the thread
         self.workerThread.start()
+
+    def handleOutput(self):
+        output = self.llamacpp_process.readAllStandardOutput().data().decode()
+
+        # Get the current cursor of the QPlainTextEdit
+        if textgen_mode == 'default_mode':
+            cursor = self.defaultTextHistory.textCursor()
+        elif textgen_mode == 'notebook_mode':
+            cursor = self.notebookHistory.textCursor()
+        elif textgen_mode == 'chat_mode':
+            cursor = self.chatHistory.textCursor()
+
+        cursor.movePosition(QTextCursor.End)  # Move it to the end
+        cursor.insertText(output)  # Insert the text at the current position
+        # self.defaultTextHistory.ensureCursorVisible() # Ensure that the cursor is visible
+
+    def launch_llama_cpp(self, message):
+        print('llama.cpp start')
+
+        llama_cpp_args = [
+            '-m', self.cppModelPath.text(),
+            '-t', self.settings_win.cppThreads.text(),
+            '--n_predict', str(self.settings_win.maxnewtokensSlider.value()),
+            '--top_k', str(self.settings_win.top_kSlider.value()),
+            '--top_p', str(self.settings_win.top_pSlider.value()/100),
+            '--repeat_last_n', str(
+                self.settings_win.CPP_repeat_last_nSlider.value()),
+            '--repeat_penalty', str(
+                self.settings_win.reppenaltySlider.value()/100),
+            '--ctx_size', str(self.settings_win.CPP_ctxsize_Slider.value()),
+            '--temp', str(self.settings_win.tempSlider.value()/100),
+            '--batch_size', str(self.settings_win.cppBatchSizeSlider.value()),
+            '-p', message
+        ]
+
+        if self.llamacpp_process is None:
+
+            print('llama_cpp_args:', llama_cpp_args)
+
+            self.llamacpp_process = QProcess(self)
+            self.llamacpp_process.readyReadStandardOutput.connect(
+                self.handleOutput)
+            self.llamacpp_process.finished.connect(
+                self.llamacpp_process_finished)
+
+            self.llamacpp_process.start(
+                self.cppBinaryPath.text(), llama_cpp_args)
+
+            if textgen_mode == 'default_mode':
+                self.defaultTextHistory.clear()
+            if textgen_mode == 'notebook_mode':
+                self.notebookHistory.clear()
+            if textgen_mode == 'chat_mode':
+                self.chatHistory.clear()
+
+            self.statusbar.showMessage(f"llama.cpp: Generating...")
+
+    def llamacpp_process_terminate(self):
+        if self.llamacpp_process != None:
+            self.llamacpp_process.terminate()
+            self.llamacpp_process = None
+            print('llama.cpp: Stopped')
+            self.statusbar.showMessage(f"llama.cpp: Stopped")
+
+    def llamacpp_process_finished(self):
+        current_date = self.get_chat_date()
+
+        with open(f"logs/chat_lcpp_{current_date}.txt", "a", encoding='utf-8') as f:
+            f.write('\n'+self.chatHistory.toPlainText())
+
+        self.llamacpp_process = None
+        print('llama.cpp: Finished')
+        self.statusbar.showMessage(f"llama.cpp: Finished")
 
 
 if __name__ == "__main__":
@@ -278,3 +381,5 @@ if __name__ == "__main__":
 
     # Start the Qt event loop
     app.exec()
+
+    # pyside6-uic ui_settings.ui > settings_window.py; pyside6-uic magi_llm_ui.ui > ui_magi_llm_ui.py
