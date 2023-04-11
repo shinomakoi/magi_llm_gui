@@ -381,5 +381,3 @@ if __name__ == "__main__":
 
     # Start the Qt event loop
     app.exec()
-
-    # pyside6-uic ui_settings.ui > settings_window.py; pyside6-uic magi_llm_ui.ui > ui_magi_llm_ui.py
