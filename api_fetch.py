@@ -1,13 +1,15 @@
 import json
-# import random
-# import string
+import random
+import string
 
 import requests
 import websockets
 
+GRADIO_FN = 29
+
 
 # API non-streaming mode
-def textgen(params, server, prompt='Tea is the best drink there is because'):
+def textgen(params, server, prompt):
 
     print('Oobabooga prompt:', prompt)
 
@@ -24,16 +26,40 @@ def textgen(params, server, prompt='Tea is the best drink there is because'):
     # print(reply)
     return reply
 
+# API streaming mode
 async def run(context, params, server):
 
-    params['prompt'] = context
+    def random_hash():
+        letters = string.ascii_lowercase + string.digits
+        return ''.join(random.choice(letters) for i in range(9))
 
-    async with websockets.connect(f"ws://{server}:5000/api/v1/stream") as websocket:
-        await websocket.send(json.dumps(params))
+    payload = json.dumps([context, params])
+    session = random_hash()
 
-        while incoming_data := json.loads(await websocket.recv()):
-            match incoming_data['event']:
-                case 'text_stream':
-                    yield incoming_data['text']
-                case 'stream_end':
-                    return
+    async with websockets.connect(f"ws://{server}:7860/queue/join") as websocket:
+        while content := json.loads(await websocket.recv()):
+            # Python3.10 syntax, replace with if elif on older
+            match content["msg"]:
+                case "send_hash":
+                    await websocket.send(json.dumps({
+                        "session_hash": session,
+                        "fn_index": GRADIO_FN
+                    }))
+                case "estimation":
+                    pass
+                case "send_data":
+                    await websocket.send(json.dumps({
+                        "session_hash": session,
+                        "fn_index": GRADIO_FN,
+                        "data": [
+                            payload
+                        ]
+                    }))
+                case "process_starts":
+                    pass
+                case "process_generating" | "process_completed":
+                    yield content["output"]["data"][0]
+                    # You can search for your desired end indicator and
+                    #  stop generation by closing the websocket here
+                    if (content["msg"] == "process_completed"):
+                        break

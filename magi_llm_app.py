@@ -29,19 +29,14 @@ class WorkerThread(QThread):
 
     def run(self):
         if self.stream_enabled is True:
-            # New streaming API extension, still broken
+
             async def get_result():
-                print(self.message, end='')
                 async for response in api_fetch.run(self.message, self.ooba_params, self.ooba_server_ip):
                     # Intermediate steps
-                    # print(response)
-                    sys.stdout.flush()
                     self.resultReady.emit(response)
 
                 # Final result
                 self.final_resultReady.emit(response)
-                # print(response)
-
             asyncio.run(get_result())
 
         else:
@@ -49,8 +44,6 @@ class WorkerThread(QThread):
                 self.ooba_params, self.ooba_server_ip, self.message)
 
             self.final_resultReady.emit(response)
-
-        # print('Final response:', response)
 
 
 class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
@@ -64,13 +57,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                      QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
-        # param_preset = glob.glob("presets/*.txt")
-
-        # for preset in param_preset:
-        #     print(preset)
-        #     self.paramsPresetsComboBox.addItem(preset)
-
-# Ooba set settings sliders
+        # Ooba set settings sliders
         self.tempSlider.valueChanged.connect(
             lambda: self.tempSliderLabel.setText(str(self.tempSlider.value()/100)))
         self.top_pSlider.valueChanged.connect(
@@ -86,24 +73,9 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
         self.lengthpenaltySlider.valueChanged.connect(
             lambda: self.lengthpenaltySliderLabel.setText(str(self.lengthpenaltySlider.value()/10)))
 
-        # def set_preset_params():
-        #     current_preset = self.paramsPresetsComboBox.currentText()
-        #     print(current_preset)
-
-        #     config = configparser.ConfigParser()
-        #     config.read(current_preset)
-
-        #     print(config["Params"]["repetition_penalty"])
-        #     repetition_penalty = float(
-        #         config["Params"]["repetition_penalty"])*100
-        #     (self.reppenaltySliderLabel).setText(str(repetition_penalty))
-        #     self.reppenaltySlider.setValue(repetition_penalty)
-
-        # self.paramsPresetsComboBox.currentTextChanged.connect(
-        #     lambda: set_preset_params())
-
 
 class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
+
     def __init__(self):
         super().__init__()
 
@@ -182,16 +154,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.llamacpp_process:
             self.llamacpp_process_terminate()
 
-        # if self.workerThread.isRunning():
-        #     print('running')
-        # else:
-        #     print('not running')
-
     def history_readonly_logic(self, readonly_mode):
 
-        # print('readonly?', readonly_mode)
-
-        # Read only output or not during/after generation
         if textgen_mode == 'notebook_mode':
             self.notebookHistory.setReadOnly(readonly_mode)
         elif textgen_mode == 'chat_mode':
@@ -224,18 +188,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     @Slot(str)
     def handleResult(self, reply):
-        # Update the chat history with
 
+        # Update the chat history
         if textgen_mode == 'default_mode':
-            cursor = self.defaultTextHistory.textCursor()
+            self.defaultTextHistory.setPlainText(reply)
         elif textgen_mode == 'notebook_mode':
-            cursor = self.notebookHistory.textCursor()
+            self.notebookHistory.setPlainText(reply)
         elif textgen_mode == 'chat_mode':
-            cursor = self.chatHistory.textCursor()
-
-        cursor.movePosition(QTextCursor.End)  # Move it to the end
-        # Insert the text at the current position
-        cursor.insertText(reply)
+            self.chatHistory.setMarkdown(reply)
 
     @Slot(str)
     def final_handleResult(self, reply):
@@ -247,13 +207,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         elif textgen_mode == 'chat_mode':
             reply += '\n'
             self.chatHistory.setMarkdown(reply)
-            print("Wrote to chatlog")
+            self.chatHistory.scroll
 
         if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked() == True:
             current_date = self.get_chat_date()
             with open(f"logs/chat_ooba_{current_date}.txt", "a", encoding='utf-8') as f:
                 f.write('\n'+self.chatHistory.toPlainText())
-            print('Wrote Ooba chat log')
+
+        print('Wrote Ooba chat log')
 
         self.statusbar.showMessage(f"Oobabooga: Generation complete")
         self.history_readonly_logic(False)
@@ -263,7 +224,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         config = configparser.ConfigParser()
         config.read(f'presets/chat/{current_preset}.txt')
-
         preset_text = config["Settings"]["preset_text"].replace("\\n", "\n")
 
         self.chatHistory.setMarkdown(f"{preset_text}\n")
@@ -359,7 +319,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             # Get chat prefixes
             chat_user_prefix, bot_user_prefix = self.get_chat_presets()
-
             message = self.chatInput.toPlainText()
 
             self.chatHistory.setMarkdown(
@@ -371,18 +330,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             final_prompt = self.chatHistory.toMarkdown()
 
-            self.notebook_textgenTab.setEnabled(False)
-            self.default_textgenTab.setEnabled(False)
-
             if self.cppCheck.isChecked() == False:
                 self.launch_ooba(final_prompt)
             elif self.llamacpp_process is None:
-                # message += '\n'
-
-                # self.chatHistory = QPlainTextEdit()
-                # self.chatHistory.setLineWrapMode(QPlainTextEdit.NoWrap)
-                # self.chatHistory.setAcceptRichText(False)
-                # self.chatHistory.setPlaceholderText("Enter some text")
+                self.notebook_textgenTab.setEnabled(False)
+                self.default_textgenTab.setEnabled(False)
 
                 self.launch_llama_cpp(final_prompt)
 
@@ -395,10 +347,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.workerThread = WorkerThread(
             ooba_params, ooba_server_ip, message, self.streamEnabledCheck.isChecked())
+
         # Connect signals and slots
         self.workerThread.resultReady.connect(self.handleResult)
         self.workerThread.final_resultReady.connect(self.final_handleResult)
         self.workerThread.finished.connect(self.workerThread.deleteLater)
+
         # Start the thread
         self.workerThread.start()
 
@@ -418,8 +372,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             cursor.movePosition(QTextCursor.End)  # Move it to the end
             # Insert the text at the current position
             cursor.insertText(output)
-            # Ensure that the cursor is visible
-            # self.defaultTextHistory.ensureCursorVisible()
 
     def launch_llama_cpp(self, message):
         print('llama.cpp: Start')

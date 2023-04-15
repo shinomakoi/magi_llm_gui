@@ -193,7 +193,7 @@ class Ui_magi_llm_window(object):
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.streamEnabledCheck = QCheckBox(self.groupBox_2)
         self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
-        self.streamEnabledCheck.setChecked(False)
+        self.streamEnabledCheck.setChecked(True)
 
         self.gridLayout_5.addWidget(self.streamEnabledCheck, 0, 0, 1, 1)
 
@@ -231,7 +231,8 @@ class Ui_magi_llm_window(object):
 
         self.logChatCheck = QCheckBox(self.groupBox_2)
         self.logChatCheck.setObjectName(u"logChatCheck")
-        self.logChatCheck.setChecked(True)
+        self.logChatCheck.setCheckable(True)
+        self.logChatCheck.setChecked(False)
 
         self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
 
@@ -244,13 +245,13 @@ class Ui_magi_llm_window(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.oobaCheck = QRadioButton(self.groupBox_5)
         self.oobaCheck.setObjectName(u"oobaCheck")
-        self.oobaCheck.setChecked(False)
+        self.oobaCheck.setChecked(True)
 
         self.verticalLayout_3.addWidget(self.oobaCheck)
 
         self.cppCheck = QRadioButton(self.groupBox_5)
         self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(True)
+        self.cppCheck.setChecked(False)
 
         self.verticalLayout_3.addWidget(self.cppCheck)
 
@@ -323,7 +324,7 @@ class Ui_magi_llm_window(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Lato'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'MS Shell Dlg 2';\">Below is an instruction that describes a task. Write a response that appropriately completes the request.</span></p></body></html>", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.chatHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Chat history appears here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.chat_textgenTab), QCoreApplication.translate("magi_llm_window", u"Chat", None))
         self.groupBox.setTitle(QCoreApplication.translate("magi_llm_window", u"Custom chat prefixes:", None))
@@ -337,7 +338,7 @@ class Ui_magi_llm_window(object):
 #if QT_CONFIG(tooltip)
         self.cppBinaryPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to the llama.cpp \"main\" binary", None))
 #endif // QT_CONFIG(tooltip)
-        self.cppBinaryPath.setText(QCoreApplication.translate("magi_llm_window", u"main.exe", None))
+        self.cppBinaryPath.setText(QCoreApplication.translate("magi_llm_window", u"main", None))
 #if QT_CONFIG(tooltip)
         self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
 #endif // QT_CONFIG(tooltip)
