@@ -16,6 +16,4 @@ Then to launch the Magi LLM GUI, use:
 python magi_llm_app.py
 ```
 
-Note: streaming mode is broken with the latest commit in the Oobabooga WebUi. 
-
 ![majillm-ss](https://user-images.githubusercontent.com/112139428/231284826-265c3a56-cef1-4421-b72a-ff25b0142a9a.png)
