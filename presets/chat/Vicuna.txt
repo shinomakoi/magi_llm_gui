@@ -1,0 +1,4 @@
+[Settings]
+preset_text=A chat between a curious human and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the human's questions.\n\n
+chat_user_prefix=USER:
+bot_user_prefix=\nASSISTANT:

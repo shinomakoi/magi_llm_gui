@@ -1,0 +1,4 @@
+[Settings]
+preset_text=Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n
+chat_user_prefix=### Instruction:\n
+bot_user_prefix=\n### Response:\n
