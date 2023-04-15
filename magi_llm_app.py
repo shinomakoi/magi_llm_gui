@@ -285,6 +285,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         global textgen_mode
         textgen_mode = pre_textgen_mode
 
+        def set_textgen_things():
+            self.history_readonly_logic(True)
+            self.cppCheck.setEnabled(False)
+            self.oobaCheck.setEnabled(False)
+
         if self.cppCheck.isChecked() == True and self.llamacpp_process and pre_textgen_mode == 'chat_mode':
 
             chat_user_prefix, bot_user_prefix = self.get_chat_presets()
@@ -296,49 +301,51 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 f"{self.chatInput.toPlainText()}\n{bot_user_prefix}".encode())
             return
 
-        self.history_readonly_logic(True)
-
-        self.cppCheck.setEnabled(False)
-        self.oobaCheck.setEnabled(False)
-
         if pre_textgen_mode == 'default_mode':
             message = self.defaultTextInput.toPlainText()
-            if self.cppCheck.isChecked() == False:
-                self.launch_ooba(message)
-            elif self.llamacpp_process is None:
-                self.launch_llama_cpp(message)
+            if message:
+                if self.cppCheck.isChecked() == False:
+                    self.launch_ooba(message)
+                elif self.llamacpp_process is None:
+                    self.launch_llama_cpp(message)
+                set_textgen_things()
 
         if pre_textgen_mode == 'notebook_mode':
+            
             message = self.notebookHistory.toPlainText()
-            if self.cppCheck.isChecked() == False:
-                self.launch_ooba(message)
-            elif self.llamacpp_process is None:
-                self.launch_llama_cpp(message)
+            if message:
+                if self.cppCheck.isChecked() == False:
+                    self.launch_ooba(message)
+                elif self.llamacpp_process is None:
+                    self.launch_llama_cpp(message)
+                set_textgen_things()
 
         if pre_textgen_mode == 'chat_mode':
 
-            # Get chat prefixes
-            chat_user_prefix, bot_user_prefix = self.get_chat_presets()
             message = self.chatInput.toPlainText()
+            if message:
+                # Get chat prefixes
+                chat_user_prefix, bot_user_prefix = self.get_chat_presets()
 
-            self.chatHistory.setMarkdown(
-                f"{self.chatHistory.toMarkdown()}{chat_user_prefix} {message}\n{bot_user_prefix}")
+                self.chatHistory.setMarkdown(
+                    f"{self.chatHistory.toMarkdown()}{chat_user_prefix} {message}\n{bot_user_prefix}")
 
-            # Add custom response prefix
-            if self.customResponsePrefixCheck.isChecked():
-                self.chatHistory.append(self.customResponsePrefix.text())
+                # Add custom response prefix
+                if self.customResponsePrefixCheck.isChecked():
+                    self.chatHistory.append(self.customResponsePrefix.text())
 
-            final_prompt = self.chatHistory.toMarkdown()
+                final_prompt = self.chatHistory.toMarkdown()
 
-            if self.cppCheck.isChecked() == False:
-                self.launch_ooba(final_prompt)
-            elif self.llamacpp_process is None:
-                self.notebook_textgenTab.setEnabled(False)
-                self.default_textgenTab.setEnabled(False)
+                if self.cppCheck.isChecked() == False:
+                    self.launch_ooba(final_prompt)
+                elif self.llamacpp_process is None:
+                    self.notebook_textgenTab.setEnabled(False)
+                    self.default_textgenTab.setEnabled(False)
 
-                self.launch_llama_cpp(final_prompt)
+                    self.launch_llama_cpp(final_prompt)
 
-            self.chatInput.clear()
+                set_textgen_things()
+                self.chatInput.clear()
 
     # Oobabooga launch
     def launch_ooba(self, message):
