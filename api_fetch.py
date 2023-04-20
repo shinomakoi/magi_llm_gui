@@ -22,12 +22,12 @@ def textgen(params, server, prompt):
     }).json()
 
     reply = response["data"][0]
-    print(reply)
-
     return reply
 
 # API streaming mode
 async def run(context, params, server):
+
+    print('``````````prompt',context)
 
     def random_hash():
         letters = string.ascii_lowercase + string.digits

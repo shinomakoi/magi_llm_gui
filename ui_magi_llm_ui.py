@@ -42,6 +42,7 @@ class Ui_magi_llm_window(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.stopButton = QPushButton(self.centralwidget)
         self.stopButton.setObjectName(u"stopButton")
+        self.stopButton.setEnabled(False)
 
         self.gridLayout.addWidget(self.stopButton, 2, 0, 1, 1)
 
@@ -160,12 +161,6 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_3.addWidget(self.chatGenerateButton, 6, 0, 1, 1)
 
-        self.chatHistory = QPlainTextEdit(self.chat_textgenTab)
-        self.chatHistory.setObjectName(u"chatHistory")
-        self.chatHistory.setFont(font1)
-
-        self.gridLayout_3.addWidget(self.chatHistory, 2, 0, 1, 3)
-
         self.groupBox_3 = QGroupBox(self.chat_textgenTab)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.horizontalLayout = QHBoxLayout(self.groupBox_3)
@@ -189,6 +184,12 @@ class Ui_magi_llm_window(object):
 
 
         self.gridLayout_3.addWidget(self.groupBox_3, 0, 2, 1, 1, Qt.AlignRight)
+
+        self.chatHistory = QPlainTextEdit(self.chat_textgenTab)
+        self.chatHistory.setObjectName(u"chatHistory")
+        self.chatHistory.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.chatHistory, 2, 0, 1, 3)
 
         self.textgenTab.addTab(self.chat_textgenTab, "")
         self.settingsTab = QWidget()
@@ -343,11 +344,11 @@ class Ui_magi_llm_window(object):
         self.chatClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
         self.label.setText(QCoreApplication.translate("magi_llm_window", u"Presets:", None))
         self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
-        self.chatHistory.setPlainText(QCoreApplication.translate("magi_llm_window", u"Below is an instruction that describes a task. Write a response that appropriately completes the request.", None))
         self.groupBox_3.setTitle("")
         self.label_2.setText(QCoreApplication.translate("magi_llm_window", u"Font size:", None))
         self.toolButton_2.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
         self.toolButton.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
+        self.chatHistory.setPlainText(QCoreApplication.translate("magi_llm_window", u"Below is an instruction that describes a task. Write a response that appropriately completes the request.", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.chat_textgenTab), QCoreApplication.translate("magi_llm_window", u"Chat", None))
         self.groupBox.setTitle(QCoreApplication.translate("magi_llm_window", u"Custom chat prefixes:", None))
         self.customResponsePrefixCheck.setText(QCoreApplication.translate("magi_llm_window", u"Response prefix:", None))

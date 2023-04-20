@@ -25,20 +25,26 @@ class WorkerThread(QThread):
         super().__init__()
         self.ooba_params = ooba_params
         self.ooba_server_ip = ooba_server_ip
-        self.message = message
+        self.message = str(message)
         self.stream_enabled = stream_enabled
         self.run_backend = run_backend
         self.cpp_params = cpp_params
 
+        self.stop_flag = False
+
     def run(self):
+
         if self.run_backend == 'ooba':
+            self.message = self.message.strip()
+
             if self.stream_enabled is True:
+                replies = []
 
                 async def get_result():
-                    replies = []
-                    async for response in api_fetch.run(self.message, self.ooba_params, self.ooba_server_ip):
-                        # Intermediate steps
 
+                    async for response in api_fetch.run(self.message, self.ooba_params, self.ooba_server_ip):
+
+                        # Intermediate steps
                         replies.append(response)
 
                         # Strip to individual tokens
@@ -48,8 +54,12 @@ class WorkerThread(QThread):
                             replies.pop(0)
                             self.resultReady.emit(stripped_response)
 
+                        if self.stop_flag:
+                            break
+
                     # Final result
                     self.final_resultReady.emit(response)
+
                     # print(response)
                 asyncio.run(get_result())
 
@@ -67,17 +77,24 @@ class WorkerThread(QThread):
                                                self.cpp_params["top_k"],
                                                self.cpp_params["repetition_penalty"],
                                                ):
+
                 if self.stream_enabled is True:
                     self.resultReady.emit(response)
                 final_response += response
                 final_text = self.message+final_response
-            # print(final_text)
+
+                if self.stop_flag:
+                    break
 
             # Final result
             self.final_resultReady.emit(final_text)
 
         # output = model.generate()[0]
         # print(output)
+
+    def stop(self):
+        # Set the stop flag to True
+        self.stop_flag = True
 
 
 class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
@@ -152,6 +169,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.chatContinueButton.clicked.connect(
             lambda: self.continue_textgen('chatContinue'))
 
+        self.stopButton.clicked.connect(lambda: self.stop_textgen())
+
         self.settingsPathSaveButton.clicked.connect(
             lambda: self.save_settings())
         self.chatClearButton.clicked.connect(lambda: self.set_preset_params())
@@ -212,6 +231,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.chatContinueButton.setEnabled(True)
 
     # Continue response logic
+
+    def stop_textgen(self):
+        self.workerThread.stop()
+        self.stopButton.setEnabled(False)
 
     def continue_textgen(self, text_tab):
 
@@ -281,6 +304,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.statusbar.showMessage(f"Status: Generation complete")
         self.history_readonly_logic(False)
+        self.stopButton.setEnabled(False)
+
+        self.workerThread.quit()
+        self.workerThread.wait()
 
     def set_preset_params(self):
         current_preset = self.chatPresetComboBox.currentText()
@@ -377,6 +404,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.history_readonly_logic(True)
         self.cppCheck.setEnabled(False)
         self.oobaCheck.setEnabled(False)
+        self.stopButton.setEnabled(True)
 
     def textgen_switcher(self, pre_textgen_mode):
 
@@ -462,3 +490,5 @@ if __name__ == "__main__":
 
     # Start the Qt event loop
     app.exec()
+
+# todo - transformers, openai API support. TTS, chat images, character JSON imports.
