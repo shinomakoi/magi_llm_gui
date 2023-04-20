@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'magi_llm_ui.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.3
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -17,10 +17,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGridLayout, QGroupBox, QLabel, QLineEdit,
-    QMainWindow, QMenu, QMenuBar, QPlainTextEdit,
-    QPushButton, QRadioButton, QSizePolicy, QStatusBar,
-    QTabWidget, QTextEdit, QVBoxLayout, QWidget)
+    QGridLayout, QGroupBox, QHBoxLayout, QLabel,
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QPlainTextEdit, QPushButton, QRadioButton, QSizePolicy,
+    QStatusBar, QTabWidget, QToolButton, QVBoxLayout,
+    QWidget)
 
 class Ui_magi_llm_window(object):
     def setupUi(self, magi_llm_window):
@@ -76,6 +77,8 @@ class Ui_magi_llm_window(object):
         font1.setFamilies([u"Lato"])
         font1.setPointSize(12)
         self.defaultTextHistory.setFont(font1)
+        self.defaultTextHistory.viewport().setProperty("cursor", QCursor(Qt.ArrowCursor))
+        self.defaultTextHistory.setAcceptDrops(False)
         self.defaultTextHistory.setStyleSheet(u"")
         self.defaultTextHistory.setReadOnly(True)
 
@@ -95,8 +98,16 @@ class Ui_magi_llm_window(object):
         self.notebook_textgenTab.setAutoFillBackground(True)
         self.gridLayout_2 = QGridLayout(self.notebook_textgenTab)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.notebookHistory = QPlainTextEdit(self.notebook_textgenTab)
+        self.notebookHistory.setObjectName(u"notebookHistory")
+        self.notebookHistory.setFont(font1)
+        self.notebookHistory.setStyleSheet(u"")
+
+        self.gridLayout_2.addWidget(self.notebookHistory, 0, 0, 1, 3)
+
         self.notebookGenerateButton = QPushButton(self.notebook_textgenTab)
         self.notebookGenerateButton.setObjectName(u"notebookGenerateButton")
+        self.notebookGenerateButton.setFont(font)
 
         self.gridLayout_2.addWidget(self.notebookGenerateButton, 1, 0, 1, 1)
 
@@ -110,59 +121,74 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_2.addWidget(self.notebookClearButton, 1, 2, 1, 1)
 
-        self.notebookHistory = QPlainTextEdit(self.notebook_textgenTab)
-        self.notebookHistory.setObjectName(u"notebookHistory")
-        self.notebookHistory.setFont(font1)
-        self.notebookHistory.setStyleSheet(u"")
-
-        self.gridLayout_2.addWidget(self.notebookHistory, 0, 0, 1, 3)
-
         self.textgenTab.addTab(self.notebook_textgenTab, "")
         self.chat_textgenTab = QWidget()
         self.chat_textgenTab.setObjectName(u"chat_textgenTab")
         self.chat_textgenTab.setAutoFillBackground(True)
         self.gridLayout_3 = QGridLayout(self.chat_textgenTab)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.label = QLabel(self.chat_textgenTab)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
-
         self.chatContinueButton = QPushButton(self.chat_textgenTab)
         self.chatContinueButton.setObjectName(u"chatContinueButton")
 
-        self.gridLayout_3.addWidget(self.chatContinueButton, 4, 1, 1, 1)
-
-        self.chatGenerateButton = QPushButton(self.chat_textgenTab)
-        self.chatGenerateButton.setObjectName(u"chatGenerateButton")
-
-        self.gridLayout_3.addWidget(self.chatGenerateButton, 4, 0, 1, 1)
-
-        self.chatClearButton = QPushButton(self.chat_textgenTab)
-        self.chatClearButton.setObjectName(u"chatClearButton")
-
-        self.gridLayout_3.addWidget(self.chatClearButton, 4, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.chatContinueButton, 6, 1, 1, 1)
 
         self.chatInput = QPlainTextEdit(self.chat_textgenTab)
         self.chatInput.setObjectName(u"chatInput")
         self.chatInput.setFont(font1)
         self.chatInput.setStyleSheet(u"")
 
-        self.gridLayout_3.addWidget(self.chatInput, 3, 0, 1, 3, Qt.AlignBottom)
+        self.gridLayout_3.addWidget(self.chatInput, 5, 0, 1, 3, Qt.AlignBottom)
 
-        self.chatHistory = QTextEdit(self.chat_textgenTab)
-        self.chatHistory.setObjectName(u"chatHistory")
-        self.chatHistory.setFont(font1)
-        self.chatHistory.setStyleSheet(u"")
-        self.chatHistory.setReadOnly(False)
-        self.chatHistory.setAcceptRichText(False)
+        self.chatClearButton = QPushButton(self.chat_textgenTab)
+        self.chatClearButton.setObjectName(u"chatClearButton")
 
-        self.gridLayout_3.addWidget(self.chatHistory, 2, 0, 1, 3)
+        self.gridLayout_3.addWidget(self.chatClearButton, 6, 2, 1, 1)
+
+        self.label = QLabel(self.chat_textgenTab)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
 
         self.chatPresetComboBox = QComboBox(self.chat_textgenTab)
         self.chatPresetComboBox.setObjectName(u"chatPresetComboBox")
 
         self.gridLayout_3.addWidget(self.chatPresetComboBox, 1, 0, 1, 3)
+
+        self.chatGenerateButton = QPushButton(self.chat_textgenTab)
+        self.chatGenerateButton.setObjectName(u"chatGenerateButton")
+        self.chatGenerateButton.setFont(font)
+
+        self.gridLayout_3.addWidget(self.chatGenerateButton, 6, 0, 1, 1)
+
+        self.chatHistory = QPlainTextEdit(self.chat_textgenTab)
+        self.chatHistory.setObjectName(u"chatHistory")
+        self.chatHistory.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.chatHistory, 2, 0, 1, 3)
+
+        self.groupBox_3 = QGroupBox(self.chat_textgenTab)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.horizontalLayout = QHBoxLayout(self.groupBox_3)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.label_2 = QLabel(self.groupBox_3)
+        self.label_2.setObjectName(u"label_2")
+
+        self.horizontalLayout.addWidget(self.label_2)
+
+        self.toolButton_2 = QToolButton(self.groupBox_3)
+        self.toolButton_2.setObjectName(u"toolButton_2")
+        self.toolButton_2.setArrowType(Qt.UpArrow)
+
+        self.horizontalLayout.addWidget(self.toolButton_2)
+
+        self.toolButton = QToolButton(self.groupBox_3)
+        self.toolButton.setObjectName(u"toolButton")
+        self.toolButton.setArrowType(Qt.DownArrow)
+
+        self.horizontalLayout.addWidget(self.toolButton)
+
+
+        self.gridLayout_3.addWidget(self.groupBox_3, 0, 2, 1, 1, Qt.AlignRight)
 
         self.textgenTab.addTab(self.chat_textgenTab, "")
         self.settingsTab = QWidget()
@@ -187,58 +213,6 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_4.addWidget(self.groupBox, 2, 0, 1, 1)
 
-        self.groupBox_2 = QGroupBox(self.settingsTab)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.gridLayout_5 = QGridLayout(self.groupBox_2)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.streamEnabledCheck = QCheckBox(self.groupBox_2)
-        self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
-        self.streamEnabledCheck.setChecked(True)
-
-        self.gridLayout_5.addWidget(self.streamEnabledCheck, 0, 0, 1, 1)
-
-        self.cppBinaryPath = QLineEdit(self.groupBox_2)
-        self.cppBinaryPath.setObjectName(u"cppBinaryPath")
-
-        self.gridLayout_5.addWidget(self.cppBinaryPath, 2, 1, 1, 1)
-
-        self.cppModelPath = QLineEdit(self.groupBox_2)
-        self.cppModelPath.setObjectName(u"cppModelPath")
-
-        self.gridLayout_5.addWidget(self.cppModelPath, 3, 1, 1, 1)
-
-        self.label_27 = QLabel(self.groupBox_2)
-        self.label_27.setObjectName(u"label_27")
-
-        self.gridLayout_5.addWidget(self.label_27, 2, 0, 1, 1)
-
-        self.line = QFrame(self.groupBox_2)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_5.addWidget(self.line, 1, 0, 1, 2)
-
-        self.label_28 = QLabel(self.groupBox_2)
-        self.label_28.setObjectName(u"label_28")
-
-        self.gridLayout_5.addWidget(self.label_28, 3, 0, 1, 1)
-
-        self.settingsPathSaveButton = QPushButton(self.groupBox_2)
-        self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
-
-        self.gridLayout_5.addWidget(self.settingsPathSaveButton, 4, 0, 1, 1)
-
-        self.logChatCheck = QCheckBox(self.groupBox_2)
-        self.logChatCheck.setObjectName(u"logChatCheck")
-        self.logChatCheck.setCheckable(True)
-        self.logChatCheck.setChecked(False)
-
-        self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
-
-
-        self.gridLayout_4.addWidget(self.groupBox_2, 1, 0, 1, 1)
-
         self.groupBox_5 = QGroupBox(self.settingsTab)
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_5)
@@ -258,6 +232,53 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_4.addWidget(self.groupBox_5, 0, 0, 1, 1)
 
+        self.groupBox_2 = QGroupBox(self.settingsTab)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_5 = QGridLayout(self.groupBox_2)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.line = QFrame(self.groupBox_2)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_5.addWidget(self.line, 1, 0, 1, 2)
+
+        self.cppModelPath = QLineEdit(self.groupBox_2)
+        self.cppModelPath.setObjectName(u"cppModelPath")
+
+        self.gridLayout_5.addWidget(self.cppModelPath, 2, 1, 1, 1)
+
+        self.label_28 = QLabel(self.groupBox_2)
+        self.label_28.setObjectName(u"label_28")
+
+        self.gridLayout_5.addWidget(self.label_28, 2, 0, 1, 1)
+
+        self.settingsPathSaveButton = QPushButton(self.groupBox_2)
+        self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
+
+        self.gridLayout_5.addWidget(self.settingsPathSaveButton, 3, 0, 1, 1)
+
+        self.streamEnabledCheck = QCheckBox(self.groupBox_2)
+        self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
+        self.streamEnabledCheck.setChecked(True)
+
+        self.gridLayout_5.addWidget(self.streamEnabledCheck, 0, 0, 1, 1)
+
+        self.cppModelSelect = QToolButton(self.groupBox_2)
+        self.cppModelSelect.setObjectName(u"cppModelSelect")
+        self.cppModelSelect.setArrowType(Qt.NoArrow)
+
+        self.gridLayout_5.addWidget(self.cppModelSelect, 2, 2, 1, 1)
+
+        self.logChatCheck = QCheckBox(self.groupBox_2)
+        self.logChatCheck.setObjectName(u"logChatCheck")
+        self.logChatCheck.setChecked(False)
+
+        self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
+
+
+        self.gridLayout_4.addWidget(self.groupBox_2, 1, 0, 1, 1)
+
         self.textgenTab.addTab(self.settingsTab, "")
 
         self.gridLayout.addWidget(self.textgenTab, 1, 0, 1, 1)
@@ -265,7 +286,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 819, 35))
+        self.llm_menubar.setGeometry(QRect(0, 0, 819, 23))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -282,9 +303,12 @@ class Ui_magi_llm_window(object):
         self.menuHelp.addAction(self.actionAbout)
 
         self.retranslateUi(magi_llm_window)
-        self.chatClearButton.clicked["bool"].connect(self.chatHistory.clear)
+        self.defaultClearButton.clicked.connect(self.defaultTextHistory.clear)
+        self.notebookClearButton.clicked.connect(self.notebookHistory.clear)
+        self.toolButton.clicked.connect(self.chatHistory.zoomOut)
+        self.toolButton_2.clicked.connect(self.chatHistory.zoomIn)
 
-        self.textgenTab.setCurrentIndex(0)
+        self.textgenTab.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(magi_llm_window)
@@ -303,53 +327,47 @@ class Ui_magi_llm_window(object):
 #endif // QT_CONFIG(shortcut)
         self.defaultContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.defaultClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
-        self.defaultTextHistory.setPlainText("")
         self.defaultTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Output appears here", None))
-        self.defaultTextInput.setPlainText("")
+        self.defaultTextInput.setPlainText(QCoreApplication.translate("magi_llm_window", u"To make a cup of tea, start by heating one cup of water in a saucepan over medium heat until it starts boiling", None))
         self.defaultTextInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.default_textgenTab), QCoreApplication.translate("magi_llm_window", u"Default", None))
+        self.notebookHistory.setPlainText(QCoreApplication.translate("magi_llm_window", u"I would like to travel to Rome because of the rich history", None))
+        self.notebookHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
         self.notebookGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
-        self.notebookHistory.setPlainText("")
-        self.notebookHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.label.setText(QCoreApplication.translate("magi_llm_window", u"Presets:", None))
         self.chatContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
-        self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
-        self.chatClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
-        self.chatInput.setPlainText("")
+        self.chatInput.setPlainText(QCoreApplication.translate("magi_llm_window", u"how to make tea?", None))
         self.chatInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Enter some text here", None))
-        self.chatHistory.setHtml(QCoreApplication.translate("magi_llm_window", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Lato'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
-        self.chatHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Chat history appears here", None))
+        self.chatClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
+        self.label.setText(QCoreApplication.translate("magi_llm_window", u"Presets:", None))
+        self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
+        self.chatHistory.setPlainText(QCoreApplication.translate("magi_llm_window", u"Below is an instruction that describes a task. Write a response that appropriately completes the request.", None))
+        self.groupBox_3.setTitle("")
+        self.label_2.setText(QCoreApplication.translate("magi_llm_window", u"Font size:", None))
+        self.toolButton_2.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
+        self.toolButton.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.chat_textgenTab), QCoreApplication.translate("magi_llm_window", u"Chat", None))
         self.groupBox.setTitle(QCoreApplication.translate("magi_llm_window", u"Custom chat prefixes:", None))
         self.customResponsePrefixCheck.setText(QCoreApplication.translate("magi_llm_window", u"Response prefix:", None))
         self.customResponsePrefix.setText(QCoreApplication.translate("magi_llm_window", u"Sure!", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
+        self.oobaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Oobabooga WebUI", None))
+        self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("magi_llm_window", u"Settings:", None))
+#if QT_CONFIG(tooltip)
+        self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppModelPath.setText(QCoreApplication.translate("magi_llm_window", u"F:\\_LLM\\llama-master-e7f6997-bin-win-avx2-x64\\models\\ggml-alpaca-7b-native-q4.bin", None))
+        self.label_28.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp: Model path:", None))
+        self.settingsPathSaveButton.setText(QCoreApplication.translate("magi_llm_window", u"Save", None))
 #if QT_CONFIG(tooltip)
         self.streamEnabledCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Stream responses (WebUI option only)", None))
 #endif // QT_CONFIG(tooltip)
         self.streamEnabledCheck.setText(QCoreApplication.translate("magi_llm_window", u"Stream responses", None))
-#if QT_CONFIG(tooltip)
-        self.cppBinaryPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to the llama.cpp \"main\" binary", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppBinaryPath.setText(QCoreApplication.translate("magi_llm_window", u"main", None))
-#if QT_CONFIG(tooltip)
-        self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppModelPath.setText(QCoreApplication.translate("magi_llm_window", u"models\\ggml-alpaca-7b-native-q4.bin", None))
-        self.label_27.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp: Binary path:", None))
-        self.label_28.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp: Model path:", None))
-        self.settingsPathSaveButton.setText(QCoreApplication.translate("magi_llm_window", u"Save", None))
+        self.cppModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
         self.logChatCheck.setText(QCoreApplication.translate("magi_llm_window", u"Log chats", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
-        self.oobaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Oobabooga WebUI", None))
-        self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.settingsTab), QCoreApplication.translate("magi_llm_window", u"Settings", None))
         self.menuFile.setTitle(QCoreApplication.translate("magi_llm_window", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("magi_llm_window", u"Help", None))

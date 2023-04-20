@@ -5,13 +5,12 @@ import string
 import requests
 import websockets
 
-GRADIO_FN = 29
+GRADIO_FN = 34
 
+### tested on commit 49aa05054ae13f381381440a9860ce0d68200e80
 
 # API non-streaming mode
 def textgen(params, server, prompt):
-
-    print('Oobabooga prompt:', prompt)
 
     # Input prompt
     payload = json.dumps([prompt, params])
@@ -23,7 +22,8 @@ def textgen(params, server, prompt):
     }).json()
 
     reply = response["data"][0]
-    # print(reply)
+    print(reply)
+
     return reply
 
 # API streaming mode
