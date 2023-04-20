@@ -16,4 +16,4 @@ Then to launch the Magi LLM GUI, use:
 python magi_llm_app.py
 ```
 
-![majillm-ss](https://user-images.githubusercontent.com/112139428/231284826-265c3a56-cef1-4421-b72a-ff25b0142a9a.png)
+![image](https://user-images.githubusercontent.com/112139428/233437918-8f9b7c2a-dd77-4536-a612-a893a2bc90d4.png)
