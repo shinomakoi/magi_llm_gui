@@ -58,6 +58,7 @@ class textgenThread(QThread):
                             break
 
                     # Final result
+                    response = str(response).strip()
                     self.final_resultReady.emit(response)
 
                     # print(response)
@@ -328,10 +329,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'repetition_penalty': float(self.settings_win.reppenaltySlider.value()/100),
         }
 
-        print("llama.cpp parameters:", cpp_params)
+        # print("llama.cpp parameters:", cpp_params)
         return cpp_params
 
-    # Get the llama.cpp parameters
+    # Get the WebUi parameters
     def get_ooba_params(self):
 
         ooba_server_ip = self.settings_win.oobaServerAddress.text().strip()
@@ -359,7 +360,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'stopping_strings': [],
         }
 
-        print('Oobabooga parameters:', ooba_params)
+        # print('Oobabooga parameters:', ooba_params)
         return ooba_params, ooba_server_ip
 
     # Get data for chat log save
@@ -459,7 +460,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Launch QThread to textgen
     def launch_backend(self, message, run_backend):
 
-        message = ' '+message
+        # message = ' '+message
 
         ooba_params, ooba_server_ip = self.get_ooba_params()
         cpp_params = self.get_llama_cpp_params()
@@ -492,5 +493,3 @@ if __name__ == "__main__":
 
     # Start the Qt event loop
     app.exec()
-
-# todo - transformers, openai API support. TTS, chat images, character JSON imports. reflection
