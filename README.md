@@ -1,6 +1,7 @@
 # Magi LLM GUI
-A QT GUI for large language models
+A Qt GUI for large language models
 
+For Windows, Linux (and Mac?)
 
 Currently works with https://github.com/oobabooga/text-generation-webui/ and https://github.com/ggerganov/llama.cpp
 
