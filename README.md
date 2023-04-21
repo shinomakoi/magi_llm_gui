@@ -9,8 +9,10 @@ Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
 Launch the WebUi with the ```--listen``` flag to enable the text-generation-webui API and add ```--no-stream``` if you don't want to use streaming mode.
 Has been tested with commit 49aa05054ae13f381381440a9860ce0d68200e80 for text-generation-webui. 
 
-Install requirements with: 
+To install (optionally create a virutal environment): 
 ```
+git clone https://github.com/shinomakoi/magi_llm_gui
+cd magi_llm_gui
 pip install -r requirements.txt
 ```
 
