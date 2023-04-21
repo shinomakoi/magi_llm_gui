@@ -39,7 +39,7 @@ class textgenThread(QThread):
         if self.run_backend == 'ooba':
             self.message = self.message.strip()
 
-            if self.stream_enabled is True:
+            if self.stream_enabled:
                 replies = []
 
                 async def get_result():
@@ -79,7 +79,7 @@ class textgenThread(QThread):
                                                self.cpp_params["repetition_penalty"],
                                                ):
 
-                if self.stream_enabled is True:
+                if self.stream_enabled:
                     self.resultReady.emit(response)
                 final_response += response
                 final_text = self.message+final_response
@@ -147,6 +147,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             chat_preset_stem = Path(chat_preset).stem
             self.chatPresetComboBox.addItem(chat_preset_stem)
 
+        self.set_preset_params()
+
         # Load settings
         config = configparser.ConfigParser()
         config.read('settings.ini')
@@ -175,13 +177,13 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.cppModelSelect.clicked.connect(lambda: self.cpp_model_select())
 
+        self.chatPresetComboBox.currentTextChanged.connect(
+            lambda: self.set_preset_params())
+
         # Quit from menu
         self.actionSettings.triggered.connect(
             lambda: self.settings_win.show())
         self.actionExit.triggered.connect(app.exit)
-
-        self.chatPresetComboBox.currentTextChanged.connect(
-            lambda: self.set_preset_params())
 
         # Status bar
         self.statusbar.showMessage(f"Status: Idle")
@@ -215,7 +217,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         elif textgen_mode == 'chat_mode':
             self.chatHistory.setReadOnly(readonly_mode)
 
-        if readonly_mode is True:
+        if readonly_mode:
             self.chatPresetComboBox.setEnabled(False)
             self.streamEnabledCheck.setEnabled(False)
 
@@ -238,8 +240,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Continue button logic
     def continue_textgen(self, text_tab):
 
-        if self.oobaCheck.isEnabled() is False:
-            if self.oobaCheck.isChecked() is True:
+        if not self.oobaCheck.isEnabled():
+            if self.oobaCheck.isChecked():
                 run_backend = 'ooba'
             else:
                 run_backend = 'llama.cpp'
@@ -284,7 +286,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     @Slot(str)
     def final_handleResult(self, final_text):
 
-        if self.streamEnabledCheck.isChecked() is False:
+        if not self.streamEnabledCheck.isChecked():
             if textgen_mode == 'default_mode':
                 self.defaultTextHistory.setPlainText(final_text)
             elif textgen_mode == 'notebook_mode':
@@ -294,7 +296,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chatHistory.setPlainText(final_text)
 
         # Write chat log
-        if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked() == True:
+        if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
             current_date = self.get_chat_date()
 
             with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
@@ -308,17 +310,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.textgenThread.quit()
         self.textgenThread.wait()
 
-    # Get chat presets from files
-    def set_preset_params(self):
-        current_preset = self.chatPresetComboBox.currentText()
-
-        config = configparser.ConfigParser()
-        config.read(f'presets/chat/{current_preset}.txt')
-        preset_text = config["Settings"]["preset_text"].replace("\\n", "\n")
-
-        self.chatHistory.setPlainText(f"{preset_text}\n")
-
-    # Get the llama.cpp parameters
     def get_llama_cpp_params(self):
 
         cpp_params = {
@@ -405,15 +396,17 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     def set_textgen_things(self):
         self.history_readonly_logic(True)
-        self.cppCheck.setEnabled(False)
-        self.oobaCheck.setEnabled(False)
         self.stopButton.setEnabled(True)
 
     # Main launcher logic
     def textgen_switcher(self, pre_textgen_mode):
 
-        if self.cppCheck.isEnabled() == True and self.cppCheck.isChecked() == True:
-            self.load_cpp_model()
+        if self.cppCheck.isEnabled():
+            self.cppCheck.setEnabled(False)
+            self.oobaCheck.setEnabled(False)
+
+            if self.cppCheck.isChecked():
+                self.load_cpp_model()
 
         global textgen_mode
         textgen_mode = pre_textgen_mode
@@ -422,7 +415,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             input_message = self.defaultTextInput.toPlainText()
             if input_message:
                 self.defaultTextHistory.setPlainText(input_message)
-                if self.cppCheck.isChecked() == False:
+                if not self.cppCheck.isChecked():
                     self.launch_backend(input_message, 'ooba')
                 else:
                     self.launch_backend(input_message, 'llama.cpp')
@@ -430,30 +423,22 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if pre_textgen_mode == 'notebook_mode':
             input_message = self.notebookHistory.toPlainText()
             if input_message:
-                if self.cppCheck.isChecked() == False:
+                if not self.cppCheck.isChecked():
                     self.launch_backend(input_message, 'ooba')
                 else:
                     self.launch_backend(input_message, 'llama.cpp')
 
         if pre_textgen_mode == 'chat_mode':
             input_message = self.chatInput.toPlainText()
+
             if input_message:
-                # Get chat prefixes
-                preset_text, chat_user_prefix, bot_user_prefix = self.get_chat_presets()
-
-                init_prompt = f"{chat_user_prefix} {input_message}{bot_user_prefix} "
-
-                # Add custom response prefix
-                if self.customResponsePrefixCheck.isChecked():
-                    init_prompt = f"{chat_user_prefix} {input_message}{bot_user_prefix} {self.customResponsePrefix.text()} "
-
-                self.chatHistory.appendPlainText(init_prompt)
+                final_prompt = self.prompt_generation(pre_textgen_mode)
+                self.chatHistory.setPlainText(final_prompt)
 
                 if self.cppCheck.isChecked() == False:
-                    self.launch_backend(self.chatHistory.toPlainText(), 'ooba')
+                    self.launch_backend(final_prompt, 'ooba')
                 else:
-                    self.launch_backend(
-                        self.chatHistory.toPlainText(), 'llama.cpp')
+                    self.launch_backend(final_prompt, 'llama.cpp')
 
                 self.chatInput.clear()
 
@@ -478,6 +463,29 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Start the thread
         self.textgenThread.start()
         self.set_textgen_things()
+
+    def prompt_generation(self, pre_textgen_mode):
+
+        if pre_textgen_mode == 'chat_mode':
+            preset_text, chat_user_prefix, bot_user_prefix = self.get_chat_presets()
+
+            final_prompt = (f"""{self.chatHistory.toPlainText()}
+{chat_user_prefix}{self.chatInput.toPlainText()}{bot_user_prefix}""")
+
+        return final_prompt
+
+    # Get chat presets from files
+    def set_preset_params(self):
+
+        current_preset = self.chatPresetComboBox.currentText()
+
+        config = configparser.ConfigParser()
+        config.read(f'presets/chat/{current_preset}.txt')
+        preset_text = config["Settings"]["preset_text"].replace("\\n", "\n")
+
+        self.chatHistory.setPlainText(f"{preset_text}\n")
+
+    # Get the llama.cpp parameters
 
 
 if __name__ == "__main__":

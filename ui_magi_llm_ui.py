@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'magi_llm_ui.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.0
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -287,7 +287,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 819, 23))
+        self.llm_menubar.setGeometry(QRect(0, 0, 819, 35))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -308,8 +308,9 @@ class Ui_magi_llm_window(object):
         self.notebookClearButton.clicked.connect(self.notebookHistory.clear)
         self.toolButton_2.clicked.connect(self.chatHistory.zoomIn)
         self.toolButton.clicked.connect(self.chatHistory.zoomOut)
+        self.chatClearButton.clicked.connect(self.chatHistory.clear)
 
-        self.textgenTab.setCurrentIndex(0)
+        self.textgenTab.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(magi_llm_window)
@@ -338,7 +339,7 @@ class Ui_magi_llm_window(object):
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.chatHistory.setPlainText(QCoreApplication.translate("magi_llm_window", u"Below is an instruction that describes a task. Write a response that appropriately completes the request.", None))
+        self.chatHistory.setPlainText("")
         self.chatInput.setPlainText("")
         self.chatInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Enter some text here", None))
         self.chatContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
