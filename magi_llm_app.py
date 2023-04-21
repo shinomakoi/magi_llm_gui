@@ -17,7 +17,7 @@ from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
 
-class WorkerThread(QThread):
+class textgenThread(QThread):
     resultReady = Signal(str)
     final_resultReady = Signal(str)
 
@@ -32,6 +32,8 @@ class WorkerThread(QThread):
 
         self.stop_flag = False
 
+        # print('Final prompt:', self.message)
+
     def run(self):
 
         if self.run_backend == 'ooba':
@@ -41,9 +43,7 @@ class WorkerThread(QThread):
                 replies = []
 
                 async def get_result():
-
                     async for response in api_fetch.run(self.message, self.ooba_params, self.ooba_server_ip):
-
                         # Intermediate steps
                         replies.append(response)
 
@@ -88,9 +88,6 @@ class WorkerThread(QThread):
 
             # Final result
             self.final_resultReady.emit(final_text)
-
-        # output = model.generate()[0]
-        # print(output)
 
     def stop(self):
         # Set the stop flag to True
@@ -177,7 +174,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.cppModelSelect.clicked.connect(lambda: self.cpp_model_select())
 
-        ###
+        # Quit from menu
         self.actionSettings.triggered.connect(
             lambda: self.settings_win.show())
         self.actionExit.triggered.connect(app.exit)
@@ -188,6 +185,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Status bar
         self.statusbar.showMessage(f"Status: Idle")
 
+    # Browse for the GGML model
     def cpp_model_select(self):
         file_x = (QFileDialog.getOpenFileName(
             self, 'Open file', '', "GGML models (*bin)")[0])
@@ -195,6 +193,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if len(file_x) > 0:
             self.cppModelPath.setText(file_x)
 
+    # Save any settings
     def save_settings(self):
 
         config = configparser.ConfigParser()
@@ -230,12 +229,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.notebookContinueButton.setEnabled(True)
             self.chatContinueButton.setEnabled(True)
 
-    # Continue response logic
-
+    # Stop button logic
     def stop_textgen(self):
-        self.workerThread.stop()
+        self.textgenThread.stop()
         self.stopButton.setEnabled(False)
 
+    # Continue button logic
     def continue_textgen(self, text_tab):
 
         if self.oobaCheck.isEnabled() is False:
@@ -259,8 +258,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     @Slot(str)
     def handleResult(self, reply):
 
-        # Update the chat history
-
         if textgen_mode == 'default_mode':
             cursor = self.defaultTextHistory.textCursor()
             cursor.movePosition(QTextCursor.End)  # Move it to the end
@@ -282,6 +279,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.chatHistory.verticalScrollBar().setValue(
                 self.chatHistory.verticalScrollBar().maximum())
 
+    # Handle the final response from textgen
     @Slot(str)
     def final_handleResult(self, final_text):
 
@@ -298,7 +296,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked() == True:
             current_date = self.get_chat_date()
 
-            with open(f"logs/chat_ooba_{current_date}.txt", "a", encoding='utf-8') as f:
+            with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
                 f.write('\n'+final_text)
             print('Wrote chat log')
 
@@ -306,9 +304,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.history_readonly_logic(False)
         self.stopButton.setEnabled(False)
 
-        self.workerThread.quit()
-        self.workerThread.wait()
+        self.textgenThread.quit()
+        self.textgenThread.wait()
 
+    # Get chat presets from files
     def set_preset_params(self):
         current_preset = self.chatPresetComboBox.currentText()
 
@@ -318,6 +317,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.chatHistory.setPlainText(f"{preset_text}\n")
 
+    # Get the llama.cpp parameters
     def get_llama_cpp_params(self):
 
         cpp_params = {
@@ -331,6 +331,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         print("llama.cpp parameters:", cpp_params)
         return cpp_params
 
+    # Get the llama.cpp parameters
     def get_ooba_params(self):
 
         ooba_server_ip = self.settings_win.oobaServerAddress.text().strip()
@@ -385,12 +386,13 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         return preset_text, chat_user_prefix, bot_user_prefix
 
+    # First load of llama.cpp model
     def load_cpp_model(self):
 
         params = {
             'model_path': str(self.cppModelPath.text()),
             'n_ctx': int(self.settings_win.CPP_ctxsize_Slider.value()),
-            'seed': 1337,
+            'seed': -1,
             'n_threads': int(self.settings_win.cppThreads.text()),
             'n_batch': int(self.settings_win.cppBatchSizeSlider.value()),
             'n_ctx': int(self.settings_win.CPP_ctxsize_Slider.value())
@@ -406,6 +408,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.oobaCheck.setEnabled(False)
         self.stopButton.setEnabled(True)
 
+    # Main launcher logic
     def textgen_switcher(self, pre_textgen_mode):
 
         if self.cppCheck.isEnabled() == True and self.cppCheck.isChecked() == True:
@@ -453,8 +456,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
                 self.chatInput.clear()
 
-    # Oobabooga launch
-
+    # Launch QThread to textgen
     def launch_backend(self, message, run_backend):
 
         message = ' '+message
@@ -464,16 +466,16 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.statusbar.showMessage(f"Status: Generating...")
 
-        self.workerThread = WorkerThread(
+        self.textgenThread = textgenThread(
             ooba_params, ooba_server_ip, message, self.streamEnabledCheck.isChecked(), run_backend, cpp_params)
 
         # Connect signals and slots
-        self.workerThread.resultReady.connect(self.handleResult)
-        self.workerThread.final_resultReady.connect(self.final_handleResult)
-        self.workerThread.finished.connect(self.workerThread.deleteLater)
+        self.textgenThread.resultReady.connect(self.handleResult)
+        self.textgenThread.final_resultReady.connect(self.final_handleResult)
+        self.textgenThread.finished.connect(self.textgenThread.deleteLater)
 
         # Start the thread
-        self.workerThread.start()
+        self.textgenThread.start()
         self.set_textgen_things()
 
 
@@ -491,4 +493,4 @@ if __name__ == "__main__":
     # Start the Qt event loop
     app.exec()
 
-# todo - transformers, openai API support. TTS, chat images, character JSON imports.
+# todo - transformers, openai API support. TTS, chat images, character JSON imports. reflection

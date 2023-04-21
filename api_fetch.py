@@ -7,9 +7,11 @@ import websockets
 
 GRADIO_FN = 34
 
-### tested on commit 49aa05054ae13f381381440a9860ce0d68200e80
+# tested on commit 49aa05054ae13f381381440a9860ce0d68200e80
 
 # API non-streaming mode
+
+
 def textgen(params, server, prompt):
 
     # Input prompt
@@ -25,13 +27,14 @@ def textgen(params, server, prompt):
     return reply
 
 # API streaming mode
-async def run(context, params, server):
 
-    print('``````````prompt',context)
+
+async def run(context, params, server):
 
     def random_hash():
         letters = string.ascii_lowercase + string.digits
         return ''.join(random.choice(letters) for i in range(9))
+
 
     payload = json.dumps([context, params])
     session = random_hash()
