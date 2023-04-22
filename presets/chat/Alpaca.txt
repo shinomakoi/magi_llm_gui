@@ -1,4 +1,0 @@
-[Settings]
-preset_text=Below is an instruction that describes a task. Write a response that appropriately completes the request.
-chat_user_prefix=\n### Instruction:\n
-bot_user_prefix=\n### Response:\n

@@ -1,4 +1,0 @@
-[Settings]
-preset_text=<|SYSTEM|>\nStableLM is a helpful assistant.\nStableLM is more than just an information source, StableLM is also able to write poetry, short stories, and make jokes.
-chat_user_prefix=\n<|USER|>
-bot_user_prefix=\n<|ASSISTANT|>
