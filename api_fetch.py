@@ -1,68 +1,46 @@
 import json
-import random
-import string
 
 import requests
 import websockets
-
-GRADIO_FN = 34
-
-# tested on commit 49aa05054ae13f381381440a9860ce0d68200e80
 
 # API non-streaming mode
 
 
 def textgen(params, server, prompt):
 
-    # Input prompt
-    payload = json.dumps([prompt, params])
+    server_addr = f'{server}:5000'
+    server_url = f'http://{server_addr}/api/v1/generate'
 
-    response = requests.post(f"http://{server}:7860/run/textgen", json={
-        "data": [
-            payload
-        ]
-    }).json()
+    params["prompt"] = prompt
+    request = params
 
-    reply = response["data"][0]
-    return reply
+    response = requests.post(server_url, json=request)
 
-# API streaming mode
+    if response.status_code == 200:
+        result = response.json()['results'][0]['text']
+        final_result = (prompt + result)
+        return final_result
 
 
 async def run(context, params, server):
 
-    def random_hash():
-        letters = string.ascii_lowercase + string.digits
-        return ''.join(random.choice(letters) for i in range(9))
+    server_addr = f'{server}:5005'
+    server_url = f'ws://{server_addr}/api/v1/stream'
 
+    params["prompt"] = context
+    request = params
 
-    payload = json.dumps([context, params])
-    session = random_hash()
+    async with websockets.connect(server_url) as websocket:
+        await websocket.send(json.dumps(request))
 
-    async with websockets.connect(f"ws://{server}:7860/queue/join") as websocket:
-        while content := json.loads(await websocket.recv()):
-            # Python3.10 syntax, replace with if elif on older
-            match content["msg"]:
-                case "send_hash":
-                    await websocket.send(json.dumps({
-                        "session_hash": session,
-                        "fn_index": GRADIO_FN
-                    }))
-                case "estimation":
-                    pass
-                case "send_data":
-                    await websocket.send(json.dumps({
-                        "session_hash": session,
-                        "fn_index": GRADIO_FN,
-                        "data": [
-                            payload
-                        ]
-                    }))
-                case "process_starts":
-                    pass
-                case "process_generating" | "process_completed":
-                    yield content["output"]["data"][0]
-                    # You can search for your desired end indicator and
-                    #  stop generation by closing the websocket here
-                    if (content["msg"] == "process_completed"):
-                        break
+        yield context  # Remove this if you just want to see the reply
+
+        while True:
+            incoming_data = await websocket.recv()
+            incoming_data = json.loads(incoming_data)
+
+            match incoming_data['event']:
+                case 'text_stream':
+                    yield incoming_data['text']
+                case 'stream_end':
+                    return

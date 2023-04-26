@@ -271,13 +271,13 @@ class Ui_magi_llm_window(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.oobaCheck = QRadioButton(self.groupBox_5)
         self.oobaCheck.setObjectName(u"oobaCheck")
-        self.oobaCheck.setChecked(False)
+        self.oobaCheck.setChecked(True)
 
         self.verticalLayout_3.addWidget(self.oobaCheck)
 
         self.cppCheck = QRadioButton(self.groupBox_5)
         self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(True)
+        self.cppCheck.setChecked(False)
 
         self.verticalLayout_3.addWidget(self.cppCheck)
 
@@ -312,7 +312,7 @@ class Ui_magi_llm_window(object):
 
         self.streamEnabledCheck = QCheckBox(self.groupBox_2)
         self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
-        self.streamEnabledCheck.setChecked(True)
+        self.streamEnabledCheck.setChecked(False)
 
         self.gridLayout_5.addWidget(self.streamEnabledCheck, 0, 0, 1, 1)
 

@@ -483,7 +483,7 @@ class Ui_Settings_Dialog(object):
         self.maxnewtokensSlider.valueChanged.connect(self.maxnewtokensSliderLabel.setNum)
         self.top_kSlider.valueChanged.connect(self.top_kSliderLabel.setNum)
 
-        self.parametersTab.setCurrentIndex(0)
+        self.parametersTab.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Settings_Dialog)
@@ -552,7 +552,7 @@ class Ui_Settings_Dialog(object):
 #if QT_CONFIG(tooltip)
         self.oobaServerAddress.setToolTip(QCoreApplication.translate("Settings_Dialog", u"IP of the WebUI server API", None))
 #endif // QT_CONFIG(tooltip)
-        self.oobaServerAddress.setText(QCoreApplication.translate("Settings_Dialog", u"127.0.0.1", None))
+        self.oobaServerAddress.setText(QCoreApplication.translate("Settings_Dialog", u"localhost", None))
 #if QT_CONFIG(tooltip)
         self.skipSpecialTokensCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Some specific models need this unset", None))
 #endif // QT_CONFIG(tooltip)
