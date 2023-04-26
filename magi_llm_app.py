@@ -530,7 +530,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             else:
                 chat_user_prefix = self.yourNameLine.text()+': '
-                bot_user_prefix = self.characterNameLine.text()+': '
+                bot_user_prefix = self.characterPresetComboBox.currentText()+': '
 
                 final_prompt = (f"""{self.chatHistory.toPlainText()}
 
