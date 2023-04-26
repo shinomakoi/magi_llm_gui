@@ -525,7 +525,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
 {chat_user_prefix}
 {self.chatInput.toPlainText()}
-{bot_user_prefix}""")
+{bot_user_prefix}
+""")
 
             else:
                 chat_user_prefix = self.yourNameLine.text()+': '
