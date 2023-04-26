@@ -16,6 +16,7 @@ import api_fetch
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
+import csv
 
 
 class textgenThread(QThread):
@@ -151,13 +152,27 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         # Chat presets load
         chat_presets_load = glob.glob("presets/chat/*.yaml")
+        character_presets_load = glob.glob("presets/character/*.yaml")
 
         for chat_preset in chat_presets_load:
             print(chat_preset)
             chat_preset_stem = Path(chat_preset).stem
             self.chatPresetComboBox.addItem(chat_preset_stem)
 
-        self.set_preset_params()
+        for character_preset in character_presets_load:
+            print(character_preset)
+            character_preset_stem = Path(character_preset).stem
+            self.characterPresetComboBox.addItem(character_preset_stem)
+
+        filename = "presets/prompts.csv"
+        with open(filename, "r",  encoding="utf-8") as csvfile:
+            datareader = csv.reader(csvfile)
+            for row in datareader:
+                self.awesomePresetComboBox.addItem(row[0])
+            self.awesomePresetComboBox.removeItem(0)
+                 # row is a list of values
+
+        self.set_preset_params('chat')
 
         # Load settings
         config = configparser.ConfigParser()
@@ -186,12 +201,17 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.settingsPathSaveButton.clicked.connect(
             lambda: self.save_settings())
 
-        self.chatClearButton.clicked.connect(lambda: self.set_preset_params())
+        self.chatClearButton.clicked.connect(
+            lambda: self.set_preset_params('chat'))
 
         self.cppModelSelect.clicked.connect(lambda: self.cpp_model_select())
 
         self.chatPresetComboBox.currentTextChanged.connect(
-            lambda: self.set_preset_params())
+            lambda: self.set_preset_params('chat'))
+        self.characterPresetComboBox.currentTextChanged.connect(
+            lambda: self.set_preset_params('character'))
+        self.awesomePresetComboBox.currentTextChanged.connect(
+            lambda: self.awesome_prompts())
 
         # Quit from menu
         self.actionSettings.triggered.connect(
@@ -396,17 +416,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             print(chat_preset)
 
-        # config = configparser.ConfigParser()
-        # config.read(f"presets/chat/{current_preset}.txt")
-
-        # # Convert the \n from settings file into new lines
-        # preset_text = config["Settings"]["preset_text"].replace(
-        #     "\\n", "\n")
-        # chat_user_prefix = config["Settings"]["chat_user_prefix"].replace(
-        #     "\\n", "\n").replace("_", " ")
-        # bot_user_prefix = config["Settings"]["bot_user_prefix"].replace(
-        #     "\\n", "\n")
-
         return chat_preset
 
     # First load of llama.cpp model
@@ -507,30 +516,66 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # if pre_textgen_mode == 'notebook_mode':
 
         if pre_textgen_mode == 'chat_mode':
-            chat_preset = self.get_chat_presets()
-            chat_user_prefix = chat_preset["your_name"]
-            bot_user_prefix = chat_preset["name"]
+            if self.instructRadioButton.isChecked():
+                chat_preset = self.get_chat_presets()
+                chat_user_prefix = chat_preset["your_name"]
+                bot_user_prefix = chat_preset["name"]
 
-            final_prompt = (f"""{self.chatHistory.toPlainText()}
+                final_prompt = (f"""{self.chatHistory.toPlainText()}
 
 {chat_user_prefix}
 {self.chatInput.toPlainText()}
-{bot_user_prefix}
-""")
+{bot_user_prefix}""")
+
+            else:
+                chat_user_prefix = self.yourNameLine.text()+': '
+                bot_user_prefix = self.characterNameLine.text()+': '
+
+                final_prompt = (f"""{self.chatHistory.toPlainText()}
+
+{chat_user_prefix}{self.chatInput.toPlainText()}
+{bot_user_prefix}""")
 
         return final_prompt
 
     # Get chat presets from files
-    def set_preset_params(self):
+    def set_preset_params(self, preset_mode):
 
-        current_preset = self.chatPresetComboBox.currentText()
-        preset_file = (f"presets/chat/{current_preset}.yaml")
+        if preset_mode == 'chat':
+            current_preset = self.chatPresetComboBox.currentText()
+            preset_file = (f"presets/chat/{current_preset}.yaml")
 
-        with open(preset_file, 'r') as file:
-            chat_preset = yaml.safe_load(file)
+            with open(preset_file, 'r') as file:
+                chat_preset = yaml.safe_load(file)
 
-        chat_preset_context = (chat_preset["context"])
-        self.chatHistory.setPlainText(f"{chat_preset_context}\n")
+            chat_preset_context = (chat_preset["context"])
+            self.chatHistory.setPlainText(f"{chat_preset_context}\n")
+
+        elif preset_mode == 'character':
+
+            current_preset = self.characterPresetComboBox.currentText()
+            preset_file = (f"presets/character/{current_preset}.yaml")
+
+            with open(preset_file, 'r') as file:
+                self.chatHistory.clear()
+                character_preset = yaml.safe_load(file)
+
+                for x in character_preset:
+                    value = character_preset[x]
+                    # final = f"{x.capitalize()}: {value}"
+                    value = value.replace(r"{{char}}", character_preset["name"]).replace(
+                        r"{{user}}", self.yourNameLine.text())
+                    self.chatHistory.appendPlainText(f"{value}\n")
+
+    def awesome_prompts(self):
+
+        filename = "presets/prompts.csv"
+        with open(filename, "r",  encoding="utf-8") as csvfile:
+            datareader = csv.reader(csvfile)
+            for row in datareader:
+                if row[0] == self.awesomePresetComboBox.currentText():
+                    self.chatInput.setPlainText(row[1])
+                    break
 
 
 if __name__ == "__main__":
