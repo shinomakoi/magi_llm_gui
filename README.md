@@ -25,3 +25,6 @@ python magi_llm_app.py
 You can set the generation parameters in File > Parameters
 
 ![image](https://user-images.githubusercontent.com/112139428/233437918-8f9b7c2a-dd77-4536-a612-a893a2bc90d4.png)
+
+
+Includes prompts from https://github.com/f/awesome-chatgpt-prompts
