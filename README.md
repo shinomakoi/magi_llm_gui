@@ -7,9 +7,9 @@ Currently works with https://github.com/oobabooga/text-generation-webui/ and htt
 
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
 
-Launch the WebUi with the ```--listen``` flag to enable the text-generation-webui API and add ```--no-stream``` if you don't want to use streaming mode.
+Launch the WebUi with the ```--api``` flag to enable the text-generation-webui API and add ```--no-stream``` if you don't want to use streaming mode.
 
-Has been tested with commit 49aa05054ae13f381381440a9860ce0d68200e80 for text-generation-webui. 
+Has been tested with commit 91745f63c35480ea3ce6b66e979dbd7ce364171c for text-generation-webui. 
 
 To install (optionally create a virtual environment): 
 ```
