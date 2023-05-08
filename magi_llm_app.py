@@ -1,5 +1,6 @@
 import asyncio
 import configparser
+import csv
 import glob
 import platform
 import sys
@@ -16,7 +17,6 @@ import api_fetch
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
-import csv
 
 
 class textgenThread(QThread):
@@ -170,7 +170,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             for row in datareader:
                 self.awesomePresetComboBox.addItem(row[0])
             self.awesomePresetComboBox.removeItem(0)
-                 # row is a list of values
+            # row is a list of values
 
         self.set_preset_params('chat')
 
@@ -321,7 +321,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         elif textgen_mode == 'chat_mode':
             cursor = self.chatHistory.textCursor()
             cursor.movePosition(QTextCursor.End)  # Move it to the end
+
+            # reply=reply.replace(" ","&nbsp;")
             cursor.insertText(reply)
+
             self.chatHistory.verticalScrollBar().setValue(
                 self.chatHistory.verticalScrollBar().maximum())
 
@@ -423,7 +426,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         cpp_model_params = {
             'model_path': str(self.cppModelPath.text()),
-            'n_ctx': int(self.settings_win.CPP_ctxsize_Slider.value()),
             'seed': -1,
             'n_threads': int(self.settings_win.cppThreads.text()),
             'n_batch': int(self.settings_win.cppBatchSizeSlider.value()),
@@ -533,9 +535,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
                 final_prompt = (f"""{self.chatHistory.toPlainText()}
 
-{chat_user_prefix}{self.chatInput.toPlainText()}
+{chat_user_prefix}
+{self.chatInput.toPlainText()}
 {bot_user_prefix}""")
 
+        if self.customResponsePrefixCheck.isChecked():
+            final_prompt += ' '+self.customResponsePrefix.text()
         return final_prompt
 
     # Get chat presets from files

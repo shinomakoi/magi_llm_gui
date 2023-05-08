@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'magi_llm_ui.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.0
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -20,8 +20,8 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QGridLayout, QGroupBox, QHBoxLayout, QLabel,
     QLineEdit, QMainWindow, QMenu, QMenuBar,
     QPlainTextEdit, QPushButton, QRadioButton, QSizePolicy,
-    QStatusBar, QTabWidget, QToolBox, QToolButton,
-    QVBoxLayout, QWidget)
+    QStatusBar, QTabWidget, QToolButton, QVBoxLayout,
+    QWidget)
 
 class Ui_magi_llm_window(object):
     def setupUi(self, magi_llm_window):
@@ -188,10 +188,20 @@ class Ui_magi_llm_window(object):
         self.groupBox_4.setObjectName(u"groupBox_4")
         self.gridLayout_10 = QGridLayout(self.groupBox_4)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.label = QLabel(self.groupBox_4)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_10.addWidget(self.label, 1, 1, 1, 1)
+
         self.chatPresetComboBox = QComboBox(self.groupBox_4)
         self.chatPresetComboBox.setObjectName(u"chatPresetComboBox")
 
         self.gridLayout_10.addWidget(self.chatPresetComboBox, 0, 2, 1, 1)
+
+        self.awesomePresetComboBox = QComboBox(self.groupBox_4)
+        self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
+
+        self.gridLayout_10.addWidget(self.awesomePresetComboBox, 1, 2, 1, 1)
 
         self.characterPresetComboBox = QComboBox(self.groupBox_4)
         self.characterPresetComboBox.setObjectName(u"characterPresetComboBox")
@@ -231,17 +241,7 @@ class Ui_magi_llm_window(object):
         self.horizontalLayout.addWidget(self.toolButton)
 
 
-        self.gridLayout_10.addWidget(self.groupBox_3, 0, 5, 1, 1)
-
-        self.awesomePresetComboBox = QComboBox(self.groupBox_4)
-        self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
-
-        self.gridLayout_10.addWidget(self.awesomePresetComboBox, 1, 2, 1, 1)
-
-        self.label = QLabel(self.groupBox_4)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_10.addWidget(self.label, 1, 1, 1, 1)
+        self.gridLayout_10.addWidget(self.groupBox_3, 1, 4, 1, 1)
 
 
         self.gridLayout_3.addWidget(self.groupBox_4, 0, 0, 1, 2)
@@ -256,35 +256,28 @@ class Ui_magi_llm_window(object):
         self.settingsTab = QWidget()
         self.settingsTab.setObjectName(u"settingsTab")
         self.settingsTab.setAutoFillBackground(True)
-        self.gridLayout_4 = QGridLayout(self.settingsTab)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.toolBox = QToolBox(self.settingsTab)
-        self.toolBox.setObjectName(u"toolBox")
-        self.page_3 = QWidget()
-        self.page_3.setObjectName(u"page_3")
-        self.page_3.setGeometry(QRect(0, 0, 777, 826))
-        self.gridLayout_8 = QGridLayout(self.page_3)
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.groupBox_5 = QGroupBox(self.page_3)
+        self.verticalLayout = QVBoxLayout(self.settingsTab)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.groupBox_5 = QGroupBox(self.settingsTab)
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_5)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.oobaCheck = QRadioButton(self.groupBox_5)
         self.oobaCheck.setObjectName(u"oobaCheck")
-        self.oobaCheck.setChecked(True)
+        self.oobaCheck.setChecked(False)
 
         self.verticalLayout_3.addWidget(self.oobaCheck)
 
         self.cppCheck = QRadioButton(self.groupBox_5)
         self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(False)
+        self.cppCheck.setChecked(True)
 
         self.verticalLayout_3.addWidget(self.cppCheck)
 
 
-        self.gridLayout_8.addWidget(self.groupBox_5, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.groupBox_5)
 
-        self.groupBox_2 = QGroupBox(self.page_3)
+        self.groupBox_2 = QGroupBox(self.settingsTab)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout_5 = QGridLayout(self.groupBox_2)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
@@ -312,7 +305,7 @@ class Ui_magi_llm_window(object):
 
         self.streamEnabledCheck = QCheckBox(self.groupBox_2)
         self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
-        self.streamEnabledCheck.setChecked(False)
+        self.streamEnabledCheck.setChecked(True)
 
         self.gridLayout_5.addWidget(self.streamEnabledCheck, 0, 0, 1, 1)
 
@@ -329,9 +322,9 @@ class Ui_magi_llm_window(object):
         self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
 
 
-        self.gridLayout_8.addWidget(self.groupBox_2, 1, 0, 1, 1)
+        self.verticalLayout.addWidget(self.groupBox_2)
 
-        self.groupBox = QGroupBox(self.page_3)
+        self.groupBox = QGroupBox(self.settingsTab)
         self.groupBox.setObjectName(u"groupBox")
         self.gridLayout_7 = QGridLayout(self.groupBox)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
@@ -356,15 +349,7 @@ class Ui_magi_llm_window(object):
         self.gridLayout_7.addWidget(self.yourNameLine, 1, 1, 1, 1)
 
 
-        self.gridLayout_8.addWidget(self.groupBox, 2, 0, 1, 1)
-
-        self.toolBox.addItem(self.page_3, u"Settings")
-        self.page_4 = QWidget()
-        self.page_4.setObjectName(u"page_4")
-        self.page_4.setGeometry(QRect(0, 0, 98, 28))
-        self.toolBox.addItem(self.page_4, u"Characters")
-
-        self.gridLayout_4.addWidget(self.toolBox, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.groupBox)
 
         self.textgenTab.addTab(self.settingsTab, "")
 
@@ -373,7 +358,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 819, 23))
+        self.llm_menubar.setGeometry(QRect(0, 0, 819, 35))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -390,8 +375,6 @@ class Ui_magi_llm_window(object):
         self.menuHelp.addAction(self.actionAbout)
 
         self.retranslateUi(magi_llm_window)
-        self.toolButton.clicked.connect(self.chatHistory.zoomOut)
-        self.toolButton_2.clicked.connect(self.chatHistory.zoomIn)
 
         self.textgenTab.setCurrentIndex(2)
 
@@ -426,7 +409,7 @@ class Ui_magi_llm_window(object):
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.chatInput.setPlainText("")
+        self.chatInput.setPlainText(QCoreApplication.translate("magi_llm_window", u"what are pigeons?", None))
         self.chatInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Enter some text here", None))
         self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
 #if QT_CONFIG(shortcut)
@@ -436,14 +419,13 @@ class Ui_magi_llm_window(object):
         self.chatContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.chatStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.groupBox_4.setTitle("")
+        self.label.setText(QCoreApplication.translate("magi_llm_window", u"Awesome prompts:", None))
         self.charactersRadioButton.setText(QCoreApplication.translate("magi_llm_window", u"Characters:", None))
         self.instructRadioButton.setText(QCoreApplication.translate("magi_llm_window", u"Instruct:", None))
         self.groupBox_3.setTitle("")
         self.label_2.setText(QCoreApplication.translate("magi_llm_window", u"Font size:", None))
         self.toolButton_2.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
         self.toolButton.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
-        self.label.setText(QCoreApplication.translate("magi_llm_window", u"Awesome prompts:", None))
-        self.chatHistory.setPlainText("")
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.chat_textgenTab), QCoreApplication.translate("magi_llm_window", u"Chat", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
         self.oobaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Oobabooga WebUI", None))
@@ -466,8 +448,6 @@ class Ui_magi_llm_window(object):
         self.label_4.setText(QCoreApplication.translate("magi_llm_window", u"Your name:", None))
         self.customResponsePrefixCheck.setText(QCoreApplication.translate("magi_llm_window", u"Response prefix:", None))
         self.yourNameLine.setText(QCoreApplication.translate("magi_llm_window", u"Bob", None))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page_3), QCoreApplication.translate("magi_llm_window", u"Settings", None))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page_4), QCoreApplication.translate("magi_llm_window", u"Characters", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.settingsTab), QCoreApplication.translate("magi_llm_window", u"Settings", None))
         self.menuFile.setTitle(QCoreApplication.translate("magi_llm_window", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("magi_llm_window", u"Help", None))

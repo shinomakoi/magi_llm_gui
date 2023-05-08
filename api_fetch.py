@@ -30,7 +30,7 @@ async def run(context, params, server):
     params["prompt"] = context
     request = params
 
-    async with websockets.connect(server_url) as websocket:
+    async with websockets.connect(server_url, ping_interval=None) as websocket:
         await websocket.send(json.dumps(request))
 
         yield context  # Remove this if you just want to see the reply

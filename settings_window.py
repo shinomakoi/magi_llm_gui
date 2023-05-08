@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_settings.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.0
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -415,7 +415,7 @@ class Ui_Settings_Dialog(object):
         self.cppThreads.setObjectName(u"cppThreads")
         self.cppThreads.setMinimum(1)
         self.cppThreads.setMaximum(64)
-        self.cppThreads.setValue(6)
+        self.cppThreads.setValue(4)
 
         self.gridLayout_4.addWidget(self.cppThreads, 0, 2, 1, 1)
 
@@ -445,7 +445,7 @@ class Ui_Settings_Dialog(object):
         self.CPP_ctxsize_Slider.setObjectName(u"CPP_ctxsize_Slider")
         self.CPP_ctxsize_Slider.setMinimum(64)
         self.CPP_ctxsize_Slider.setMaximum(2048)
-        self.CPP_ctxsize_Slider.setValue(1024)
+        self.CPP_ctxsize_Slider.setValue(2048)
         self.CPP_ctxsize_Slider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_4.addWidget(self.CPP_ctxsize_Slider, 2, 2, 1, 1)
@@ -483,7 +483,7 @@ class Ui_Settings_Dialog(object):
         self.maxnewtokensSlider.valueChanged.connect(self.maxnewtokensSliderLabel.setNum)
         self.top_kSlider.valueChanged.connect(self.top_kSliderLabel.setNum)
 
-        self.parametersTab.setCurrentIndex(1)
+        self.parametersTab.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Settings_Dialog)
@@ -598,7 +598,7 @@ class Ui_Settings_Dialog(object):
         self.cppMmapCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Use mmap if possible", None))
 #endif // QT_CONFIG(tooltip)
         self.cppMmapCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Use MMAP", None))
-        self.CPP_ctxsize_SliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1024", None))
+        self.CPP_ctxsize_SliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"2048", None))
         self.label_16.setText(QCoreApplication.translate("Settings_Dialog", u"Threads:", None))
         self.label_6.setText(QCoreApplication.translate("Settings_Dialog", u"Batch size:", None))
         self.cppBatchSizeSlider_2.setText(QCoreApplication.translate("Settings_Dialog", u"64", None))
