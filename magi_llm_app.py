@@ -84,6 +84,7 @@ class textgenThread(QThread):
                                                    self.cpp_params["top_p"],
                                                    self.cpp_params["top_k"],
                                                    self.cpp_params["repetition_penalty"],
+                                                   self.cpp_params["mirostat_mode"],
                                                    ):
 
                     if self.stream_enabled:
@@ -367,6 +368,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'top_p': float(self.settings_win.top_pSlider.value()/100),
             'top_k': int(self.settings_win.top_kSlider.value()),
             'repetition_penalty': float(self.settings_win.reppenaltySlider.value()/100),
+            'mirostat_mode': int(self.settings_win.cppMirastatMode.value())
         }
 
         return cpp_params
@@ -433,6 +435,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'use_mmap': bool(self.settings_win.cppMmapCheck.isChecked()),
             'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),
         }
+
+        if self.settings_win.gpuAccelCheck.isChecked():
+            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value(
+            )
 
         print('llama.cpp model load params:', cpp_model_params)
         print('Loading llama.cpp model...')
