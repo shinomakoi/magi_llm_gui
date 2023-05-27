@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'magi_llm_ui.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.3
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -409,7 +409,7 @@ class Ui_magi_llm_window(object):
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.chatInput.setPlainText(QCoreApplication.translate("magi_llm_window", u"what are pigeons?", None))
+        self.chatInput.setPlainText("")
         self.chatInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Enter some text here", None))
         self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
 #if QT_CONFIG(shortcut)

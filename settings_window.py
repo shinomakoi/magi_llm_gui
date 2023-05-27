@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_settings.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.3
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -376,11 +376,6 @@ class Ui_Settings_Dialog(object):
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.gridLayout_4 = QGridLayout(self.groupBox_5)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.label_13 = QLabel(self.groupBox_5)
-        self.label_13.setObjectName(u"label_13")
-
-        self.gridLayout_4.addWidget(self.label_13, 2, 3, 1, 1)
-
         self.label_31 = QLabel(self.groupBox_5)
         self.label_31.setObjectName(u"label_31")
 
@@ -394,13 +389,27 @@ class Ui_Settings_Dialog(object):
         self.cppMlockCheck = QCheckBox(self.groupBox_5)
         self.cppMlockCheck.setObjectName(u"cppMlockCheck")
 
-        self.gridLayout_4.addWidget(self.cppMlockCheck, 9, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.cppMlockCheck, 12, 2, 1, 1)
 
         self.cppMmapCheck = QCheckBox(self.groupBox_5)
         self.cppMmapCheck.setObjectName(u"cppMmapCheck")
         self.cppMmapCheck.setChecked(True)
 
-        self.gridLayout_4.addWidget(self.cppMmapCheck, 7, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.cppMmapCheck, 10, 2, 1, 1)
+
+        self.label_14 = QLabel(self.groupBox_5)
+        self.label_14.setObjectName(u"label_14")
+
+        self.gridLayout_4.addWidget(self.label_14, 6, 0, 1, 1)
+
+        self.gpuLayersSlider = QSlider(self.groupBox_5)
+        self.gpuLayersSlider.setObjectName(u"gpuLayersSlider")
+        self.gpuLayersSlider.setMinimum(1)
+        self.gpuLayersSlider.setMaximum(80)
+        self.gpuLayersSlider.setValue(22)
+        self.gpuLayersSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_4.addWidget(self.gpuLayersSlider, 8, 2, 1, 1)
 
         self.label_16 = QLabel(self.groupBox_5)
         self.label_16.setObjectName(u"label_16")
@@ -417,8 +426,9 @@ class Ui_Settings_Dialog(object):
 
         self.gpuAccelCheck = QCheckBox(self.groupBox_5)
         self.gpuAccelCheck.setObjectName(u"gpuAccelCheck")
+        self.gpuAccelCheck.setChecked(False)
 
-        self.gridLayout_4.addWidget(self.gpuAccelCheck, 10, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.gpuAccelCheck, 13, 2, 1, 1)
 
         self.CPP_repeat_last_nSliderLabel = QLabel(self.groupBox_5)
         self.CPP_repeat_last_nSliderLabel.setObjectName(u"CPP_repeat_last_nSliderLabel")
@@ -439,7 +449,7 @@ class Ui_Settings_Dialog(object):
         self.cppBatchSizeSlider.setObjectName(u"cppBatchSizeSlider")
         self.cppBatchSizeSlider.setMinimum(8)
         self.cppBatchSizeSlider.setMaximum(1024)
-        self.cppBatchSizeSlider.setValue(256)
+        self.cppBatchSizeSlider.setValue(512)
         self.cppBatchSizeSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_4.addWidget(self.cppBatchSizeSlider, 5, 2, 1, 1)
@@ -453,16 +463,11 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_4.addWidget(self.CPP_ctxsize_Slider, 3, 2, 1, 1)
 
-        self.label_10 = QLabel(self.groupBox_5)
-        self.label_10.setObjectName(u"label_10")
-
-        self.gridLayout_4.addWidget(self.label_10, 2, 0, 1, 1)
-
         self.CPP_repeat_last_nSlider = QSlider(self.groupBox_5)
         self.CPP_repeat_last_nSlider.setObjectName(u"CPP_repeat_last_nSlider")
         self.CPP_repeat_last_nSlider.setMinimum(16)
         self.CPP_repeat_last_nSlider.setMaximum(512)
-        self.CPP_repeat_last_nSlider.setValue(128)
+        self.CPP_repeat_last_nSlider.setValue(64)
         self.CPP_repeat_last_nSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_4.addWidget(self.CPP_repeat_last_nSlider, 4, 2, 1, 1)
@@ -472,14 +477,11 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_4.addWidget(self.label_12, 3, 0, 1, 2)
 
-        self.gpuLayersSlider = QSlider(self.groupBox_5)
-        self.gpuLayersSlider.setObjectName(u"gpuLayersSlider")
-        self.gpuLayersSlider.setMinimum(1)
-        self.gpuLayersSlider.setMaximum(80)
-        self.gpuLayersSlider.setValue(16)
-        self.gpuLayersSlider.setOrientation(Qt.Horizontal)
+        self.cppMirastatMode = QSpinBox(self.groupBox_5)
+        self.cppMirastatMode.setObjectName(u"cppMirastatMode")
+        self.cppMirastatMode.setMaximum(2)
 
-        self.gridLayout_4.addWidget(self.gpuLayersSlider, 2, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.cppMirastatMode, 6, 2, 1, 1)
 
         self.line_3 = QFrame(self.groupBox_5)
         self.line_3.setObjectName(u"line_3")
@@ -488,16 +490,15 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_4.addWidget(self.line_3, 1, 2, 1, 1)
 
-        self.cppMirastatMode = QSpinBox(self.groupBox_5)
-        self.cppMirastatMode.setObjectName(u"cppMirastatMode")
-        self.cppMirastatMode.setMaximum(2)
+        self.label_10 = QLabel(self.groupBox_5)
+        self.label_10.setObjectName(u"label_10")
 
-        self.gridLayout_4.addWidget(self.cppMirastatMode, 6, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.label_10, 8, 0, 1, 1)
 
-        self.label_14 = QLabel(self.groupBox_5)
-        self.label_14.setObjectName(u"label_14")
+        self.label_13 = QLabel(self.groupBox_5)
+        self.label_13.setObjectName(u"label_13")
 
-        self.gridLayout_4.addWidget(self.label_14, 6, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.label_13, 8, 3, 1, 1)
 
 
         self.verticalLayout_4.addWidget(self.groupBox_5)
@@ -517,6 +518,7 @@ class Ui_Settings_Dialog(object):
         self.numbeamsSlider.valueChanged.connect(self.numbeamsSliderLabel.setNum)
         self.maxnewtokensSlider.valueChanged.connect(self.maxnewtokensSliderLabel.setNum)
         self.top_kSlider.valueChanged.connect(self.top_kSliderLabel.setNum)
+        self.gpuLayersSlider.valueChanged.connect(self.label_13.setNum)
 
         self.parametersTab.setCurrentIndex(0)
 
@@ -626,7 +628,6 @@ class Ui_Settings_Dialog(object):
 #endif // QT_CONFIG(tooltip)
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.oobaParamTab), QCoreApplication.translate("Settings_Dialog", u"Oobabooga", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
-        self.label_13.setText(QCoreApplication.translate("Settings_Dialog", u"16", None))
         self.label_31.setText(QCoreApplication.translate("Settings_Dialog", u"Repeat last N:", None))
         self.label_6.setText(QCoreApplication.translate("Settings_Dialog", u"Batch size:", None))
 #if QT_CONFIG(tooltip)
@@ -637,26 +638,27 @@ class Ui_Settings_Dialog(object):
         self.cppMmapCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Use mmap if possible", None))
 #endif // QT_CONFIG(tooltip)
         self.cppMmapCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Use MMAP", None))
+        self.label_14.setText(QCoreApplication.translate("Settings_Dialog", u"Mirostat mode:", None))
         self.label_16.setText(QCoreApplication.translate("Settings_Dialog", u"Threads:", None))
 #if QT_CONFIG(tooltip)
         self.cppThreads.setToolTip(QCoreApplication.translate("Settings_Dialog", u"CPU threads to use", None))
 #endif // QT_CONFIG(tooltip)
         self.gpuAccelCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Use GPU acceleration", None))
-        self.CPP_repeat_last_nSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"128", None))
+        self.CPP_repeat_last_nSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"64", None))
         self.CPP_ctxsize_SliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"2048", None))
-        self.cppBatchSizeSlider_2.setText(QCoreApplication.translate("Settings_Dialog", u"256", None))
+        self.cppBatchSizeSlider_2.setText(QCoreApplication.translate("Settings_Dialog", u"512", None))
 #if QT_CONFIG(tooltip)
         self.cppBatchSizeSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Batch size to use", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.CPP_ctxsize_Slider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_10.setText(QCoreApplication.translate("Settings_Dialog", u"GPU Layers", None))
 #if QT_CONFIG(tooltip)
         self.CPP_repeat_last_nSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Last n tokens to consider for penalize - size of window of tokens that the model will be penalized for repeating", None))
 #endif // QT_CONFIG(tooltip)
         self.label_12.setText(QCoreApplication.translate("Settings_Dialog", u"Context size:", None))
-        self.label_14.setText(QCoreApplication.translate("Settings_Dialog", u"Mirostat mode", None))
+        self.label_10.setText(QCoreApplication.translate("Settings_Dialog", u"GPU Layers", None))
+        self.label_13.setText(QCoreApplication.translate("Settings_Dialog", u"22", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
     # retranslateUi
 
