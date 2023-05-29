@@ -375,6 +375,8 @@ class Ui_magi_llm_window(object):
         self.menuHelp.addAction(self.actionAbout)
 
         self.retranslateUi(magi_llm_window)
+        self.toolButton_2.clicked.connect(self.chatHistory.zoomIn)
+        self.toolButton.clicked.connect(self.chatHistory.zoomOut)
 
         self.textgenTab.setCurrentIndex(2)
 

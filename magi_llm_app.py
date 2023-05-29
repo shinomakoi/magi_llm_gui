@@ -258,6 +258,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             readonly_mode = True
 
         self.chatPresetComboBox.setEnabled(readonly_mode)
+        self.characterPresetComboBox.setEnabled(readonly_mode)
         self.streamEnabledCheck.setEnabled(readonly_mode)
 
         self.defaultContinueButton.setEnabled(readonly_mode)
@@ -428,17 +429,18 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         cpp_model_params = {
             'model_path': str(self.cppModelPath.text()),
-            'seed': -1,
+            'seed': int(self.settings_win.seedValue.value()),
             'n_threads': int(self.settings_win.cppThreads.text()),
             'n_batch': int(self.settings_win.cppBatchSizeSlider.value()),
             'n_ctx': int(self.settings_win.CPP_ctxsize_Slider.value()),
             'use_mmap': bool(self.settings_win.cppMmapCheck.isChecked()),
-            'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),
+            'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),            
         }
 
         if self.settings_win.gpuAccelCheck.isChecked():
-            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value(
-            )
+            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value()
+        if len(self.settings_win.cppLoraLineEdit.text()) > 0:
+            cpp_model_params["lora_path"] = self.settings_win.cppLoraLineEdit.text()
 
         print('llama.cpp model load params:', cpp_model_params)
         print('Loading llama.cpp model...')
@@ -553,6 +555,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def set_preset_params(self, preset_mode):
 
         if preset_mode == 'chat':
+            self.instructRadioButton.setChecked(True)
             current_preset = self.chatPresetComboBox.currentText()
             preset_file = (f"presets/chat/{current_preset}.yaml")
 
@@ -563,7 +566,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.chatHistory.setPlainText(f"{chat_preset_context}\n")
 
         elif preset_mode == 'character':
-
+            self.charactersRadioButton.setChecked(True)
             current_preset = self.characterPresetComboBox.currentText()
             preset_file = (f"presets/character/{current_preset}.yaml")
 

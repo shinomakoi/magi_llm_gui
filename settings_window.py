@@ -426,7 +426,7 @@ class Ui_Settings_Dialog(object):
 
         self.gpuAccelCheck = QCheckBox(self.groupBox_5)
         self.gpuAccelCheck.setObjectName(u"gpuAccelCheck")
-        self.gpuAccelCheck.setChecked(False)
+        self.gpuAccelCheck.setChecked(True)
 
         self.gridLayout_4.addWidget(self.gpuAccelCheck, 13, 2, 1, 1)
 
@@ -500,6 +500,16 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_4.addWidget(self.label_13, 8, 3, 1, 1)
 
+        self.label_18 = QLabel(self.groupBox_5)
+        self.label_18.setObjectName(u"label_18")
+
+        self.gridLayout_4.addWidget(self.label_18, 9, 0, 1, 1)
+
+        self.cppLoraLineEdit = QLineEdit(self.groupBox_5)
+        self.cppLoraLineEdit.setObjectName(u"cppLoraLineEdit")
+
+        self.gridLayout_4.addWidget(self.cppLoraLineEdit, 9, 2, 1, 1)
+
 
         self.verticalLayout_4.addWidget(self.groupBox_5)
 
@@ -520,7 +530,7 @@ class Ui_Settings_Dialog(object):
         self.top_kSlider.valueChanged.connect(self.top_kSliderLabel.setNum)
         self.gpuLayersSlider.valueChanged.connect(self.label_13.setNum)
 
-        self.parametersTab.setCurrentIndex(0)
+        self.parametersTab.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(Settings_Dialog)
@@ -657,8 +667,9 @@ class Ui_Settings_Dialog(object):
         self.CPP_repeat_last_nSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Last n tokens to consider for penalize - size of window of tokens that the model will be penalized for repeating", None))
 #endif // QT_CONFIG(tooltip)
         self.label_12.setText(QCoreApplication.translate("Settings_Dialog", u"Context size:", None))
-        self.label_10.setText(QCoreApplication.translate("Settings_Dialog", u"GPU Layers", None))
+        self.label_10.setText(QCoreApplication.translate("Settings_Dialog", u"GPU Layers:", None))
         self.label_13.setText(QCoreApplication.translate("Settings_Dialog", u"22", None))
+        self.label_18.setText(QCoreApplication.translate("Settings_Dialog", u"LORA:", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
     # retranslateUi
 
