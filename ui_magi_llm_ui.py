@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'magi_llm_ui.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.0
+## Created by: Qt User Interface Compiler version 6.5.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -262,15 +262,15 @@ class Ui_magi_llm_window(object):
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_5)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.oobaCheck = QRadioButton(self.groupBox_5)
-        self.oobaCheck.setObjectName(u"oobaCheck")
-        self.oobaCheck.setChecked(False)
+        self.exllamaCheck = QRadioButton(self.groupBox_5)
+        self.exllamaCheck.setObjectName(u"exllamaCheck")
+        self.exllamaCheck.setChecked(True)
 
-        self.verticalLayout_3.addWidget(self.oobaCheck)
+        self.verticalLayout_3.addWidget(self.exllamaCheck)
 
         self.cppCheck = QRadioButton(self.groupBox_5)
         self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(True)
+        self.cppCheck.setChecked(False)
 
         self.verticalLayout_3.addWidget(self.cppCheck)
 
@@ -281,27 +281,28 @@ class Ui_magi_llm_window(object):
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout_5 = QGridLayout(self.groupBox_2)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.label_28 = QLabel(self.groupBox_2)
+        self.label_28.setObjectName(u"label_28")
+
+        self.gridLayout_5.addWidget(self.label_28, 2, 0, 1, 1)
+
+        self.logChatCheck = QCheckBox(self.groupBox_2)
+        self.logChatCheck.setObjectName(u"logChatCheck")
+        self.logChatCheck.setChecked(False)
+
+        self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
+
+        self.settingsPathSaveButton = QPushButton(self.groupBox_2)
+        self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
+
+        self.gridLayout_5.addWidget(self.settingsPathSaveButton, 4, 0, 1, 1)
+
         self.line = QFrame(self.groupBox_2)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
         self.gridLayout_5.addWidget(self.line, 1, 0, 1, 2)
-
-        self.cppModelPath = QLineEdit(self.groupBox_2)
-        self.cppModelPath.setObjectName(u"cppModelPath")
-
-        self.gridLayout_5.addWidget(self.cppModelPath, 2, 1, 1, 1)
-
-        self.label_28 = QLabel(self.groupBox_2)
-        self.label_28.setObjectName(u"label_28")
-
-        self.gridLayout_5.addWidget(self.label_28, 2, 0, 1, 1)
-
-        self.settingsPathSaveButton = QPushButton(self.groupBox_2)
-        self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
-
-        self.gridLayout_5.addWidget(self.settingsPathSaveButton, 3, 0, 1, 1)
 
         self.streamEnabledCheck = QCheckBox(self.groupBox_2)
         self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
@@ -315,11 +316,25 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_5.addWidget(self.cppModelSelect, 2, 2, 1, 1)
 
-        self.logChatCheck = QCheckBox(self.groupBox_2)
-        self.logChatCheck.setObjectName(u"logChatCheck")
-        self.logChatCheck.setChecked(False)
+        self.cppModelPath = QLineEdit(self.groupBox_2)
+        self.cppModelPath.setObjectName(u"cppModelPath")
 
-        self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.cppModelPath, 2, 1, 1, 1)
+
+        self.label_3 = QLabel(self.groupBox_2)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_5.addWidget(self.label_3, 3, 0, 1, 1)
+
+        self.exllamaModelPath = QLineEdit(self.groupBox_2)
+        self.exllamaModelPath.setObjectName(u"exllamaModelPath")
+
+        self.gridLayout_5.addWidget(self.exllamaModelPath, 3, 1, 1, 1)
+
+        self.exllamaModelSelect = QToolButton(self.groupBox_2)
+        self.exllamaModelSelect.setObjectName(u"exllamaModelSelect")
+
+        self.gridLayout_5.addWidget(self.exllamaModelSelect, 3, 2, 1, 1)
 
 
         self.verticalLayout.addWidget(self.groupBox_2)
@@ -411,7 +426,7 @@ class Ui_magi_llm_window(object):
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.chatInput.setPlainText("")
+        self.chatInput.setPlainText(QCoreApplication.translate("magi_llm_window", u"what are pigeons?", None))
         self.chatInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Enter some text here", None))
         self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
 #if QT_CONFIG(shortcut)
@@ -431,21 +446,24 @@ class Ui_magi_llm_window(object):
         self.chatHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Output appears here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.chat_textgenTab), QCoreApplication.translate("magi_llm_window", u"Chat", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
-        self.oobaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Oobabooga WebUI", None))
+        self.exllamaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Exllama", None))
         self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("magi_llm_window", u"Settings:", None))
-#if QT_CONFIG(tooltip)
-        self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppModelPath.setText("")
         self.label_28.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp: Model path:", None))
+        self.logChatCheck.setText(QCoreApplication.translate("magi_llm_window", u"Log chats", None))
         self.settingsPathSaveButton.setText(QCoreApplication.translate("magi_llm_window", u"Save", None))
 #if QT_CONFIG(tooltip)
         self.streamEnabledCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Stream responses (WebUI option only)", None))
 #endif // QT_CONFIG(tooltip)
         self.streamEnabledCheck.setText(QCoreApplication.translate("magi_llm_window", u"Stream responses", None))
         self.cppModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
-        self.logChatCheck.setText(QCoreApplication.translate("magi_llm_window", u"Log chats", None))
+#if QT_CONFIG(tooltip)
+        self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppModelPath.setText("")
+        self.label_3.setText(QCoreApplication.translate("magi_llm_window", u"Exllama: Model directory:", None))
+        self.exllamaModelPath.setText(QCoreApplication.translate("magi_llm_window", u"/mnt/ext4_data0/gits/text-generation-webui/models/TheBloke_WizardLM-7B-uncensored-GPTQ", None))
+        self.exllamaModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
         self.groupBox.setTitle(QCoreApplication.translate("magi_llm_window", u"Custom chat prefixes:", None))
         self.customResponsePrefix.setText(QCoreApplication.translate("magi_llm_window", u"Sure!", None))
         self.label_4.setText(QCoreApplication.translate("magi_llm_window", u"Your name:", None))

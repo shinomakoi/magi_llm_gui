@@ -13,7 +13,7 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
-import api_fetch
+from api_fetch import ExllamaModel
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
@@ -23,10 +23,9 @@ class textgenThread(QThread):
     resultReady = Signal(str)
     final_resultReady = Signal(str)
 
-    def __init__(self, ooba_params, ooba_server_ip, message, stream_enabled, run_backend, cpp_params):
+    def __init__(self, exllama_params, message, stream_enabled, run_backend, cpp_params):
         super().__init__()
-        self.ooba_params = ooba_params
-        self.ooba_server_ip = ooba_server_ip
+        self.exllama_params = exllama_params
         self.message = str(message)
         self.stream_enabled = stream_enabled
         self.run_backend = run_backend
@@ -38,39 +37,39 @@ class textgenThread(QThread):
 
     def run(self):
 
-        if self.run_backend == 'ooba':
-            print('Oobabooga parameters:', self.ooba_params)
+        if self.run_backend == 'exllama':
+            print('Exllama parameters:', self.exllama_params)
 
             self.message = self.message.strip()
 
             if self.stream_enabled:
                 replies = []
 
-                async def get_result():
-                    async for response in api_fetch.run(self.message, self.ooba_params, self.ooba_server_ip):
-                        # Intermediate steps
-                        replies.append(response)
+                for response in ExllamaModel.generate_with_streaming(exllama_model, self.message, self.exllama_params):
+                    # Intermediate steps
+                    replies.append(response)
 
-                        # Strip to individual tokens
-                        if len(replies) > 1:
-                            stripped_response = replies[1].replace(
-                                replies[0], "")
-                            replies.pop(0)
-                            self.resultReady.emit(stripped_response)
+                    # Strip to individual tokens
+                    if len(replies) > 1:
+                        stripped_response = replies[1].replace(
+                            replies[0], "")
+                        replies.pop(0)
+                        self.resultReady.emit(stripped_response)
+                    else:
+                        self.resultReady.emit(response)
 
-                        if self.stop_flag:
-                            break
+                    if self.stop_flag:
+                        break
 
-                    # Final result
-                    response = str(response).strip()
-                    self.final_resultReady.emit(response)
+                # Final result
+                response = str(response).strip()
+                self.final_resultReady.emit(response)
 
-                    # print(response)
-                asyncio.run(get_result())
+                # print(response)
 
             else:
-                response = api_fetch.textgen(
-                    self.ooba_params, self.ooba_server_ip, self.message)
+                
+                response = ExllamaModel.generate(exllama_model, self.message, self.exllama_params)
                 self.final_resultReady.emit(response)
 
         if self.run_backend == 'llama.cpp':
@@ -119,22 +118,15 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
         self.setWindowIcon(icon)
 
         self.cpp_model_loaded = False
+        self.exllama_model_loaded = False
 
         # Ooba set settings sliders
         self.tempSlider.valueChanged.connect(
             lambda: self.tempSliderLabel.setText(str(self.tempSlider.value()/100)))
         self.top_pSlider.valueChanged.connect(
             lambda: self.top_pSliderLabel.setText(str(self.top_pSlider.value()/100)))
-        self.typicalPSlider.valueChanged.connect(
-            lambda: self.typicalPSliderLabel.setText(str(self.typicalPSlider.value()/100)))
-        self.encoderrepSlider.valueChanged.connect(
-            lambda: self.encoderrepSliderLabel.setText(str(self.encoderrepSlider.value()/100)))
         self.reppenaltySlider.valueChanged.connect(
             lambda: self.reppenaltySliderLabel.setText(str(self.reppenaltySlider.value()/100)))
-        self.penaltyAlphaSlider.valueChanged.connect(
-            lambda: self.penaltyAlphaSliderLabel.setText(str(self.penaltyAlphaSlider.value()/100)))
-        self.lengthpenaltySlider.valueChanged.connect(
-            lambda: self.lengthpenaltySliderLabel.setText(str(self.lengthpenaltySlider.value()/10)))
 
 
 class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
@@ -179,6 +171,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         config = configparser.ConfigParser()
         config.read('settings.ini')
         self.cppModelPath.setText(config["Settings"]["cpp_model_path"])
+        self.exllamaModelPath.setText(config["Settings"]["exllama_model_path"])
 
         # Button clicks
         self.defaultGenerateButton.clicked.connect(
@@ -206,6 +199,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             lambda: self.set_preset_params('chat'))
 
         self.cppModelSelect.clicked.connect(lambda: self.cpp_model_select())
+        self.exllamaModelSelect.clicked.connect(lambda: self.exllama_model_select())
 
         self.chatPresetComboBox.currentTextChanged.connect(
             lambda: self.set_preset_params('chat'))
@@ -230,12 +224,19 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if len(file_x) > 0:
             self.cppModelPath.setText(file_x)
 
+    def exllama_model_select(self):
+        file_x = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+
+        if len(file_x) > 0:
+            self.exllamaModelPath.setText(file_x)
+
     # Save any settings
     def save_settings(self):
 
         config = configparser.ConfigParser()
         config.read("settings.ini")
         config.set("Settings", "cpp_model_path", self.cppModelPath.text())
+        config.set("Settings", "exllama_model_path", self.exllamaModelPath.text())
 
         with open("settings.ini", "w") as f:
             # Write the ConfigParser object to the file
@@ -285,9 +286,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Continue button logic
     def continue_textgen(self, text_tab):
 
-        if not self.oobaCheck.isEnabled():
-            if self.oobaCheck.isChecked():
-                run_backend = 'ooba'
+        if not self.exllamaCheck.isEnabled():
+            if self.exllamaCheck.isChecked():
+                run_backend = 'exllama'
             else:
                 run_backend = 'llama.cpp'
 
@@ -375,34 +376,26 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         return cpp_params
 
     # Get the WebUi parameters
-    def get_ooba_params(self):
+    def get_exllama_params(self):
 
-        ooba_server_ip = self.settings_win.oobaServerAddress.text().strip()
-
-        ooba_params = {
+        exllama_params = {
             'max_new_tokens': self.settings_win.maxnewtokensSlider.value(),
-            'do_sample': self.settings_win.dosampleCheck.isChecked(),
             'temperature': self.settings_win.tempSlider.value()/100,
             'top_p': self.settings_win.top_pSlider.value()/100,
-            'typical_p': self.settings_win.typicalPSlider.value()/100,
             'repetition_penalty': self.settings_win.reppenaltySlider.value()/100,
-            'encoder_repetition_penalty': self.settings_win.encoderrepSlider.value()/100,
             'top_k': self.settings_win.top_kSlider.value(),
-            'min_length': self.settings_win.minlengthSlider.value(),
-            'no_repeat_ngram_size': self.settings_win.norepeatngramSlider.value(),
             'num_beams': self.settings_win.numbeamsSlider.value(),
-            'penalty_alpha': self.settings_win.penaltyAlphaSlider.value()/100,
-            'length_penalty': self.settings_win.lengthpenaltySlider.value()/10,
-            'early_stopping': self.settings_win.earlyStoppingCheck.isChecked(),
-            'seed': -1,
-            'add_bos_token': self.settings_win.bosTokenCheck.isChecked(),
-            'truncation_length': self.settings_win.truncateLengthSlider.value(),
-            'ban_eos_token': self.settings_win.eosTokenBanCheck.isChecked(),
-            'skip_special_tokens': self.settings_win.skipSpecialTokensCheck.isChecked(),
-            'stopping_strings': self.settings_win.custStopTokenLine.text()
+            'beam_length': self.settings_win.beamLengthSlider.value(),
+            'min_p': self.settings_win.minPSlider.value(),
+            'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySlider.value(),
+
+            # 'seed': -1,
+            # 'ban_eos_token': self.settings_win.eosTokenBanCheck.isChecked(),
+            # 'skip_special_tokens': self.settings_win.skipSpecialTokensCheck.isChecked(),
+            # 'stopping_strings': self.settings_win.custStopTokenLine.text()
         }
 
-        return ooba_params, ooba_server_ip
+        return exllama_params
 
     # Get data for chat log save
     def get_chat_date(self):
@@ -425,6 +418,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         return chat_preset
 
     # First load of llama.cpp model
+    def load_exllama_model(self):
+        global exllama_model
+        exllama_model, tokzenizer = ExllamaModel.from_pretrained(self.exllamaModelPath.text())
+
     def load_cpp_model(self):
 
         cpp_model_params = {
@@ -460,10 +457,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         if self.cppCheck.isEnabled():
             self.cppCheck.setEnabled(False)
-            self.oobaCheck.setEnabled(False)
+            self.exllamaCheck.setEnabled(False)
 
             if self.cppCheck.isChecked():
                 self.load_cpp_model()
+            else:
+                self.load_exllama_model()
 
         global textgen_mode
         textgen_mode = pre_textgen_mode
@@ -473,7 +472,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             if input_message:
                 self.defaultTextHistory.setPlainText(input_message)
                 if not self.cppCheck.isChecked():
-                    self.launch_backend(input_message, 'ooba')
+                    self.launch_backend(input_message, 'exllama')
                 else:
                     self.launch_backend(input_message, 'llama.cpp')
 
@@ -481,7 +480,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             input_message = self.notebookHistory.toPlainText()
             if input_message:
                 if not self.cppCheck.isChecked():
-                    self.launch_backend(input_message, 'ooba')
+                    self.launch_backend(input_message, 'exllama')
                 else:
                     self.launch_backend(input_message, 'llama.cpp')
 
@@ -493,7 +492,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chatHistory.setPlainText(final_prompt)
 
                 if self.cppCheck.isChecked() == False:
-                    self.launch_backend(final_prompt, 'ooba')
+                    self.launch_backend(final_prompt, 'exllama')
                 else:
                     self.launch_backend(final_prompt, 'llama.cpp')
 
@@ -502,13 +501,13 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Launch QThread to textgen
     def launch_backend(self, message, run_backend):
 
-        ooba_params, ooba_server_ip = self.get_ooba_params()
+        exllama_params = self.get_exllama_params()
         cpp_params = self.get_llama_cpp_params()
 
         self.statusbar.showMessage(f"Status: Generating...")
 
         self.textgenThread = textgenThread(
-            ooba_params, ooba_server_ip, message, self.streamEnabledCheck.isChecked(), run_backend, cpp_params)
+            exllama_params, message, self.streamEnabledCheck.isChecked(), run_backend, cpp_params)
 
         # Connect signals and slots
         self.textgenThread.resultReady.connect(self.handleResult)

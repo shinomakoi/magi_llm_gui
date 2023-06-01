@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_settings.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.0
+## Created by: Qt User Interface Compiler version 6.5.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -54,7 +54,7 @@ class Ui_Settings_Dialog(object):
         self.top_kSlider = QSlider(self.groupBox_2)
         self.top_kSlider.setObjectName(u"top_kSlider")
         self.top_kSlider.setMaximum(200)
-        self.top_kSlider.setValue(40)
+        self.top_kSlider.setValue(20)
         self.top_kSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.top_kSlider, 3, 1, 1, 1)
@@ -67,7 +67,7 @@ class Ui_Settings_Dialog(object):
         self.top_pSlider = QSlider(self.groupBox_2)
         self.top_pSlider.setObjectName(u"top_pSlider")
         self.top_pSlider.setMaximum(100)
-        self.top_pSlider.setValue(73)
+        self.top_pSlider.setValue(65)
         self.top_pSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.top_pSlider, 5, 1, 1, 1)
@@ -80,7 +80,7 @@ class Ui_Settings_Dialog(object):
         self.tempSlider = QSlider(self.groupBox_2)
         self.tempSlider.setObjectName(u"tempSlider")
         self.tempSlider.setMaximum(199)
-        self.tempSlider.setValue(72)
+        self.tempSlider.setValue(95)
         self.tempSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.tempSlider, 2, 1, 1, 1)
@@ -113,7 +113,7 @@ class Ui_Settings_Dialog(object):
         self.reppenaltySlider = QSlider(self.groupBox_2)
         self.reppenaltySlider.setObjectName(u"reppenaltySlider")
         self.reppenaltySlider.setMaximum(150)
-        self.reppenaltySlider.setValue(117)
+        self.reppenaltySlider.setValue(115)
         self.reppenaltySlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.reppenaltySlider, 9, 1, 1, 1)
@@ -130,9 +130,9 @@ class Ui_Settings_Dialog(object):
 
         self.maxnewtokensSlider = QSlider(self.groupBox_2)
         self.maxnewtokensSlider.setObjectName(u"maxnewtokensSlider")
-        self.maxnewtokensSlider.setMinimum(128)
-        self.maxnewtokensSlider.setMaximum(1024)
-        self.maxnewtokensSlider.setValue(200)
+        self.maxnewtokensSlider.setMinimum(32)
+        self.maxnewtokensSlider.setMaximum(2048)
+        self.maxnewtokensSlider.setValue(256)
         self.maxnewtokensSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.maxnewtokensSlider, 7, 1, 1, 1)
@@ -146,227 +146,111 @@ class Ui_Settings_Dialog(object):
         self.verticalLayout_3.addWidget(self.groupBox_2)
 
         self.parametersTab.addTab(self.tab, "")
-        self.oobaParamTab = QWidget()
-        self.oobaParamTab.setObjectName(u"oobaParamTab")
-        self.oobaParamTab.setAutoFillBackground(True)
-        self.verticalLayout_2 = QVBoxLayout(self.oobaParamTab)
+        self.exllamaParamTab = QWidget()
+        self.exllamaParamTab.setObjectName(u"exllamaParamTab")
+        self.exllamaParamTab.setAutoFillBackground(True)
+        self.verticalLayout_2 = QVBoxLayout(self.exllamaParamTab)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.groupBox = QGroupBox(self.oobaParamTab)
+        self.groupBox = QGroupBox(self.exllamaParamTab)
         self.groupBox.setObjectName(u"groupBox")
         self.groupBox.setEnabled(True)
         self.gridLayout = QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.norepeatngramSlider = QSlider(self.groupBox)
-        self.norepeatngramSlider.setObjectName(u"norepeatngramSlider")
-        self.norepeatngramSlider.setMaximum(20)
-        self.norepeatngramSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.norepeatngramSlider, 4, 2, 1, 1)
-
-        self.label_4 = QLabel(self.groupBox)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout.addWidget(self.label_4, 11, 0, 1, 1)
-
-        self.label_9 = QLabel(self.groupBox)
-        self.label_9.setObjectName(u"label_9")
-
-        self.gridLayout.addWidget(self.label_9, 4, 0, 1, 2)
-
-        self.dosampleCheck = QCheckBox(self.groupBox)
-        self.dosampleCheck.setObjectName(u"dosampleCheck")
-        self.dosampleCheck.setChecked(True)
-
-        self.gridLayout.addWidget(self.dosampleCheck, 13, 2, 1, 1)
-
-        self.typicalPSliderLabel = QLabel(self.groupBox)
-        self.typicalPSliderLabel.setObjectName(u"typicalPSliderLabel")
-
-        self.gridLayout.addWidget(self.typicalPSliderLabel, 1, 3, 1, 1)
-
-        self.label_21 = QLabel(self.groupBox)
-        self.label_21.setObjectName(u"label_21")
-
-        self.gridLayout.addWidget(self.label_21, 7, 0, 1, 1)
-
-        self.encoderrepSliderLabel = QLabel(self.groupBox)
-        self.encoderrepSliderLabel.setObjectName(u"encoderrepSliderLabel")
-
-        self.gridLayout.addWidget(self.encoderrepSliderLabel, 2, 3, 1, 1)
-
-        self.penaltyAlphaSlider = QSlider(self.groupBox)
-        self.penaltyAlphaSlider.setObjectName(u"penaltyAlphaSlider")
-        self.penaltyAlphaSlider.setMaximum(500)
-        self.penaltyAlphaSlider.setValue(0)
-        self.penaltyAlphaSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.penaltyAlphaSlider, 7, 2, 1, 1)
-
-        self.line_2 = QFrame(self.groupBox)
-        self.line_2.setObjectName(u"line_2")
-        self.line_2.setFrameShape(QFrame.HLine)
-        self.line_2.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout.addWidget(self.line_2, 15, 2, 1, 1)
-
-        self.numbeamsSliderLabel = QLabel(self.groupBox)
-        self.numbeamsSliderLabel.setObjectName(u"numbeamsSliderLabel")
-
-        self.gridLayout.addWidget(self.numbeamsSliderLabel, 9, 3, 1, 1)
-
-        self.label_3 = QLabel(self.groupBox)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout.addWidget(self.label_3, 2, 0, 1, 2)
-
-        self.minlengthSliderLabel = QLabel(self.groupBox)
-        self.minlengthSliderLabel.setObjectName(u"minlengthSliderLabel")
-
-        self.gridLayout.addWidget(self.minlengthSliderLabel, 3, 3, 1, 1)
-
-        self.label_2 = QLabel(self.groupBox)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.label_7 = QLabel(self.groupBox)
-        self.label_7.setObjectName(u"label_7")
-
-        self.gridLayout.addWidget(self.label_7, 3, 0, 1, 1)
-
-        self.label_8 = QLabel(self.groupBox)
-        self.label_8.setObjectName(u"label_8")
-
-        self.gridLayout.addWidget(self.label_8, 11, 3, 1, 1)
-
-        self.lengthpenaltySlider = QSlider(self.groupBox)
-        self.lengthpenaltySlider.setObjectName(u"lengthpenaltySlider")
-        self.lengthpenaltySlider.setMaximum(50)
-        self.lengthpenaltySlider.setValue(10)
-        self.lengthpenaltySlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.lengthpenaltySlider, 10, 2, 1, 1)
-
-        self.label_22 = QLabel(self.groupBox)
-        self.label_22.setObjectName(u"label_22")
-
-        self.gridLayout.addWidget(self.label_22, 9, 0, 1, 1)
-
-        self.minlengthSlider = QSlider(self.groupBox)
-        self.minlengthSlider.setObjectName(u"minlengthSlider")
-        self.minlengthSlider.setMaximum(1024)
-        self.minlengthSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.minlengthSlider, 3, 2, 1, 1)
-
-        self.lengthpenaltySliderLabel = QLabel(self.groupBox)
-        self.lengthpenaltySliderLabel.setObjectName(u"lengthpenaltySliderLabel")
-
-        self.gridLayout.addWidget(self.lengthpenaltySliderLabel, 10, 3, 1, 1)
-
         self.line = QFrame(self.groupBox)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout.addWidget(self.line, 8, 2, 1, 1)
+        self.gridLayout.addWidget(self.line, 5, 3, 1, 1)
 
-        self.oobaServerAddress = QLineEdit(self.groupBox)
-        self.oobaServerAddress.setObjectName(u"oobaServerAddress")
-        self.oobaServerAddress.setInputMethodHints(Qt.ImhNone)
+        self.typicalPSliderLabel = QLabel(self.groupBox)
+        self.typicalPSliderLabel.setObjectName(u"typicalPSliderLabel")
 
-        self.gridLayout.addWidget(self.oobaServerAddress, 0, 2, 1, 1)
-
-        self.skipSpecialTokensCheck = QCheckBox(self.groupBox)
-        self.skipSpecialTokensCheck.setObjectName(u"skipSpecialTokensCheck")
-        self.skipSpecialTokensCheck.setChecked(True)
-
-        self.gridLayout.addWidget(self.skipSpecialTokensCheck, 18, 0, 1, 1)
-
-        self.custStopTokenLine = QLineEdit(self.groupBox)
-        self.custStopTokenLine.setObjectName(u"custStopTokenLine")
-
-        self.gridLayout.addWidget(self.custStopTokenLine, 18, 2, 1, 1)
-
-        self.numbeamsSlider = QSlider(self.groupBox)
-        self.numbeamsSlider.setObjectName(u"numbeamsSlider")
-        self.numbeamsSlider.setMaximum(5)
-        self.numbeamsSlider.setValue(1)
-        self.numbeamsSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.numbeamsSlider, 9, 2, 1, 1)
-
-        self.eosTokenBanCheck = QCheckBox(self.groupBox)
-        self.eosTokenBanCheck.setObjectName(u"eosTokenBanCheck")
-
-        self.gridLayout.addWidget(self.eosTokenBanCheck, 17, 2, 1, 1)
-
-        self.label_26 = QLabel(self.groupBox)
-        self.label_26.setObjectName(u"label_26")
-
-        self.gridLayout.addWidget(self.label_26, 10, 0, 1, 1)
-
-        self.penaltyAlphaSliderLabel = QLabel(self.groupBox)
-        self.penaltyAlphaSliderLabel.setObjectName(u"penaltyAlphaSliderLabel")
-
-        self.gridLayout.addWidget(self.penaltyAlphaSliderLabel, 7, 3, 1, 1)
-
-        self.norepeatngramSliderLabel = QLabel(self.groupBox)
-        self.norepeatngramSliderLabel.setObjectName(u"norepeatngramSliderLabel")
-
-        self.gridLayout.addWidget(self.norepeatngramSliderLabel, 4, 3, 1, 1)
-
-        self.earlyStoppingCheck = QCheckBox(self.groupBox)
-        self.earlyStoppingCheck.setObjectName(u"earlyStoppingCheck")
-
-        self.gridLayout.addWidget(self.earlyStoppingCheck, 13, 0, 1, 1)
-
-        self.bosTokenCheck = QCheckBox(self.groupBox)
-        self.bosTokenCheck.setObjectName(u"bosTokenCheck")
-        self.bosTokenCheck.setChecked(True)
-
-        self.gridLayout.addWidget(self.bosTokenCheck, 17, 0, 1, 1)
+        self.gridLayout.addWidget(self.typicalPSliderLabel, 1, 4, 1, 1)
 
         self.label_19 = QLabel(self.groupBox)
         self.label_19.setObjectName(u"label_19")
 
-        self.gridLayout.addWidget(self.label_19, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_19, 1, 1, 1, 1)
 
-        self.truncateLengthSlider = QSlider(self.groupBox)
-        self.truncateLengthSlider.setObjectName(u"truncateLengthSlider")
-        self.truncateLengthSlider.setMaximum(4096)
-        self.truncateLengthSlider.setValue(2048)
-        self.truncateLengthSlider.setOrientation(Qt.Horizontal)
+        self.token_repetition_penalty_decaySlider = QSlider(self.groupBox)
+        self.token_repetition_penalty_decaySlider.setObjectName(u"token_repetition_penalty_decaySlider")
+        self.token_repetition_penalty_decaySlider.setMaximum(512)
+        self.token_repetition_penalty_decaySlider.setValue(256)
+        self.token_repetition_penalty_decaySlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.truncateLengthSlider, 11, 2, 1, 1)
+        self.gridLayout.addWidget(self.token_repetition_penalty_decaySlider, 2, 3, 1, 1)
 
-        self.encoderrepSlider = QSlider(self.groupBox)
-        self.encoderrepSlider.setObjectName(u"encoderrepSlider")
-        self.encoderrepSlider.setMaximum(150)
-        self.encoderrepSlider.setValue(100)
-        self.encoderrepSlider.setOrientation(Qt.Horizontal)
+        self.label25 = QLabel(self.groupBox)
+        self.label25.setObjectName(u"label25")
 
-        self.gridLayout.addWidget(self.encoderrepSlider, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.label25, 2, 1, 1, 2)
 
-        self.typicalPSlider = QSlider(self.groupBox)
-        self.typicalPSlider.setObjectName(u"typicalPSlider")
-        self.typicalPSlider.setMaximum(100)
-        self.typicalPSlider.setValue(100)
-        self.typicalPSlider.setOrientation(Qt.Horizontal)
+        self.beamLengthSlider = QSlider(self.groupBox)
+        self.beamLengthSlider.setObjectName(u"beamLengthSlider")
+        self.beamLengthSlider.setMinimum(1)
+        self.beamLengthSlider.setMaximum(10)
+        self.beamLengthSlider.setValue(1)
+        self.beamLengthSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.typicalPSlider, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.beamLengthSlider, 7, 3, 1, 1)
 
-        self.line_4 = QFrame(self.groupBox)
-        self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.HLine)
-        self.line_4.setFrameShadow(QFrame.Sunken)
+        self.lengthpenaltySliderLabel = QLabel(self.groupBox)
+        self.lengthpenaltySliderLabel.setObjectName(u"lengthpenaltySliderLabel")
 
-        self.gridLayout.addWidget(self.line_4, 12, 2, 1, 1)
+        self.gridLayout.addWidget(self.lengthpenaltySliderLabel, 7, 4, 1, 1)
+
+        self.label_26 = QLabel(self.groupBox)
+        self.label_26.setObjectName(u"label_26")
+
+        self.gridLayout.addWidget(self.label_26, 7, 1, 1, 1)
+
+        self.encoderrepSliderLabel = QLabel(self.groupBox)
+        self.encoderrepSliderLabel.setObjectName(u"encoderrepSliderLabel")
+
+        self.gridLayout.addWidget(self.encoderrepSliderLabel, 2, 4, 1, 1)
+
+        self.numbeamsSlider = QSlider(self.groupBox)
+        self.numbeamsSlider.setObjectName(u"numbeamsSlider")
+        self.numbeamsSlider.setMinimum(1)
+        self.numbeamsSlider.setMaximum(10)
+        self.numbeamsSlider.setValue(1)
+        self.numbeamsSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout.addWidget(self.numbeamsSlider, 6, 3, 1, 1)
+
+        self.minPSlider = QSlider(self.groupBox)
+        self.minPSlider.setObjectName(u"minPSlider")
+        self.minPSlider.setMaximum(100)
+        self.minPSlider.setValue(0)
+        self.minPSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout.addWidget(self.minPSlider, 1, 3, 1, 1)
+
+        self.numbeamsSliderLabel = QLabel(self.groupBox)
+        self.numbeamsSliderLabel.setObjectName(u"numbeamsSliderLabel")
+
+        self.gridLayout.addWidget(self.numbeamsSliderLabel, 6, 4, 1, 1)
+
+        self.label_22 = QLabel(self.groupBox)
+        self.label_22.setObjectName(u"label_22")
+
+        self.gridLayout.addWidget(self.label_22, 6, 1, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
+
+        self.exllamaModelPathLineEdit = QLineEdit(self.groupBox)
+        self.exllamaModelPathLineEdit.setObjectName(u"exllamaModelPathLineEdit")
+
+        self.gridLayout.addWidget(self.exllamaModelPathLineEdit, 0, 3, 1, 1)
 
 
         self.verticalLayout_2.addWidget(self.groupBox)
 
-        self.parametersTab.addTab(self.oobaParamTab, "")
+        self.parametersTab.addTab(self.exllamaParamTab, "")
         self.llamacppParamTab = QWidget()
         self.llamacppParamTab.setObjectName(u"llamacppParamTab")
         self.llamacppParamTab.setAutoFillBackground(True)
@@ -519,18 +403,15 @@ class Ui_Settings_Dialog(object):
 
 
         self.retranslateUi(Settings_Dialog)
-        self.minlengthSlider.valueChanged.connect(self.minlengthSliderLabel.setNum)
-        self.norepeatngramSlider.valueChanged.connect(self.norepeatngramSliderLabel.setNum)
         self.CPP_ctxsize_Slider.valueChanged.connect(self.CPP_ctxsize_SliderLabel.setNum)
         self.CPP_repeat_last_nSlider.valueChanged.connect(self.CPP_repeat_last_nSliderLabel.setNum)
         self.cppBatchSizeSlider.valueChanged.connect(self.cppBatchSizeSlider_2.setNum)
-        self.truncateLengthSlider.valueChanged.connect(self.label_8.setNum)
         self.numbeamsSlider.valueChanged.connect(self.numbeamsSliderLabel.setNum)
         self.maxnewtokensSlider.valueChanged.connect(self.maxnewtokensSliderLabel.setNum)
         self.top_kSlider.valueChanged.connect(self.top_kSliderLabel.setNum)
         self.gpuLayersSlider.valueChanged.connect(self.label_13.setNum)
 
-        self.parametersTab.setCurrentIndex(2)
+        self.parametersTab.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Settings_Dialog)
@@ -539,14 +420,14 @@ class Ui_Settings_Dialog(object):
     def retranslateUi(self, Settings_Dialog):
         Settings_Dialog.setWindowTitle(QCoreApplication.translate("Settings_Dialog", u"Parameters", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Settings_Dialog", u"Shared", None))
-        self.top_kSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"40", None))
+        self.top_kSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"20", None))
 #if QT_CONFIG(tooltip)
         self.seedValue.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Seed to use", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.top_kSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only this many most likely tokens - ignore all others", None))
 #endif // QT_CONFIG(tooltip)
-        self.reppenaltySliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1.17", None))
+        self.reppenaltySliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1.15", None))
 #if QT_CONFIG(tooltip)
         self.top_pSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only the top tokens whose likelihood together adds up to this number (0-1.0) - ignore all others", None))
 #endif // QT_CONFIG(tooltip)
@@ -555,10 +436,10 @@ class Ui_Settings_Dialog(object):
         self.tempSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Degree of randomness or wildness - how much AI is allowed to sway from the most probable prediction", None))
 #endif // QT_CONFIG(tooltip)
         self.label_17.setText(QCoreApplication.translate("Settings_Dialog", u"Top P:", None))
-        self.tempSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0.72", None))
+        self.tempSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0.95", None))
         self.label_11.setText(QCoreApplication.translate("Settings_Dialog", u"Max new tokens:", None))
         self.label_15.setText(QCoreApplication.translate("Settings_Dialog", u"Temperature:", None))
-        self.top_pSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0.73", None))
+        self.top_pSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0.65", None))
 #if QT_CONFIG(tooltip)
         self.reppenaltySlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u" Sets the amount the model will be penalized for attempting to use one of those tokens in repeat window", None))
 #endif // QT_CONFIG(tooltip)
@@ -567,76 +448,32 @@ class Ui_Settings_Dialog(object):
 #if QT_CONFIG(tooltip)
         self.maxnewtokensSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum number of tokens the model will output after outputting the prompt - number of tokens to predict", None))
 #endif // QT_CONFIG(tooltip)
-        self.maxnewtokensSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"200", None))
+        self.maxnewtokensSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"256", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.tab), QCoreApplication.translate("Settings_Dialog", u"Shared", None))
-        self.groupBox.setTitle(QCoreApplication.translate("Settings_Dialog", u"Ooobabooga", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
+        self.typicalPSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0", None))
+        self.label_19.setText(QCoreApplication.translate("Settings_Dialog", u"Min P:", None))
 #if QT_CONFIG(tooltip)
-        self.norepeatngramSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Higher values = blocks larger phrases, lower values = blocks words or letters from repeating. Only 0 or high values are a good idea in most cases", None))
+        self.token_repetition_penalty_decaySlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Also known as the \"Hallucinations filter\". Used to penalize tokens that are *not* in the prior text. Higher value = more likely to stay in context, lower value = more likely to diverge", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_4.setText(QCoreApplication.translate("Settings_Dialog", u"Truncate length:", None))
-        self.label_9.setText(QCoreApplication.translate("Settings_Dialog", u"No repeat ngram size:", None))
-        self.dosampleCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Do sample", None))
-        self.typicalPSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1.0", None))
-        self.label_21.setText(QCoreApplication.translate("Settings_Dialog", u"Penalty alpha:", None))
-        self.encoderrepSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1.0", None))
+        self.label25.setText(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain:", None))
 #if QT_CONFIG(tooltip)
-        self.penaltyAlphaSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Contrastive search", None))
-#endif // QT_CONFIG(tooltip)
-        self.numbeamsSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1", None))
-        self.label_3.setText(QCoreApplication.translate("Settings_Dialog", u"Encoder rep penalty:", None))
-        self.minlengthSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0", None))
-        self.label_2.setText(QCoreApplication.translate("Settings_Dialog", u"Server IP:", None))
-        self.label_7.setText(QCoreApplication.translate("Settings_Dialog", u"Min length:", None))
-        self.label_8.setText(QCoreApplication.translate("Settings_Dialog", u"2048", None))
-#if QT_CONFIG(tooltip)
-        self.lengthpenaltySlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam search length penalty", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_22.setText(QCoreApplication.translate("Settings_Dialog", u"Num beams:", None))
-#if QT_CONFIG(tooltip)
-        self.minlengthSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Minimum generation length in tokens", None))
+        self.beamLengthSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam search length penalty", None))
 #endif // QT_CONFIG(tooltip)
         self.lengthpenaltySliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1", None))
-#if QT_CONFIG(tooltip)
-        self.oobaServerAddress.setToolTip(QCoreApplication.translate("Settings_Dialog", u"IP of the WebUI server API", None))
-#endif // QT_CONFIG(tooltip)
-        self.oobaServerAddress.setText(QCoreApplication.translate("Settings_Dialog", u"localhost", None))
-#if QT_CONFIG(tooltip)
-        self.skipSpecialTokensCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Some specific models need this unset", None))
-#endif // QT_CONFIG(tooltip)
-        self.skipSpecialTokensCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Skip special tokens", None))
-#if QT_CONFIG(tooltip)
-        self.custStopTokenLine.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Stop generation on these tokens", None))
-#endif // QT_CONFIG(tooltip)
-        self.custStopTokenLine.setPlaceholderText(QCoreApplication.translate("Settings_Dialog", u"Custom stopping token", None))
+        self.label_26.setText(QCoreApplication.translate("Settings_Dialog", u"Beam length:", None))
+        self.encoderrepSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"256", None))
 #if QT_CONFIG(tooltip)
         self.numbeamsSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam search", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.eosTokenBanCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Forces the model to never end the generation prematurely", None))
+        self.minPSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.", None))
 #endif // QT_CONFIG(tooltip)
-        self.eosTokenBanCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Ban EOS token", None))
-        self.label_26.setText(QCoreApplication.translate("Settings_Dialog", u"Length penalty:", None))
-        self.penaltyAlphaSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0", None))
-        self.norepeatngramSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"0", None))
-#if QT_CONFIG(tooltip)
-        self.earlyStoppingCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Disable for deterministic", None))
-#endif // QT_CONFIG(tooltip)
-        self.earlyStoppingCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Early stopping", None))
-#if QT_CONFIG(tooltip)
-        self.bosTokenCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Disabling this can make the replies more creative", None))
-#endif // QT_CONFIG(tooltip)
-        self.bosTokenCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Add BOS token", None))
-        self.label_19.setText(QCoreApplication.translate("Settings_Dialog", u"Typical P:", None))
-#if QT_CONFIG(tooltip)
-        self.truncateLengthSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"The leftmost tokens are removed if the prompt exceeds this length. Most models require this to be at most 2048", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.encoderrepSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Also known as the \"Hallucinations filter\". Used to penalize tokens that are *not* in the prior text. Higher value = more likely to stay in context, lower value = more likely to diverge", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.typicalPSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.", None))
-#endif // QT_CONFIG(tooltip)
-        self.parametersTab.setTabText(self.parametersTab.indexOf(self.oobaParamTab), QCoreApplication.translate("Settings_Dialog", u"Oobabooga", None))
+        self.numbeamsSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1", None))
+        self.label_22.setText(QCoreApplication.translate("Settings_Dialog", u"Num beams:", None))
+        self.label_2.setText(QCoreApplication.translate("Settings_Dialog", u"Model path:", None))
+        self.exllamaModelPathLineEdit.setText(QCoreApplication.translate("Settings_Dialog", u"/mnt/ext4_data0/gits/text-generation-webui/models/TheBloke_WizardLM-7B-uncensored-GPTQ", None))
+        self.parametersTab.setTabText(self.parametersTab.indexOf(self.exllamaParamTab), QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
         self.label_31.setText(QCoreApplication.translate("Settings_Dialog", u"Repeat last N:", None))
         self.label_6.setText(QCoreApplication.translate("Settings_Dialog", u"Batch size:", None))
@@ -669,7 +506,7 @@ class Ui_Settings_Dialog(object):
         self.label_12.setText(QCoreApplication.translate("Settings_Dialog", u"Context size:", None))
         self.label_10.setText(QCoreApplication.translate("Settings_Dialog", u"GPU Layers:", None))
         self.label_13.setText(QCoreApplication.translate("Settings_Dialog", u"22", None))
-        self.label_18.setText(QCoreApplication.translate("Settings_Dialog", u"LORA:", None))
+        self.label_18.setText(QCoreApplication.translate("Settings_Dialog", u"LoRA:", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
     # retranslateUi
 
