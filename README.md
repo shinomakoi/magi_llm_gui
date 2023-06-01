@@ -3,7 +3,7 @@ A Qt GUI for large language models
 
 For Windows, Linux (and Mac?)
 
-Currently works with [https://github.com/oobabooga/text-generation-webui/](https://github.com/turboderp/exllama) and [https://github.com/ggerganov/llama.cpp](https://github.com/ggerganov/llama.cpp)
+Currently works with https://github.com/turboderp/exllama and https://github.com/ggerganov/llama.cpp
 
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
 
