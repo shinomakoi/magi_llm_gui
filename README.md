@@ -14,6 +14,7 @@ git clone https://github.com/shinomakoi/magi_llm_gui
 cd magi_llm_gui
 pip install -r requirements.txt
 ```
+To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Tested working on Linux. For Windows, good luck.
 
 Then to launch the Magi LLM GUI, use: 
 ```
