@@ -3,10 +3,9 @@ A Qt GUI for large language models
 
 For Windows, Linux (and Mac?)
 
-Currently works with https://github.com/turboderp/exllama and https://github.com/ggerganov/llama.cpp
+Uses Exllama and LLamA.cpp as backends.
 
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
-
 
 To install (optionally create a virtual environment): 
 ```
