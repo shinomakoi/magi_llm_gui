@@ -12,15 +12,10 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
+from api_fetch import ExllamaModel
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
-
-try:
-    from api_fetch import ExllamaModel
-except Exception as error: 
-    print(error, type(error).__name__)
-    print('---WARNING: Exllama disabled---')
 
 
 class textgenThread(QThread):
@@ -80,13 +75,13 @@ class textgenThread(QThread):
 
             final_response = ''
             for response in cpp_model.generate(self.message,
-                                                self.cpp_params["token_count"],
-                                                self.cpp_params["temperature"],
-                                                self.cpp_params["top_p"],
-                                                self.cpp_params["top_k"],
-                                                self.cpp_params["repetition_penalty"],
-                                                self.cpp_params["mirostat_mode"],
-                                                ):
+                                               self.cpp_params["token_count"],
+                                               self.cpp_params["temperature"],
+                                               self.cpp_params["top_p"],
+                                               self.cpp_params["top_k"],
+                                               self.cpp_params["repetition_penalty"],
+                                               self.cpp_params["mirostat_mode"],
+                                               ):
 
                 if self.stream_enabled:
                     self.resultReady.emit(response)
