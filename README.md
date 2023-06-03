@@ -11,7 +11,7 @@ git clone https://github.com/shinomakoi/magi_llm_gui
 cd magi_llm_gui
 pip install -r requirements.txt
 ```
-To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Tested working on Linux. For Windows, good luck.
+To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. I think it also requires CUDA Toolkit installed (installed with Linux package manager). Tested working on Linux. For Windows, good luck.
 ```
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu118
 pip install safetensors sentencepiece ninja
