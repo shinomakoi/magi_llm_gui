@@ -12,8 +12,13 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
-from api_fetch import ExllamaModel
-from llamacpp_model_generate import LlamaCppModel
+try:
+    from api_fetch import ExllamaModel
+except Exception as error: 
+    print(error, type(error).__name__)
+    print('---WARNING: Exllama disabled---')
+    
+    from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
