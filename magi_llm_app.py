@@ -12,15 +12,15 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
-try:
-    from api_fetch import ExllamaModel
-except Exception as error: 
-    print(error, type(error).__name__)
-    print('---WARNING: Exllama disabled---')
-    
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
+
+try:
+    from api_fetch import ExllamaModel
+except Exception as error:
+    print(error, type(error).__name__)
+    print('---WARNING: Exllama disabled---')
 
 
 class textgenThread(QThread):
@@ -42,7 +42,7 @@ class textgenThread(QThread):
         if self.run_backend == 'exllama':
             print('Exllama parameters:', self.exllama_params)
 
-            self.message = self.message.strip()
+            self.message = self.message
 
             if self.stream_enabled:
                 replies = []
@@ -64,7 +64,7 @@ class textgenThread(QThread):
                         break
 
                 # Final result
-                response = str(response).strip()
+                response = str(response)
                 self.final_resultReady.emit(response)
 
                 # print(response)
@@ -79,24 +79,30 @@ class textgenThread(QThread):
             print("llama.cpp parameters:", self.cpp_params)
 
             final_response = ''
-            for response in cpp_model.generate(self.message,
-                                               self.cpp_params["token_count"],
-                                               self.cpp_params["temperature"],
-                                               self.cpp_params["top_p"],
-                                               self.cpp_params["top_k"],
-                                               self.cpp_params["repetition_penalty"],
-                                               self.cpp_params["mirostat_mode"],
-                                               ):
+            try:
+                for response in cpp_model.generate(self.message,
+                                                   self.cpp_params["token_count"],
+                                                   self.cpp_params["temperature"],
+                                                   self.cpp_params["top_p"],
+                                                   self.cpp_params["top_k"],
+                                                   self.cpp_params["repetition_penalty"],
+                                                   self.cpp_params["mirostat_mode"],
+                                                   ):
 
-                if self.stream_enabled:
-                    self.resultReady.emit(response)
-                final_response += response
-                final_text = self.message+final_response
+                    if self.stream_enabled:
+                        self.resultReady.emit(response)
+                    final_response += response
+                    final_text = self.message+final_response
 
-                if self.stop_flag:
-                    break
-            # Final result
-            self.final_resultReady.emit(final_text)
+                    if self.stop_flag:
+                        break
+                # Final result
+                self.final_resultReady.emit(final_text)
+
+            except UnicodeDecodeError:
+                print('UnicodeDecodeError! Exiting.')
+                self.final_resultReady.emit('')
+                return
 
     def stop(self):
         # Set the stop flag to True
@@ -344,9 +350,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # final_text += '\n'
                 self.chatHistory.setPlainText(final_text)
 
-        # fix this later
-        self.chatHistory.appendPlainText('\n\n')
-
         # Write chat log
         if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
             current_date = self.get_chat_date()
@@ -540,10 +543,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                     .replace("<|bot|>", chat_preset["bot"])
 
                 # fix this later
+                match = "<|bot-message|>"
+                end_newlines = final_prompt.split(match)[1]
+                final_prompt = final_prompt.split(match)[0]
                 final_prompt = final_prompt.replace(
-                    "<|bot-message|>", "").strip()
+                    "<|bot-message|>", "")
+
                 final_prompt = (
-                    f"{self.chatHistory.toPlainText()}{final_prompt}")
+                    f"{self.chatHistory.toPlainText()}{end_newlines}{final_prompt}")
 
             else:
                 chat_user_prefix = self.yourNameLine.text()+': '
@@ -564,7 +571,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.instructRadioButton.setChecked(True)
 
             chat_preset = self.get_chat_presets()
-            self.chatHistory.setPlainText(chat_preset["context"])
+            self.chatHistory.setPlainText(chat_preset["context"].rstrip())
 
         elif preset_mode == 'character':
             self.charactersRadioButton.setChecked(True)
