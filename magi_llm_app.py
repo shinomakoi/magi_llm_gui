@@ -18,7 +18,7 @@ except Exception as error:
     print(error, type(error).__name__)
     print('---WARNING: Exllama disabled---')
     
-    from llamacpp_model_generate import LlamaCppModel
+from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
