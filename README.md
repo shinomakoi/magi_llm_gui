@@ -27,4 +27,5 @@ You can set the generation parameters in File > Parameters
 
 
 Includes prompts from https://github.com/f/awesome-chatgpt-prompts
+
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
