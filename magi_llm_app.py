@@ -1,4 +1,3 @@
-import asyncio
 import configparser
 import csv
 import glob
@@ -13,10 +12,14 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
-from api_fetch import ExllamaModel
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
+
+# try:
+#     from api_fetch import ExllamaModel
+# except:
+#     print('Exllama disabled')
 
 
 class textgenThread(QThread):
@@ -68,8 +71,9 @@ class textgenThread(QThread):
                 # print(response)
 
             else:
-                
-                response = ExllamaModel.generate(exllama_model, self.message, self.exllama_params)
+
+                response = ExllamaModel.generate(
+                    exllama_model, self.message, self.exllama_params)
                 self.final_resultReady.emit(response)
 
         if self.run_backend == 'llama.cpp':
@@ -199,7 +203,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             lambda: self.set_preset_params('chat'))
 
         self.cppModelSelect.clicked.connect(lambda: self.cpp_model_select())
-        self.exllamaModelSelect.clicked.connect(lambda: self.exllama_model_select())
+        self.exllamaModelSelect.clicked.connect(
+            lambda: self.exllama_model_select())
 
         self.chatPresetComboBox.currentTextChanged.connect(
             lambda: self.set_preset_params('chat'))
@@ -225,7 +230,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.cppModelPath.setText(file_x)
 
     def exllama_model_select(self):
-        file_x = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        file_x = str(QFileDialog.getExistingDirectory(
+            self, "Select Directory"))
 
         if len(file_x) > 0:
             self.exllamaModelPath.setText(file_x)
@@ -236,7 +242,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         config = configparser.ConfigParser()
         config.read("settings.ini")
         config.set("Settings", "cpp_model_path", self.cppModelPath.text())
-        config.set("Settings", "exllama_model_path", self.exllamaModelPath.text())
+        config.set("Settings", "exllama_model_path",
+                   self.exllamaModelPath.text())
 
         with open("settings.ini", "w") as f:
             # Write the ConfigParser object to the file
@@ -344,6 +351,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # final_text += '\n'
                 self.chatHistory.setPlainText(final_text)
 
+        # fix this later
+        self.chatHistory.appendPlainText('\n\n')
+
         # Write chat log
         if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
             current_date = self.get_chat_date()
@@ -420,7 +430,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # First load of llama.cpp model
     def load_exllama_model(self):
         global exllama_model
-        exllama_model, tokzenizer = ExllamaModel.from_pretrained(self.exllamaModelPath.text())
+        exllama_model, tokenizer = ExllamaModel.from_pretrained(
+            self.exllamaModelPath.text())
 
     def load_cpp_model(self):
 
@@ -431,11 +442,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'n_batch': int(self.settings_win.cppBatchSizeSlider.value()),
             'n_ctx': int(self.settings_win.CPP_ctxsize_Slider.value()),
             'use_mmap': bool(self.settings_win.cppMmapCheck.isChecked()),
-            'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),            
+            'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),
         }
 
         if self.settings_win.gpuAccelCheck.isChecked():
-            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value()
+            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value(
+            )
         if len(self.settings_win.cppLoraLineEdit.text()) > 0:
             cpp_model_params["lora_path"] = self.settings_win.cppLoraLineEdit.text()
 
@@ -526,23 +538,25 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         if pre_textgen_mode == 'chat_mode':
             if self.instructRadioButton.isChecked():
+
                 chat_preset = self.get_chat_presets()
-                chat_user_prefix = chat_preset["your_name"]
-                bot_user_prefix = chat_preset["name"]
 
-                final_prompt = (f"""{self.chatHistory.toPlainText()}
+                final_prompt = chat_preset["turn_template"]\
+                    .replace("<|user|>", chat_preset["user"])\
+                    .replace("<|user-message|>", self.chatInput.toPlainText())\
+                    .replace("<|bot|>", chat_preset["bot"])
 
-{chat_user_prefix}
-{self.chatInput.toPlainText()}
-{bot_user_prefix}""")
+                # fix this later
+                final_prompt = final_prompt.replace(
+                    "<|bot-message|>", "").strip()
+                final_prompt = (
+                    f"{self.chatHistory.toPlainText()}{final_prompt}")
 
             else:
                 chat_user_prefix = self.yourNameLine.text()+': '
                 bot_user_prefix = self.characterPresetComboBox.currentText()+': '
 
-                final_prompt = (f"""{self.chatHistory.toPlainText()}
-
-{chat_user_prefix}
+                final_prompt = (f"""{self.chatHistory.toPlainText()}{chat_user_prefix}
 {self.chatInput.toPlainText()}
 {bot_user_prefix}""")
 
@@ -555,14 +569,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         if preset_mode == 'chat':
             self.instructRadioButton.setChecked(True)
-            current_preset = self.chatPresetComboBox.currentText()
-            preset_file = (f"presets/chat/{current_preset}.yaml")
 
-            with open(preset_file, 'r') as file:
-                chat_preset = yaml.safe_load(file)
-
-            chat_preset_context = (chat_preset["context"])
-            self.chatHistory.setPlainText(f"{chat_preset_context}\n")
+            chat_preset = self.get_chat_presets()
+            self.chatHistory.setPlainText(chat_preset["context"])
 
         elif preset_mode == 'character':
             self.charactersRadioButton.setChecked(True)

@@ -1,19 +1,18 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path("exllama")))
-
 import torch
 
 from exllama.generator import ExLlamaGenerator
 from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
 
+sys.path.insert(0, str(Path("exllama")))
+
 
 class ExllamaModel:
     def __init__(self):
         pass
-
 
     @classmethod
     def from_pretrained(self, path_to_model):
@@ -28,7 +27,8 @@ class ExllamaModel:
             found = list(path_to_model.glob(f"*{ext}"))
             if len(found) > 0:
                 if len(found) > 1:
-                    print(f'More than one {ext} model has been found. The last one will be selected. It could be wrong.')
+                    print(
+                        f'More than one {ext} model has been found. The last one will be selected. It could be wrong.')
 
                 model_path = found[-1]
                 print(model_path)
@@ -46,9 +46,8 @@ class ExllamaModel:
         result.model = model
         result.cache = cache
         result.tokenizer = tokenizer
-        
-        return result, result
 
+        return result, result
 
     def generate(self, context, params):
         torch.set_grad_enabled(False)
@@ -62,13 +61,14 @@ class ExllamaModel:
         generator.settings.beams = params["num_beams"]
 
         generator.settings.min_p = params["min_p"]
-        generator.settings.token_repetition_penalty_sustain = params["token_repetition_penalty_sustain"]
+        generator.settings.token_repetition_penalty_sustain = params[
+            "token_repetition_penalty_sustain"]
         generator.settings.token_repetition_penalty_decay = generator.settings.token_repetition_penalty_sustain // 2
         generator.settings.beam_length = params["beam_length"]
 
-        text = generator.generate_simple(context, max_new_tokens = params["max_new_tokens"])
+        text = generator.generate_simple(
+            context, max_new_tokens=params["max_new_tokens"])
         return text
-
 
     def generate_with_streaming(self, context, params):
 
@@ -83,7 +83,8 @@ class ExllamaModel:
         generator.settings.beams = params["num_beams"]
 
         generator.settings.min_p = params["min_p"]
-        generator.settings.token_repetition_penalty_sustain = params["token_repetition_penalty_sustain"]
+        generator.settings.token_repetition_penalty_sustain = params[
+            "token_repetition_penalty_sustain"]
         generator.settings.token_repetition_penalty_decay = generator.settings.token_repetition_penalty_sustain // 2
         generator.settings.beam_length = params["beam_length"]
 
@@ -94,9 +95,9 @@ class ExllamaModel:
         all_tokens = []
         for i in range(params["max_new_tokens"]):
             token = generator.gen_single_token()
-            yield(generator.tokenizer.decode(generator.sequence[0][initial_len:]))
-            if token.item() == generator.tokenizer.eos_token_id: break
-
+            yield (generator.tokenizer.decode(generator.sequence[0][initial_len:]))
+            if token.item() == generator.tokenizer.eos_token_id:
+                break
 
     def encode(self, string, **kwargs):
         return self.tokenizer.encode(string)
