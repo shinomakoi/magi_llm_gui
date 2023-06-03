@@ -1,4 +1,0 @@
-name: "<|assistant|>"
-your_name: "<|prompter|>"
-end_of_turn: "<|endoftext|>"
-context : "A chat between a human and an personal digital assistant. The assistant gives helpful, detailed, and polite answers to the human's questions."
