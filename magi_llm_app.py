@@ -18,8 +18,9 @@ from ui_magi_llm_ui import Ui_magi_llm_window
 
 try:
     from api_fetch import ExllamaModel
-except:
-    print('----WARNING: Import error. Exllama disabled----')
+except Exception as error: 
+    print(error, type(error).__name__)
+    print('---WARNING: Exllama disabled---')
 
 
 class textgenThread(QThread):
@@ -35,8 +36,6 @@ class textgenThread(QThread):
         self.cpp_params = cpp_params
 
         self.stop_flag = False
-
-        # print('Final prompt:', self.message)
 
     def run(self):
 
