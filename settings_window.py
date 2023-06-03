@@ -161,17 +161,17 @@ class Ui_Settings_Dialog(object):
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout.addWidget(self.line, 5, 3, 1, 1)
+        self.gridLayout.addWidget(self.line, 4, 3, 1, 1)
 
         self.typicalPSliderLabel = QLabel(self.groupBox)
         self.typicalPSliderLabel.setObjectName(u"typicalPSliderLabel")
 
-        self.gridLayout.addWidget(self.typicalPSliderLabel, 1, 4, 1, 1)
+        self.gridLayout.addWidget(self.typicalPSliderLabel, 0, 4, 1, 1)
 
         self.label_19 = QLabel(self.groupBox)
         self.label_19.setObjectName(u"label_19")
 
-        self.gridLayout.addWidget(self.label_19, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.label_19, 0, 1, 1, 1)
 
         self.token_repetition_penalty_decaySlider = QSlider(self.groupBox)
         self.token_repetition_penalty_decaySlider.setObjectName(u"token_repetition_penalty_decaySlider")
@@ -179,12 +179,12 @@ class Ui_Settings_Dialog(object):
         self.token_repetition_penalty_decaySlider.setValue(256)
         self.token_repetition_penalty_decaySlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.token_repetition_penalty_decaySlider, 2, 3, 1, 1)
+        self.gridLayout.addWidget(self.token_repetition_penalty_decaySlider, 1, 3, 1, 1)
 
         self.label25 = QLabel(self.groupBox)
         self.label25.setObjectName(u"label25")
 
-        self.gridLayout.addWidget(self.label25, 2, 1, 1, 2)
+        self.gridLayout.addWidget(self.label25, 1, 1, 1, 2)
 
         self.beamLengthSlider = QSlider(self.groupBox)
         self.beamLengthSlider.setObjectName(u"beamLengthSlider")
@@ -193,22 +193,22 @@ class Ui_Settings_Dialog(object):
         self.beamLengthSlider.setValue(1)
         self.beamLengthSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.beamLengthSlider, 7, 3, 1, 1)
+        self.gridLayout.addWidget(self.beamLengthSlider, 6, 3, 1, 1)
 
         self.lengthpenaltySliderLabel = QLabel(self.groupBox)
         self.lengthpenaltySliderLabel.setObjectName(u"lengthpenaltySliderLabel")
 
-        self.gridLayout.addWidget(self.lengthpenaltySliderLabel, 7, 4, 1, 1)
+        self.gridLayout.addWidget(self.lengthpenaltySliderLabel, 6, 4, 1, 1)
 
         self.label_26 = QLabel(self.groupBox)
         self.label_26.setObjectName(u"label_26")
 
-        self.gridLayout.addWidget(self.label_26, 7, 1, 1, 1)
+        self.gridLayout.addWidget(self.label_26, 6, 1, 1, 1)
 
         self.encoderrepSliderLabel = QLabel(self.groupBox)
         self.encoderrepSliderLabel.setObjectName(u"encoderrepSliderLabel")
 
-        self.gridLayout.addWidget(self.encoderrepSliderLabel, 2, 4, 1, 1)
+        self.gridLayout.addWidget(self.encoderrepSliderLabel, 1, 4, 1, 1)
 
         self.numbeamsSlider = QSlider(self.groupBox)
         self.numbeamsSlider.setObjectName(u"numbeamsSlider")
@@ -217,7 +217,7 @@ class Ui_Settings_Dialog(object):
         self.numbeamsSlider.setValue(1)
         self.numbeamsSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.numbeamsSlider, 6, 3, 1, 1)
+        self.gridLayout.addWidget(self.numbeamsSlider, 5, 3, 1, 1)
 
         self.minPSlider = QSlider(self.groupBox)
         self.minPSlider.setObjectName(u"minPSlider")
@@ -225,27 +225,17 @@ class Ui_Settings_Dialog(object):
         self.minPSlider.setValue(0)
         self.minPSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.minPSlider, 1, 3, 1, 1)
+        self.gridLayout.addWidget(self.minPSlider, 0, 3, 1, 1)
 
         self.numbeamsSliderLabel = QLabel(self.groupBox)
         self.numbeamsSliderLabel.setObjectName(u"numbeamsSliderLabel")
 
-        self.gridLayout.addWidget(self.numbeamsSliderLabel, 6, 4, 1, 1)
+        self.gridLayout.addWidget(self.numbeamsSliderLabel, 5, 4, 1, 1)
 
         self.label_22 = QLabel(self.groupBox)
         self.label_22.setObjectName(u"label_22")
 
-        self.gridLayout.addWidget(self.label_22, 6, 1, 1, 1)
-
-        self.label_2 = QLabel(self.groupBox)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
-
-        self.exllamaModelPathLineEdit = QLineEdit(self.groupBox)
-        self.exllamaModelPathLineEdit.setObjectName(u"exllamaModelPathLineEdit")
-
-        self.gridLayout.addWidget(self.exllamaModelPathLineEdit, 0, 3, 1, 1)
+        self.gridLayout.addWidget(self.label_22, 5, 1, 1, 1)
 
 
         self.verticalLayout_2.addWidget(self.groupBox)
@@ -411,7 +401,7 @@ class Ui_Settings_Dialog(object):
         self.top_kSlider.valueChanged.connect(self.top_kSliderLabel.setNum)
         self.gpuLayersSlider.valueChanged.connect(self.label_13.setNum)
 
-        self.parametersTab.setCurrentIndex(1)
+        self.parametersTab.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Settings_Dialog)
@@ -471,8 +461,6 @@ class Ui_Settings_Dialog(object):
 #endif // QT_CONFIG(tooltip)
         self.numbeamsSliderLabel.setText(QCoreApplication.translate("Settings_Dialog", u"1", None))
         self.label_22.setText(QCoreApplication.translate("Settings_Dialog", u"Num beams:", None))
-        self.label_2.setText(QCoreApplication.translate("Settings_Dialog", u"Model path:", None))
-        self.exllamaModelPathLineEdit.setText(QCoreApplication.translate("Settings_Dialog", u"/mnt/ext4_data0/gits/text-generation-webui/models/TheBloke_WizardLM-7B-uncensored-GPTQ", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.exllamaParamTab), QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
         self.label_31.setText(QCoreApplication.translate("Settings_Dialog", u"Repeat last N:", None))

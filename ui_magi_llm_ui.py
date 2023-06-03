@@ -195,16 +195,19 @@ class Ui_magi_llm_window(object):
 
         self.chatPresetComboBox = QComboBox(self.groupBox_4)
         self.chatPresetComboBox.setObjectName(u"chatPresetComboBox")
+        self.chatPresetComboBox.setInsertPolicy(QComboBox.InsertAlphabetically)
 
         self.gridLayout_10.addWidget(self.chatPresetComboBox, 0, 2, 1, 1)
 
         self.awesomePresetComboBox = QComboBox(self.groupBox_4)
         self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
+        self.awesomePresetComboBox.setInsertPolicy(QComboBox.InsertAlphabetically)
 
         self.gridLayout_10.addWidget(self.awesomePresetComboBox, 1, 2, 1, 1)
 
         self.characterPresetComboBox = QComboBox(self.groupBox_4)
         self.characterPresetComboBox.setObjectName(u"characterPresetComboBox")
+        self.characterPresetComboBox.setInsertPolicy(QComboBox.InsertAlphabetically)
 
         self.gridLayout_10.addWidget(self.characterPresetComboBox, 0, 4, 1, 1)
 
@@ -249,6 +252,7 @@ class Ui_magi_llm_window(object):
         self.chatHistory = QPlainTextEdit(self.chat_textgenTab)
         self.chatHistory.setObjectName(u"chatHistory")
         self.chatHistory.setFont(font)
+        self.chatHistory.setReadOnly(True)
 
         self.gridLayout_3.addWidget(self.chatHistory, 3, 0, 1, 2)
 
@@ -264,13 +268,13 @@ class Ui_magi_llm_window(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.exllamaCheck = QRadioButton(self.groupBox_5)
         self.exllamaCheck.setObjectName(u"exllamaCheck")
-        self.exllamaCheck.setChecked(True)
+        self.exllamaCheck.setChecked(False)
 
         self.verticalLayout_3.addWidget(self.exllamaCheck)
 
         self.cppCheck = QRadioButton(self.groupBox_5)
         self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(False)
+        self.cppCheck.setChecked(True)
 
         self.verticalLayout_3.addWidget(self.cppCheck)
 
@@ -373,7 +377,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 819, 35))
+        self.llm_menubar.setGeometry(QRect(0, 0, 819, 23))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -426,7 +430,7 @@ class Ui_magi_llm_window(object):
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.chatInput.setPlainText(QCoreApplication.translate("magi_llm_window", u"what are pigeons?", None))
+        self.chatInput.setPlainText("")
         self.chatInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Enter some text here", None))
         self.chatGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
 #if QT_CONFIG(shortcut)
@@ -462,7 +466,7 @@ class Ui_magi_llm_window(object):
 #endif // QT_CONFIG(tooltip)
         self.cppModelPath.setText("")
         self.label_3.setText(QCoreApplication.translate("magi_llm_window", u"Exllama: Model directory:", None))
-        self.exllamaModelPath.setText(QCoreApplication.translate("magi_llm_window", u"/mnt/ext4_data0/gits/text-generation-webui/models/TheBloke_WizardLM-7B-uncensored-GPTQ", None))
+        self.exllamaModelPath.setText("")
         self.exllamaModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
         self.groupBox.setTitle(QCoreApplication.translate("magi_llm_window", u"Custom chat prefixes:", None))
         self.customResponsePrefix.setText(QCoreApplication.translate("magi_llm_window", u"Sure!", None))

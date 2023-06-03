@@ -19,7 +19,7 @@ from ui_magi_llm_ui import Ui_magi_llm_window
 try:
     from api_fetch import ExllamaModel
 except:
-    print('Exllama disabled')
+    print('----WARNING: Import error. Exllama disabled----')
 
 
 class textgenThread(QThread):
@@ -80,30 +80,24 @@ class textgenThread(QThread):
             print("llama.cpp parameters:", self.cpp_params)
 
             final_response = ''
-            try:
-                for response in cpp_model.generate(self.message,
-                                                   self.cpp_params["token_count"],
-                                                   self.cpp_params["temperature"],
-                                                   self.cpp_params["top_p"],
-                                                   self.cpp_params["top_k"],
-                                                   self.cpp_params["repetition_penalty"],
-                                                   self.cpp_params["mirostat_mode"],
-                                                   ):
+            for response in cpp_model.generate(self.message,
+                                                self.cpp_params["token_count"],
+                                                self.cpp_params["temperature"],
+                                                self.cpp_params["top_p"],
+                                                self.cpp_params["top_k"],
+                                                self.cpp_params["repetition_penalty"],
+                                                self.cpp_params["mirostat_mode"],
+                                                ):
 
-                    if self.stream_enabled:
-                        self.resultReady.emit(response)
-                    final_response += response
-                    final_text = self.message+final_response
+                if self.stream_enabled:
+                    self.resultReady.emit(response)
+                final_response += response
+                final_text = self.message+final_response
 
-                    if self.stop_flag:
-                        break
-                # Final result
-                self.final_resultReady.emit(final_text)
-
-            except UnicodeDecodeError:
-                print('UnicodeDecodeError! Exiting.')
-                self.final_resultReady.emit('')
-                return
+                if self.stop_flag:
+                    break
+            # Final result
+            self.final_resultReady.emit(final_text)
 
     def stop(self):
         # Set the stop flag to True
@@ -152,12 +146,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         character_presets_load = glob.glob("presets/character/*.yaml")
 
         for chat_preset in chat_presets_load:
-            print(chat_preset)
+            # print(chat_preset)
             chat_preset_stem = Path(chat_preset).stem
             self.chatPresetComboBox.addItem(chat_preset_stem)
 
         for character_preset in character_presets_load:
-            print(character_preset)
+            # print(character_preset)
             character_preset_stem = Path(character_preset).stem
             self.characterPresetComboBox.addItem(character_preset_stem)
 
@@ -423,7 +417,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         with open(preset_file, 'r') as file:
             chat_preset = yaml.safe_load(file)
 
-            print(chat_preset)
+            # print(chat_preset)
 
         return chat_preset
 
