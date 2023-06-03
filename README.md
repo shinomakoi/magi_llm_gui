@@ -4,6 +4,7 @@ A Qt GUI for large language models for Windows, Linux (and Mac?)
 Uses Exllama and llama.cpp as backends.
 
 Optionally create a virtual environment (recommended)
+
 To install (Python 3.10 recommended + git): 
 ```
 git clone https://github.com/shinomakoi/magi_llm_gui
