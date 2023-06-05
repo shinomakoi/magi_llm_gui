@@ -494,7 +494,7 @@ class Ui_Settings_Dialog(object):
         self.label_12.setText(QCoreApplication.translate("Settings_Dialog", u"Context size:", None))
         self.label_10.setText(QCoreApplication.translate("Settings_Dialog", u"GPU Layers:", None))
         self.label_13.setText(QCoreApplication.translate("Settings_Dialog", u"22", None))
-        self.label_18.setText(QCoreApplication.translate("Settings_Dialog", u"LoRA:", None))
+        self.label_18.setText(QCoreApplication.translate("Settings_Dialog", u"LoRA path:", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
     # retranslateUi
 

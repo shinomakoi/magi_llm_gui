@@ -3,11 +3,11 @@ from pathlib import Path
 
 import torch
 
+sys.path.insert(0, str(Path("exllama")))
+
 from exllama.generator import ExLlamaGenerator
 from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
-
-sys.path.insert(0, str(Path("exllama")))
 
 
 class ExllamaModel:
@@ -93,9 +93,13 @@ class ExllamaModel:
         generator.gen_begin(ids)
         initial_len = generator.sequence[0].shape[0]
         all_tokens = []
+        
         for i in range(params["max_new_tokens"]):
             token = generator.gen_single_token()
             yield (generator.tokenizer.decode(generator.sequence[0][initial_len:]))
+            
+            if token.item() == generator.tokenizer.eos_token_id:
+                generator.replace_last_token(generator.tokenizer.newline_token_id)
             if token.item() == generator.tokenizer.eos_token_id:
                 break
 

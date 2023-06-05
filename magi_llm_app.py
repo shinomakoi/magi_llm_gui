@@ -12,6 +12,7 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
+import qdarkstyle
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
@@ -209,6 +210,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             lambda: self.set_preset_params('chat'))
         self.characterPresetComboBox.currentTextChanged.connect(
             lambda: self.set_preset_params('character'))
+        self.instructRadioButton.clicked.connect(
+            lambda: self.set_preset_params('chat'))
+        self.charactersRadioButton.clicked.connect(
+            lambda: self.set_preset_params('character'))
+
         self.awesomePresetComboBox.currentTextChanged.connect(
             lambda: self.awesome_prompts())
 
@@ -394,11 +400,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'beam_length': self.settings_win.beamLengthSlider.value(),
             'min_p': self.settings_win.minPSlider.value(),
             'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySlider.value(),
-
-            # 'seed': -1,
-            # 'ban_eos_token': self.settings_win.eosTokenBanCheck.isChecked(),
-            # 'skip_special_tokens': self.settings_win.skipSpecialTokensCheck.isChecked(),
-            # 'stopping_strings': self.settings_win.custStopTokenLine.text()
         }
 
         return exllama_params
@@ -412,14 +413,22 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         return (f'{day}-{month}-{year}')
 
     # Set chat prefixes
-    def get_chat_presets(self):
-        current_preset = self.chatPresetComboBox.currentText()
-        preset_file = (f"presets/chat/{current_preset}.yaml")
+    def get_chat_presets(self, chat_mode):
 
-        with open(preset_file, 'r') as file:
-            chat_preset = yaml.safe_load(file)
+        if chat_mode == 'instruct':
+            current_preset = self.chatPresetComboBox.currentText()
+            preset_file = (f"presets/chat/{current_preset}.yaml")
 
-            # print(chat_preset)
+            with open(preset_file, 'r') as file:
+                chat_preset = yaml.safe_load(file)
+
+                # print(chat_preset)
+        else:
+            current_preset = self.characterPresetComboBox.currentText()
+            preset_file = (f"presets/character/{current_preset}.yaml")
+
+            with open(preset_file, 'r') as file:
+                chat_preset = yaml.safe_load(file)
 
         return chat_preset
 
@@ -535,7 +544,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if pre_textgen_mode == 'chat_mode':
             if self.instructRadioButton.isChecked():
 
-                chat_preset = self.get_chat_presets()
+                chat_preset = self.get_chat_presets("instruct")
 
                 final_prompt = chat_preset["turn_template"]\
                     .replace("<|user|>", chat_preset["user"])\
@@ -553,16 +562,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                     f"{self.chatHistory.toPlainText()}{end_newlines}{final_prompt}")
 
             else:
-                chat_user_prefix = self.yourNameLine.text()+': '
-                bot_user_prefix = self.characterPresetComboBox.currentText()+': '
-
-                final_prompt = (f"""{self.chatHistory.toPlainText()}{chat_user_prefix}
-{self.chatInput.toPlainText()}
-{bot_user_prefix}""")
-
-        if self.customResponsePrefixCheck.isChecked():
-            final_prompt += ' '+self.customResponsePrefix.text()
-        return final_prompt
+                chat_preset = self.get_chat_presets("character")
+                final_prompt = self.chatHistory.toPlainText()+'\n\n'+self.yourNameLine.text()+": "+self.chatInput.toPlainText()+'\n' +\
+                    chat_preset["name"]+":"
+            print('------\n', final_prompt)
+            return final_prompt
 
     # Get chat presets from files
     def set_preset_params(self, preset_mode):
@@ -570,24 +574,22 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if preset_mode == 'chat':
             self.instructRadioButton.setChecked(True)
 
-            chat_preset = self.get_chat_presets()
+            chat_preset = self.get_chat_presets('instruct')
             self.chatHistory.setPlainText(chat_preset["context"].rstrip())
 
         elif preset_mode == 'character':
             self.charactersRadioButton.setChecked(True)
-            current_preset = self.characterPresetComboBox.currentText()
-            preset_file = (f"presets/character/{current_preset}.yaml")
+            chat_preset = self.get_chat_presets("character")
 
-            with open(preset_file, 'r') as file:
-                self.chatHistory.clear()
-                character_preset = yaml.safe_load(file)
+            final_example_dialogue = chat_preset["example_dialogue"]\
+                .replace(r"{{char}}", chat_preset["name"])\
+                .replace(r"{{user}}", self.yourNameLine.text())
 
-                for x in character_preset:
-                    value = character_preset[x]
-                    # final = f"{x.capitalize()}: {value}"
-                    value = value.replace(r"{{char}}", character_preset["name"]).replace(
-                        r"{{user}}", self.yourNameLine.text())
-                    self.chatHistory.appendPlainText(f"{value}\n")
+            final_prompt = (chat_preset["context"])\
+                + '\n\n'+chat_preset["greeting"]\
+                + '\n\n'+final_example_dialogue
+
+            self.chatHistory.setPlainText(final_prompt)
 
     def awesome_prompts(self):
 
