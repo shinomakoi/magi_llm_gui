@@ -12,7 +12,6 @@ from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 
-import qdarkstyle
 from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
