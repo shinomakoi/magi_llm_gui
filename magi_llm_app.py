@@ -16,12 +16,6 @@ from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
-# try:
-#     from api_fetch import ExllamaModel
-# except Exception as error:
-#     print(error, type(error).__name__)
-#     print('---WARNING: Exllama disabled---')
-
 
 class textgenThread(QThread):
     resultReady = Signal(str)
@@ -40,14 +34,14 @@ class textgenThread(QThread):
     def run(self):
 
         if self.run_backend == 'exllama':
-            print('Exllama parameters:', self.exllama_params)
+            # print('Exllama parameters:', self.exllama_params)
 
             self.message = self.message
 
             if self.stream_enabled:
                 replies = []
 
-                for response in ExllamaModel.generate_with_streaming(exllama_model, self.message, self.exllama_params):
+                for response in exllama_model.generate_with_streaming(self.message, self.exllama_params):
                     # Intermediate steps
                     replies.append(response)
 
@@ -71,7 +65,7 @@ class textgenThread(QThread):
 
             else:
 
-                response = ExllamaModel.generate(
+                response = exllama_model.generate(
                     exllama_model, self.message, self.exllama_params)
                 self.final_resultReady.emit(response)
 
@@ -139,6 +133,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         icon.addFile(str("appicon.png"),
                      QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
+
+        self.model_load = False
 
         # Chat presets load
         chat_presets_load = glob.glob("presets/chat/*.yaml")
@@ -427,6 +423,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # First load of Exllama model
     def load_exllama_model(self):
+        from api_fetch import ExllamaModel
+
         global exllama_model
         exllama_model, tokenizer = ExllamaModel.from_pretrained(
             self.exllamaModelPath.text().strip())
@@ -468,15 +466,20 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Main launcher logic
     def textgen_switcher(self, pre_textgen_mode):
 
-        if self.cppCheck.isEnabled() and self.exllamaCheck.isEnabled():
-            self.cppCheck.setEnabled(False)
-            self.exllamaCheck.setEnabled(False)
+        if not self.model_load:
 
             if self.cppCheck.isChecked():
                 self.load_cpp_model()
-            else:
+                print('--- Loaded llama.cpp model')
+
+            elif self.exllamaCheck.isChecked():
                 self.load_exllama_model()
-            self.chatGenerateButton.setText("Generate")
+                print('--- Loaded Exllama model')
+
+            self.model_load = True
+            # self.chatGenerateButton.setText("Generate")
+            self.cppCheck.setEnabled(False)
+            self.exllamaCheck.setEnabled(False)
 
         global textgen_mode
         textgen_mode = pre_textgen_mode
