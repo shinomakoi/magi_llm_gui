@@ -1,7 +1,7 @@
 
 # Adapted from Oobabooga's WebUI repo
 
-from llama_cpp import Llama, LlamaCache
+from llama_cpp import Llama
 
 
 class LlamaCppModel:
@@ -46,5 +46,5 @@ class LlamaCppModel:
                     break
                 byte_list = []
 
-            except:
-                pass
+            except Exception as error:
+                print(error)

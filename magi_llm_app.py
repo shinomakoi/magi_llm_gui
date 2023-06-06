@@ -16,11 +16,11 @@ from llamacpp_model_generate import LlamaCppModel
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
-try:
-    from api_fetch import ExllamaModel
-except Exception as error:
-    print(error, type(error).__name__)
-    print('---WARNING: Exllama disabled---')
+# try:
+#     from api_fetch import ExllamaModel
+# except Exception as error:
+#     print(error, type(error).__name__)
+#     print('---WARNING: Exllama disabled---')
 
 
 class textgenThread(QThread):
@@ -76,33 +76,27 @@ class textgenThread(QThread):
                 self.final_resultReady.emit(response)
 
         if self.run_backend == 'llama.cpp':
-            print("llama.cpp parameters:", self.cpp_params)
+            # print("llama.cpp parameters:", self.cpp_params)
 
             final_response = ''
-            try:
-                for response in cpp_model.generate(self.message,
-                                                   self.cpp_params["token_count"],
-                                                   self.cpp_params["temperature"],
-                                                   self.cpp_params["top_p"],
-                                                   self.cpp_params["top_k"],
-                                                   self.cpp_params["repetition_penalty"],
-                                                   self.cpp_params["mirostat_mode"],
-                                                   ):
+            for response in cpp_model.generate(self.message,
+                                               self.cpp_params["token_count"],
+                                               self.cpp_params["temperature"],
+                                               self.cpp_params["top_p"],
+                                               self.cpp_params["top_k"],
+                                               self.cpp_params["repetition_penalty"],
+                                               self.cpp_params["mirostat_mode"],
+                                               ):
 
-                    if self.stream_enabled:
-                        self.resultReady.emit(response)
-                    final_response += response
-                    final_text = self.message+final_response
+                if self.stream_enabled:
+                    self.resultReady.emit(response)
+                final_response += response
+                final_text = self.message+final_response
 
-                    if self.stop_flag:
-                        break
-                # Final result
-                self.final_resultReady.emit(final_text)
-
-            except UnicodeDecodeError:
-                print('UnicodeDecodeError! Exiting.')
-                self.final_resultReady.emit('')
-                return
+                if self.stop_flag:
+                    break
+            # Final result
+            self.final_resultReady.emit(final_text)
 
     def stop(self):
         # Set the stop flag to True
@@ -150,6 +144,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         chat_presets_load = glob.glob("presets/chat/*.yaml")
         character_presets_load = glob.glob("presets/character/*.yaml")
 
+        # Load chat presets
         for chat_preset in chat_presets_load:
             # print(chat_preset)
             chat_preset_stem = Path(chat_preset).stem
@@ -160,13 +155,13 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             character_preset_stem = Path(character_preset).stem
             self.characterPresetComboBox.addItem(character_preset_stem)
 
+        # Load awesome prompts
         filename = "presets/prompts.csv"
         with open(filename, "r",  encoding="utf-8") as csvfile:
             datareader = csv.reader(csvfile)
             for row in datareader:
                 self.awesomePresetComboBox.addItem(row[0])
             self.awesomePresetComboBox.removeItem(0)
-            # row is a list of values
 
         self.set_preset_params('chat')
 
@@ -420,7 +415,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             with open(preset_file, 'r') as file:
                 chat_preset = yaml.safe_load(file)
-
                 # print(chat_preset)
         else:
             current_preset = self.characterPresetComboBox.currentText()
@@ -431,16 +425,17 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         return chat_preset
 
-    # First load of llama.cpp model
+    # First load of Exllama model
     def load_exllama_model(self):
         global exllama_model
         exllama_model, tokenizer = ExllamaModel.from_pretrained(
-            self.exllamaModelPath.text())
+            self.exllamaModelPath.text().strip())
 
+    # First load of llama.cpp model
     def load_cpp_model(self):
 
         cpp_model_params = {
-            'model_path': str(self.cppModelPath.text()),
+            'model_path': str(self.cppModelPath.text().strip()),
             'seed': int(self.settings_win.seedValue.value()),
             'n_threads': int(self.settings_win.cppThreads.text()),
             'n_batch': int(self.settings_win.cppBatchSizeSlider.value()),
@@ -449,14 +444,16 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),
         }
 
+        # Add optional params
         if self.settings_win.gpuAccelCheck.isChecked():
             cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value(
             )
         if len(self.settings_win.cppLoraLineEdit.text()) > 0:
-            cpp_model_params["lora_path"] = self.settings_win.cppLoraLineEdit.text()
+            cpp_model_params["lora_path"] = self.settings_win.cppLoraLineEdit.text(
+            ).strip()
 
-        print('llama.cpp model load params:', cpp_model_params)
-        print('Loading llama.cpp model...')
+        print('--- llama.cpp model load params:', cpp_model_params)
+        print('--- Loading llama.cpp model...')
 
         global cpp_model
         cpp_model, tokenizer = LlamaCppModel.from_pretrained(cpp_model_params)
@@ -471,7 +468,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Main launcher logic
     def textgen_switcher(self, pre_textgen_mode):
 
-        if self.cppCheck.isEnabled():
+        if self.cppCheck.isEnabled() and self.exllamaCheck.isEnabled():
             self.cppCheck.setEnabled(False)
             self.exllamaCheck.setEnabled(False)
 
@@ -479,6 +476,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.load_cpp_model()
             else:
                 self.load_exllama_model()
+            self.chatGenerateButton.setText("Generate")
 
         global textgen_mode
         textgen_mode = pre_textgen_mode
@@ -564,7 +562,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 chat_preset = self.get_chat_presets("character")
                 final_prompt = self.chatHistory.toPlainText()+'\n\n'+self.yourNameLine.text()+": "+self.chatInput.toPlainText()+'\n' +\
                     chat_preset["name"]+":"
-            print('------\n', final_prompt)
+            # print('---Prompt---\n', final_prompt)
             return final_prompt
 
     # Get chat presets from files
@@ -576,7 +574,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             chat_preset = self.get_chat_presets('instruct')
             self.chatHistory.setPlainText(chat_preset["context"].rstrip())
 
-        elif preset_mode == 'character':
+        if preset_mode == 'character':
             self.charactersRadioButton.setChecked(True)
             chat_preset = self.get_chat_presets("character")
 
