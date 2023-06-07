@@ -30,10 +30,11 @@ class textgenThread(QThread):
         self.cpp_params = cpp_params
 
         self.stop_flag = False
+        print('g')
 
     def run(self):
 
-        if self.run_backend == 'Exllama':
+        if self.run_backend == 'exllama':
             print('Exllama parameters:', self.exllama_params)
 
             self.message = self.message
