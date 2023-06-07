@@ -1,0 +1,8 @@
+.ex_venv
+test.py
+ui_settings.ui
+__pycache__
+magi_llm_ui.ui
+logs
+settings.ini
+exllama

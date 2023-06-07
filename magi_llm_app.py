@@ -30,7 +30,6 @@ class textgenThread(QThread):
         self.cpp_params = cpp_params
 
         self.stop_flag = False
-        print('g')
 
     def run(self):
 

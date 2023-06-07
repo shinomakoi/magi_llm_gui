@@ -417,6 +417,7 @@ class Ui_Settings_Dialog(object):
         self.gpuLayersSpin.setObjectName(u"gpuLayersSpin")
         self.gpuLayersSpin.setMinimum(1)
         self.gpuLayersSpin.setMaximum(80)
+        self.gpuLayersSpin.setValue(22)
 
         self.gridLayout_4.addWidget(self.gpuLayersSpin, 8, 3, 1, 1)
 
