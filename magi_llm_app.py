@@ -33,7 +33,7 @@ class textgenThread(QThread):
 
     def run(self):
 
-        if self.run_backend == 'exllama':
+        if self.run_backend == 'Exllama':
             print('Exllama parameters:', self.exllama_params)
 
             self.message = self.message
