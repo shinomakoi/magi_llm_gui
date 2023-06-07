@@ -34,7 +34,7 @@ class textgenThread(QThread):
     def run(self):
 
         if self.run_backend == 'exllama':
-            # print('Exllama parameters:', self.exllama_params)
+            print('Exllama parameters:', self.exllama_params)
 
             self.message = self.message
 
@@ -70,7 +70,7 @@ class textgenThread(QThread):
                 self.final_resultReady.emit(response)
 
         if self.run_backend == 'llama.cpp':
-            # print("llama.cpp parameters:", self.cpp_params)
+            print("llama.cpp parameters:", self.cpp_params)
 
             final_response = ''
             for response in cpp_model.generate(self.message,
@@ -111,13 +111,13 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
         self.cpp_model_loaded = False
         self.exllama_model_loaded = False
 
-        # Ooba set settings sliders
+        # Settings sliders
         self.tempSlider.valueChanged.connect(
-            lambda: self.tempSliderLabel.setText(str(self.tempSlider.value()/100)))
+            lambda: self.tempSpin.setValue(self.tempSlider.value()/100))
         self.top_pSlider.valueChanged.connect(
-            lambda: self.top_pSliderLabel.setText(str(self.top_pSlider.value()/100)))
+            lambda: self.top_pSpin.setValue(self.top_pSlider.value()/100))
         self.reppenaltySlider.valueChanged.connect(
-            lambda: self.reppenaltySliderLabel.setText(str(self.reppenaltySlider.value()/100)))
+            lambda: self.reppenaltySpin.setValue(self.reppenaltySlider.value()/100))
 
 
 class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
@@ -367,11 +367,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def get_llama_cpp_params(self):
 
         cpp_params = {
-            'token_count': int(self.settings_win.maxnewtokensSlider.value()),
-            'temperature': float(self.settings_win.tempSlider.value()/100),
-            'top_p': float(self.settings_win.top_pSlider.value()/100),
-            'top_k': int(self.settings_win.top_kSlider.value()),
-            'repetition_penalty': float(self.settings_win.reppenaltySlider.value()/100),
+            'token_count': int(self.settings_win.maxnewtokensSpin.value()),
+            'temperature': float(self.settings_win.tempSpin.value()),
+            'top_p': float(self.settings_win.top_pSpin.value()),
+            'top_k': int(self.settings_win.top_kSpin.value()),
+            'repetition_penalty': float(self.settings_win.reppenaltySpin.value()),
             'mirostat_mode': int(self.settings_win.cppMirastatMode.value())
         }
 
@@ -381,15 +381,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def get_exllama_params(self):
 
         exllama_params = {
-            'max_new_tokens': self.settings_win.maxnewtokensSlider.value(),
-            'temperature': self.settings_win.tempSlider.value()/100,
-            'top_p': self.settings_win.top_pSlider.value()/100,
-            'repetition_penalty': self.settings_win.reppenaltySlider.value()/100,
-            'top_k': self.settings_win.top_kSlider.value(),
-            'num_beams': self.settings_win.numbeamsSlider.value(),
-            'beam_length': self.settings_win.beamLengthSlider.value(),
-            'min_p': self.settings_win.minPSlider.value(),
-            'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySlider.value(),
+            'max_new_tokens': self.settings_win.maxnewtokensSpin.value(),
+            'temperature': self.settings_win.tempSpin.value(),
+            'top_p': self.settings_win.top_pSpin.value(),
+            'repetition_penalty': self.settings_win.reppenaltySpin.value(),
+            'top_k': self.settings_win.top_kSpin.value(),
+            'num_beams': self.settings_win.numbeamsSpin.value(),
+            'beam_length': self.settings_win.beamLengthSpin.value(),
+            'min_p': self.settings_win.minPSpin.value(),
+            'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySpin.value(),
         }
 
         return exllama_params
@@ -436,15 +436,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'model_path': str(self.cppModelPath.text().strip()),
             'seed': int(self.settings_win.seedValue.value()),
             'n_threads': int(self.settings_win.cppThreads.text()),
-            'n_batch': int(self.settings_win.cppBatchSizeSlider.value()),
-            'n_ctx': int(self.settings_win.CPP_ctxsize_Slider.value()),
+            'n_batch': int(self.settings_win.cppBatchSizeSpin.value()),
+            'n_ctx': int(self.settings_win.CPP_ctxsize_Spin.value()),
             'use_mmap': bool(self.settings_win.cppMmapCheck.isChecked()),
             'use_mlock': bool(self.settings_win.cppMlockCheck.isChecked()),
         }
 
         # Add optional params
         if self.settings_win.gpuAccelCheck.isChecked():
-            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSlider.value(
+            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value(
             )
         if len(self.settings_win.cppLoraLineEdit.text()) > 0:
             cpp_model_params["lora_path"] = self.settings_win.cppLoraLineEdit.text(

@@ -1,7 +1,6 @@
-
 # Adapted from Oobabooga's WebUI repo
 
-from llama_cpp import Llama
+from llama_cpp import Llama, LlamaCache
 
 
 class LlamaCppModel:
@@ -13,7 +12,7 @@ class LlamaCppModel:
         result = self()
 
         self.model = Llama(**params)
-        # self.model.set_cache(LlamaCache)
+        self.model.set_cache(LlamaCache)
 
         # This is ugly, but the model and the tokenizer are the same object in this library.
         return result, result
