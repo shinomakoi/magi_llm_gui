@@ -124,6 +124,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
         self.setupUi(self)
 
+        print('--- Launched app')
+
         # Set the window icon
         icon = QIcon()
         icon.addFile(str(APP_ICON), QSize(), QIcon.Normal, QIcon.Off)
@@ -163,9 +165,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
         # Define a function to load parameters presets
         def load_params():
-            # Get the list of yaml files in the presets folder
             param_preset_load = glob.glob("presets/model_params/*.yaml")
-            # Loop over the files and add their names to the combo box
+            param_preset_load = sorted(param_preset_load) # sort the list of files alphabetically
             for param_preset in param_preset_load:
                 param_preset_stem = Path(param_preset).stem
                 self.paramPresets_comboBox.addItem(param_preset_stem)
@@ -334,14 +335,19 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def load_presets(self, directory, combo_box):
         # Load presets from a given directory and populate a combo box.
         presets = glob.glob(f"{directory}/*.yaml")
+        presets = sorted(presets) # sort the list of files alphabetically
+
         for preset in presets:
             preset_stem = Path(preset).stem
             combo_box.addItem(preset_stem)
+
 
     def load_prompts(self, filename):
         # Load prompts from a CSV file and populate a combo box.
         with open(filename, "r",  encoding="utf-8") as csvfile:
             datareader = csv.reader(csvfile)
+            datareader = sorted(datareader) # sort the list of files alphabetically
+
             for row in datareader:
                 self.awesomePresetComboBox.addItem(row[0])
             self.awesomePresetComboBox.removeItem(0)
