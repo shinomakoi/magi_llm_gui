@@ -167,6 +167,7 @@ class Ui_Settings_Dialog(object):
 
         self.paramPresets_comboBox = QComboBox(self.groupBox_2)
         self.paramPresets_comboBox.setObjectName(u"paramPresets_comboBox")
+        self.paramPresets_comboBox.setInsertPolicy(QComboBox.InsertAlphabetically)
 
         self.gridLayout_2.addWidget(self.paramPresets_comboBox, 0, 1, 1, 2)
 

@@ -166,7 +166,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
         # Define a function to load parameters presets
         def load_params():
             param_preset_load = glob.glob("presets/model_params/*.yaml")
-            param_preset_load = sorted(param_preset_load) # sort the list of files alphabetically
+            # sort the list of files alphabetically
+            param_preset_load = sorted(param_preset_load)
             for param_preset in param_preset_load:
                 param_preset_stem = Path(param_preset).stem
                 self.paramPresets_comboBox.addItem(param_preset_stem)
@@ -335,18 +336,18 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def load_presets(self, directory, combo_box):
         # Load presets from a given directory and populate a combo box.
         presets = glob.glob(f"{directory}/*.yaml")
-        presets = sorted(presets) # sort the list of files alphabetically
+        presets = sorted(presets)  # sort the list of files alphabetically
 
         for preset in presets:
             preset_stem = Path(preset).stem
             combo_box.addItem(preset_stem)
 
-
     def load_prompts(self, filename):
         # Load prompts from a CSV file and populate a combo box.
         with open(filename, "r",  encoding="utf-8") as csvfile:
             datareader = csv.reader(csvfile)
-            datareader = sorted(datareader) # sort the list of files alphabetically
+            # sort the list of files alphabetically
+            datareader = sorted(datareader)
 
             for row in datareader:
                 self.awesomePresetComboBox.addItem(row[0])
@@ -792,6 +793,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # Add the previous chat history and any newlines to the final prompt
                 final_prompt = (
                     f"{self.chat_modeTextHistory.toPlainText()}{end_newlines}{final_prompt}")
+                if self.customResponsePrefixCheck.isChecked():
+                    final_prompt += ' '+self.customResponsePrefix.text().strip()
 
             else:
                 # Get the chat preset for character mode from a file
