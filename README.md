@@ -6,7 +6,7 @@ Uses Exllama and llama.cpp as backends.
 
 **Installation:**
 
-First make sure Python (3.10 recommended) and GIT are installed. Then:
+First make sure Python (3.10+ recommended) and GIT are installed. Then:
 ```
 git clone https://github.com/shinomakoi/magi_llm_gui
 cd magi_llm_gui
@@ -27,15 +27,14 @@ pip install --pre torch torchvision torchaudio --index-url https://download.pyto
 pip install safetensors sentencepiece ninja
 git clone https://github.com/turboderp/exllama
 ```
-Then to launch the Magi LLM GUI, use: 
+**Usage:**
+
+To launch the Magi LLM GUI, use: 
 ```
 python magi_llm_app.py
 ```
 You can set the generation parameters in File > Parameters
 
-![image](https://user-images.githubusercontent.com/112139428/234652796-6fe1c935-25f8-401c-b96e-ab4bbe825173.png)
-
-
-Includes prompts from https://github.com/f/awesome-chatgpt-prompts
+![gfj](https://github.com/shinomakoi/magi_llm_gui/assets/112139428/f0234f46-c765-4e42-9860-d1c07b0beb73)
 
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
