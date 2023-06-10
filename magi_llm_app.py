@@ -23,9 +23,13 @@ CHARACTER_PRESETS_DIR = Path("presets/character")
 PROMPTS_FILE = Path("presets/prompts.csv")
 SETTINGS_FILE = Path("settings.ini")
 
+# Use constants for the backend names
+EXLLAMA = "exllama"
+LLAMA_CPP = "llama.cpp"
 
+
+"""A class to run text generation in a separate thread."""
 class TextgenThread(QThread):
-    """A class to run text generation in a separate thread."""
 
     resultReady = Signal(str)
     final_resultReady = Signal(str)
@@ -38,15 +42,6 @@ class TextgenThread(QThread):
         run_backend: str,
         cpp_params: dict,
     ):
-        """Initialize the thread with the given parameters.
-
-        Args:
-            exllama_params (dict): The parameters for the exllama model.
-            message (str): The input message to generate a response.
-            stream_enabled (bool): Whether to enable streaming mode or not.
-            run_backend (str): The backend to use for text generation ("exllama" or "llama.cpp").
-            cpp_params (dict): The parameters for the llama.cpp model.
-        """
         super().__init__()
         self.exllama_params = exllama_params
         self.message = message
@@ -57,68 +52,78 @@ class TextgenThread(QThread):
         self.stop_flag = False
 
     def run(self):
-        """Run the text generation process and emit signals with the results."""
+        # Use a dictionary to dispatch the backend methods
+        backend_methods = {
+            EXLLAMA: self.run_exllama,
+            LLAMA_CPP: self.run_llama_cpp,
+        }
+        # Call the appropriate method based on the run_backend attribute
+        backend_method = backend_methods.get(self.run_backend)
+        if backend_method:
+            backend_method()
+        else:
+            raise ValueError(f"Invalid run_backend: {self.run_backend}")
 
-        if self.run_backend == "exllama":
+    def run_exllama(self):
+        # Use a generator expression to iterate over the responses
+        responses = exllama_model.generate_with_streaming(
+            self.message, self.exllama_params
+        ) if self.stream_enabled else [exllama_model.generate(self.message, self.exllama_params)]
 
-            if self.stream_enabled:
-                replies = []
+        # Use a variable to store the previous response
+        prev_response = ""
+        for response in responses:
+            if self.stop_flag:
+                break
+            # Strip the previous response from the current one
+            stripped_response = response.replace(prev_response, "")
+            prev_response = response
+            # Emit the stripped response as resultReady signal
+            self.resultReady.emit(stripped_response)
 
-                for response in exllama_model.generate_with_streaming(
-                    self.message, self.exllama_params
-                ):
-                    replies.append(response)
+        # Emit the final response as final_resultReady signal
+        self.final_resultReady.emit(response)
 
-                    if len(replies) > 1:
-                        # Remove the previous response from the current one
-                        stripped_response = replies[1].replace(replies[0], "")
-                        replies.pop(0)
-                        self.resultReady.emit(stripped_response)
-                    else:
-                        self.resultReady.emit(response)
+    def run_llama_cpp(self):
+        # Use keyword arguments to pass the cpp_params to the model methods
+        kwargs = {
+            "max_tokens": self.cpp_params["max_new_tokens"],
+            "temperature": self.cpp_params["temperature"],
+            "top_p": self.cpp_params["top_p"],
+            "top_k": self.cpp_params["top_k"],
+            "repeat_penalty": self.cpp_params["repetition_penalty"],
+            "mirostat_mode": self.cpp_params["mirostat_mode"],
+            "stop": self.cpp_params["stop"],
+            "tfs_z": self.cpp_params["tfs_z"],
+            
+        }
+        # print(kwargs)
 
-                    if self.stop_flag:
-                        break
+        # Use a generator expression to iterate over the responses
+        responses = cpp_model.generate_with_streaming(
+            self.message, **kwargs
+        ) if self.stream_enabled else [cpp_model.generate(self.message, **kwargs)]
 
-                response = str(response)
-                self.final_resultReady.emit(response)
+        # Use a list to store the responses and join them at the end
+        response_list = []
+        for response in responses:
+            if self.stop_flag:
+                break
+            # Emit the response as resultReady signal
+            self.resultReady.emit(response)
+            # Append the response to the list
+            response_list.append(response)
 
-            else:
-
-                response = exllama_model.generate(
-                    exllama_model, self.message, self.exllama_params
-                )
-                self.final_resultReady.emit(response)
-
-        if self.run_backend == "llama.cpp":
-            final_response = ""
-            for response in cpp_model.generate(
-                self.message,
-                self.cpp_params["token_count"],
-                self.cpp_params["temperature"],
-                self.cpp_params["top_p"],
-                self.cpp_params["top_k"],
-                self.cpp_params["repetition_penalty"],
-                self.cpp_params["mirostat_mode"],
-            ):
-
-                if self.stream_enabled:
-                    self.resultReady.emit(response)
-                final_response += response
-                final_text = f"{self.message}{final_response}"
-
-                if self.stop_flag:
-                    break
-            self.final_resultReady.emit(final_text)
+        # Join the message and the responses and emit as final_resultReady signal
+        final_text = f"{self.message}{''.join(response_list)}"
+        self.final_resultReady.emit(final_text)
 
     def stop(self):
         """Set the stop flag to True."""
         self.stop_flag = True
 
 
-# Define a class for the SettingsWindow
 class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
-    # Initialize the window
     def __init__(self):
         super().__init__()
 
@@ -148,6 +153,11 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 self.repetition_penaltySlider.value() / 100
             )
         )
+        self.cpp_tfszSlider.valueChanged.connect(
+            lambda: self.cpp_tfszSpin.setValue(
+                self.cpp_tfszSlider.value() / 100
+            )
+        )
 
         # Connect the spin boxes to the settings sliders
         self.temperatureSpin.valueChanged.connect(
@@ -162,6 +172,11 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 self.repetition_penaltySpin.value() * 100
             )
         )
+        self.cpp_tfszSpin.valueChanged.connect(
+            lambda: self.cpp_tfszSlider.setValue(
+                self.cpp_tfszSpin.value() * 100
+            )
+        )
 
         # Define a function to load parameters presets
         def load_params():
@@ -172,8 +187,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 param_preset_stem = Path(param_preset).stem
                 self.paramPresets_comboBox.addItem(param_preset_stem)
 
-            # Set the default preset to _MAGI_DEFAULT
-            self.paramPresets_comboBox.setCurrentText("_MAGI_DEFAULT")
+            # Set the default preset to Magi-Default
+            self.paramPresets_comboBox.setCurrentText("Magi-Default")
 
         # Call the function to load parameters presets
         load_params()
@@ -198,10 +213,13 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             num_beams = config["Params-Exllama"]["num_beams"]
             beam_length = config["Params-Exllama"]["beam_length"]
 
+            gpu_split = config["Params-Exllama"]["gpu_split"]
+            gpu_split_values = config["Params-Exllama"]["gpu_split_values"]
+
             # Params-LlamaCPP
             threads = config["Params-LlamaCPP"]["threads"]
             context_size = config["Params-LlamaCPP"]["context_size"]
-            repeat_last_n = config["Params-LlamaCPP"]["repeat_last_n"]
+            tfs_z = config["Params-LlamaCPP"]["tfs_z"]
             batch_size = config["Params-LlamaCPP"]["batch_size"]
             mirostat_mode = config["Params-LlamaCPP"]["mirostat_mode"]
             n_gpu_layers = config["Params-LlamaCPP"]["n_gpu_layers"]
@@ -246,14 +264,17 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.beamLengthSpin.setValue(int(beam_length))
             self.beamLengthSlider.setValue(int(beam_length))
 
+            self.exllamaGpuSplitCheck.setChecked(eval(gpu_split))
+            self.exllamaGpuSplitLine.setText((gpu_split_values))
+
             # Params-LlamaCPP
             self.cppThreads.setValue(int(threads))
 
             self.CPP_ctxsize_Spin.setValue(int(context_size))
             self.CPP_ctxsize_Slider.setValue(int(context_size))
 
-            self.CPP_repeat_last_nSpin.setValue(int(repeat_last_n))
-            self.CPP_repeat_last_nSlider.setValue(int(repeat_last_n))
+            self.cpp_tfszSpin.setValue(float(tfs_z))
+            self.cpp_tfszSlider.setValue(int(float(tfs_z)*100))
 
             self.cppBatchSizeSpin.setValue(int(batch_size))
             self.cppBatchSizeSlider.setValue(int(batch_size))
@@ -298,7 +319,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             )
 
             # Print a message indicating which preset was applied
-            print("--- Applied parameter preset:", preset_file)
+            print("--- Applied parameter preset:", Path(preset_file).stem)
 
         # Connect the function to the combo box signal
         self.paramPresets_comboBox.currentTextChanged.connect(
@@ -321,17 +342,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         # Load chat presets
         self.load_presets(CHAT_PRESETS_DIR, self.instructPresetComboBox)
-
         # Load character presets
         self.load_presets(CHARACTER_PRESETS_DIR, self.characterPresetComboBox)
-
         # Load awesome prompts
         self.load_prompts(PROMPTS_FILE)
-
-        self.set_preset_params('instruct')
-
         # Load settings
         self.load_settings(SETTINGS_FILE)
+
+        self.set_preset_params('instruct')
 
     def load_presets(self, directory, combo_box):
         # Load presets from a given directory and populate a combo box.
@@ -356,7 +374,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def load_settings(self, filename: str):
 
         # Load settings from an INI file and set the corresponding widgets.
-
         config = configparser.ConfigParser()
         config.read(filename)
         self.cppModelPath.setText(config["Settings"]["cpp_model_path"])
@@ -424,16 +441,16 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Browse for the GGML model
     def cpp_model_select(self):
-        file_x = self.get_file_path('Open file', "GGML models (*bin)")
+        cpp_model = self.get_file_path('Open file', "GGML models (*bin)")
 
-        if file_x:
-            self.cppModelPath.setText(file_x)
+        if cpp_model:
+            self.cppModelPath.setText(cpp_model)
 
     def exllama_model_select(self):
-        file_x = self.get_directory_path("Select Directory")
+        exllama_model = self.get_directory_path("Select Directory")
 
-        if file_x:
-            self.exllamaModelPath.setText(file_x)
+        if exllama_model:
+            self.exllamaModelPath.setText(exllama_model)
 
     def save_settings(self):
 
@@ -448,11 +465,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             config.write(f)
         f.close()
 
-        print('Settings saved')
+        print('--- Model paths saved')
 
     def history_readonly_logic(self, readonly_mode: bool):
         """Set the history widget and the buttons to readonly mode or not.
-
         Args:
             readonly_mode (bool): Whether to enable readonly mode or not.
         """
@@ -492,7 +508,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             button.setEnabled(button_mode)
 
     # Stop button logic
-
     def stop_textgen(self):
         self.textgenThread.stop()
 
@@ -553,7 +568,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
                 f.write('\n'+final_text)
-            print('Wrote chat log')
+            print('--- Wrote chat log')
 
         self.statusbar.showMessage(f"Status: Generation complete")
         self.history_readonly_logic(False)
@@ -561,16 +576,33 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Stop the textgen thread
         self.stop_textgen()
 
+    def get_stop_strings(self):
+        stop_strings = []
+
+        if self.instructRadioButton.isChecked():
+            chat_preset = self.get_chat_presets("instruct")
+            stop_strings.append(chat_preset["user"])
+
+        elif self.charactersRadioButton.isChecked():
+            stop_strings.append(self.yourNameLine.text()+':')
+
+        return stop_strings
+
     # Get the llama.cpp parameters
     def get_llama_cpp_params(self):
 
+        stop_strings = self.get_stop_strings()
+
         cpp_params = {
-            'token_count': int(self.settings_win.max_new_tokensSpin.value()),
+            'max_new_tokens': int(self.settings_win.max_new_tokensSpin.value()),
             'temperature': float(self.settings_win.temperatureSpin.value()),
             'top_p': float(self.settings_win.top_pSpin.value()),
             'top_k': int(self.settings_win.top_kSpin.value()),
             'repetition_penalty': float(self.settings_win.repetition_penaltySpin.value()),
-            'mirostat_mode': int(self.settings_win.cppMirastatMode.value())
+            'mirostat_mode': int(self.settings_win.cppMirastatMode.value()),
+            'stop': list(stop_strings),
+            'tfs_z': float(self.settings_win.cpp_tfszSpin.value()),
+
         }
 
         return cpp_params
@@ -599,30 +631,33 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         month = today.month
         year = today.year
         return (f'{day}-{month}-{year}')
-
-    # Set chat prefixes
+    
+        # Get chat presets from a YAML file
     def get_chat_presets(self, chat_mode):
-
-        # Get the preset name from the corresponding combo box
         preset_name = getattr(self, chat_mode + 'PresetComboBox').currentText()
-
-        # Get the preset file path from the chat mode and the preset name
         preset_file = f"presets/{chat_mode}/{preset_name}.yaml"
-
-        # Load the preset file as a dictionary
         with open(preset_file, 'r') as file:
             chat_preset = yaml.safe_load(file)
-
         return chat_preset
 
-    # Define a helper function to get the model path from a line edit widget
     def get_model_path(self, line_edit):
+        # Get the model path from a line edit widget
         model_path = line_edit.text().strip()
         return model_path
 
-    # Define a helper function to get the cpp model parameters from the settings window
-    def get_cpp_model_params(self):
+    def get_exllama_model_params(self):
+        # Get the Exllama model parameters from the settings window
+        exllama_model_params = {
+            'model_path': self.get_model_path(self.exllamaModelPath),
+            'gpu_split': self.settings_win.exllamaGpuSplitCheck.isChecked()
+        }
+        if self.settings_win.exllamaGpuSplitCheck.isChecked():
+            exllama_model_params["gpu_split_values"] = self.settings_win.exllamaGpuSplitLine.text(
+            )
+        return exllama_model_params
 
+    def get_cpp_model_params(self):
+        # Get the cpp model parameters from the settings window
         cpp_model_params = {
             'model_path': self.get_model_path(self.cppModelPath),
             'seed': self.settings_win.seedSpin.value(),
@@ -632,37 +667,31 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'use_mmap': self.settings_win.cppMmapCheck.isChecked(),
             'use_mlock': self.settings_win.cppMlockCheck.isChecked(),
         }
-
-        # Add optional params
         if self.settings_win.gpuAccelCheck.isChecked():
             cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value(
             )
         if self.settings_win.cppLoraLineEdit.text():
             cpp_model_params["lora_path"] = self.get_model_path(
                 self.settings_win.cppLoraLineEdit)
-
         return cpp_model_params
 
-    # Load models
     def load_model(self, model_name):
-
-        # Print a message indicating which model is being loaded
+        # Load a model based on its name
         print(f'--- Loading {model_name} model...')
+        self.statusbar.showMessage(f'Status: Loading {model_name} model...')
 
-        # Declare global variables for the models and the tokenizer
-        global exllama_model, cpp_model, tokenizer
-        # Load the model and the tokenizer based on the model name
         if model_name == 'Exllama':
             from api_fetch import ExllamaModel
-            exllama_model, tokenizer = ExllamaModel.from_pretrained(
-                self.get_model_path(self.exllamaModelPath))
-            print(f'--- Exllama model load parameters:',
-                  self.get_model_path(self.exllamaModelPath))
+            global exllama_model
+            exllama_model = ExllamaModel.from_pretrained(
+                self.get_exllama_model_params())
+            print('--- Exllama model load parameters:',
+                  self.get_exllama_model_params())
 
         elif model_name == 'llama.cpp':
             from llamacpp_model_generate import LlamaCppModel
-
-            cpp_model, tokenizer = LlamaCppModel.from_pretrained(
+            global cpp_model
+            cpp_model = LlamaCppModel.from_pretrained(
                 self.get_cpp_model_params())
             print('--- llama.cpp model load parameters:',
                   self.get_cpp_model_params())
@@ -696,7 +725,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         # Declare a global variable for the textgen mode
         global textgen_mode
-        # Set the textgen mode to the pre-textgen mode argument
         textgen_mode = pre_textgen_mode
 
         # If the pre-textgen mode is default mode
@@ -817,10 +845,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             chat_preset = self.get_chat_presets('instruct')
             # Set the chat mode text history widget to show the context from the preset
             self.chat_modeTextHistory.setPlainText(
-                chat_preset["context"].rstrip())
+                chat_preset["context"])
 
         if preset_mode == 'character':
-            # If the preset mode is character
             # Check the character radio button
             self.charactersRadioButton.setChecked(True)
             # Get the chat preset for character mode from a file
@@ -841,7 +868,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     def awesome_prompts(self):
         # Get awesome prompts from a csv file
-
         filename = "presets/prompts.csv"
         with open(filename, "r",  encoding="utf-8") as csvfile:
             datareader = csv.reader(csvfile)

@@ -3,79 +3,92 @@ from pathlib import Path
 
 import torch
 
+# Add the exllama module to the system path
 sys.path.insert(0, str(Path("exllama")))
 
-# Import the ExLlama modules
 from exllama.generator import ExLlamaGenerator
 from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
 
+# Import the necessary classes from exllama
 
-# Define a class for the ExLlama model
+# Define some constants for paths and extensions
+MODEL_EXTENSIONS = [".safetensors", ".pt", ".bin"]
+
+
 class ExllamaModel:
     def __init__(self):
-        pass
+        # Initialize the attributes of the class to None
+        self.config = None
+        self.model = None
+        self.cache = None
+        self.tokenizer = None
 
     @classmethod
-    def from_pretrained(self, path_to_model):
-        # Load the model and the tokenizer from a pretrained path
-        # Convert the path to a Path object
-        path_to_model = Path(path_to_model)
+    def from_pretrained(cls, params):
+
+        MODEL_PATH = Path(params["model_path"])
         # Get the paths for the tokenizer model and the model config
-        tokenizer_model_path = path_to_model / "tokenizer.model"
-        model_config_path = path_to_model / "config.json"
+        TOKENIZER_MODEL_PATH = MODEL_PATH / "tokenizer.model"
+        MODEL_CONFIG_PATH = MODEL_PATH / "config.json"
 
-        # Find the model checkpoint
+        # Create an instance of the class from a pretrained model
+
+        # Load the model config from a json file
+        config = ExLlamaConfig(str(MODEL_CONFIG_PATH))
+
+        # Find the model file with one of the extensions
         model_path = None
-        # Loop through the possible extensions
-        for ext in ['.safetensors', '.pt', '.bin']:
-            # Find all the files with that extension in the path
-            found = list(path_to_model.glob(f"*{ext}"))
-            # If there are any files found
+        for ext in MODEL_EXTENSIONS:
+            found = list(MODEL_PATH.glob(f"*{ext}"))
             if len(found) > 0:
-                # If there are more than one file found
+                # If more than one file is found, use the last one
                 if len(found) > 1:
-                    # Print a warning message that the last one will be selected
                     print(
-                        f'More than one {ext} model has been found. The last one will be selected. It could be wrong.')
-
-                # Set the model path to the last file found
+                        f"More than one {ext} model has been found. The last one will be selected. It could be wrong."
+                    )
                 model_path = found[-1]
                 print(model_path)
-                # Break the loop
                 break
 
-        # Load the config from the config path and set some attributes
-        config = ExLlamaConfig(str(model_config_path))
+        # Set the model path and max sequence length in the config
         config.model_path = str(model_path)
         config.max_seq_len = 2048
-        # Load the model from the config
-        model = ExLlama(config)
-        # Create a cache for the model
-        cache = ExLlamaCache(model)
-        # Load the tokenizer from the tokenizer model path
-        tokenizer = ExLlamaTokenizer(str(tokenizer_model_path))
 
-        # Create an instance of this class and set its attributes
-        result = self()
+        # Set some other parameters in the config based on params
+        if params["gpu_split"]:
+            config.set_auto_map(params["gpu_split_values"])
+            config.gpu_peer_fix = True
+
+        # Create an instance of ExLlama with the config
+        model = ExLlama(config)
+
+        # Create an instance of ExLlamaCache with the model
+        cache = ExLlamaCache(model)
+
+        # Create an instance of ExLlamaTokenizer with the tokenizer model path
+        tokenizer = ExLlamaTokenizer(str(TOKENIZER_MODEL_PATH))
+
+        # Create an instance of ExllamaModel and assign its attributes
+        result = cls()
         result.config = config
         result.model = model
         result.cache = cache
         result.tokenizer = tokenizer
 
-        # Return a tuple of the instance and itself (why?)
-        return result, result
+        return result
 
     def generate(self, context, params):
         # Generate text from a given context and parameters
 
-        # Disable gradient computation and initialize CUDA if available
+        # Disable gradient computation and initialize CUDA device
         torch.set_grad_enabled(False)
         torch.cuda._lazy_init()
 
-        # Create a generator object with the model, tokenizer and cache
+        # Create an instance of ExLlamaGenerator with the model, tokenizer and cache
         generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)
-        # Set the generator settings from the parameters dictionary
+
+        # Set some settings for the generator based on params
         generator.settings.temperature = params["temperature"]
         generator.settings.top_p = params["top_p"]
         generator.settings.top_k = params["top_k"]
@@ -84,27 +97,29 @@ class ExllamaModel:
 
         generator.settings.min_p = params["min_p"]
         generator.settings.token_repetition_penalty_sustain = params[
-            "token_repetition_penalty_sustain"]
-        generator.settings.token_repetition_penalty_decay = generator.settings.token_repetition_penalty_sustain // 2
+            "token_repetition_penalty_sustain"
+        ]
+        generator.settings.token_repetition_penalty_decay = (
+            generator.settings.token_repetition_penalty_sustain // 2
+        )
         generator.settings.beam_length = params["beam_length"]
 
-        # Generate text using the simple method with the context and max new tokens limit
+        # Generate text using the generator
         text = generator.generate_simple(
-            context, max_new_tokens=params["max_new_tokens"])
-
-        # Return the generated text
+            context, max_new_tokens=params["max_new_tokens"]
+        )
         return text
-    
-        # Generate text from a given context and parameters using streaming
+
     def generate_with_streaming(self, context, params):
 
-        # Disable gradient computation and initialize CUDA if available
+        # Disable gradient computation and initialize CUDA device
         torch.set_grad_enabled(False)
         torch.cuda._lazy_init()
 
-        # Create a generator object with the model, tokenizer and cache
+        # Create an instance of ExLlamaGenerator with the model, tokenizer and cache
         generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)
-        # Set the generator settings from the parameters dictionary
+
+        # Set some settings for the generator based on params
         generator.settings.temperature = params["temperature"]
         generator.settings.top_p = params["top_p"]
         generator.settings.top_k = params["top_k"]
@@ -113,29 +128,30 @@ class ExllamaModel:
 
         generator.settings.min_p = params["min_p"]
         generator.settings.token_repetition_penalty_sustain = params[
-            "token_repetition_penalty_sustain"]
-        generator.settings.token_repetition_penalty_decay = generator.settings.token_repetition_penalty_sustain // 2
+            "token_repetition_penalty_sustain"
+        ]
+        generator.settings.token_repetition_penalty_decay = (
+            generator.settings.token_repetition_penalty_sustain // 2
+        )
         generator.settings.beam_length = params["beam_length"]
 
-        # End the beam search if it is still running
+        # End the previous beam search if any
         generator.end_beam_search()
-        # Encode the context into ids
+
+        # Encode the context into ids using the tokenizer
         ids = generator.tokenizer.encode(context)
-        # Begin the generation with the ids
+
+        # Begin the generation process with the ids
         generator.gen_begin(ids)
+
         # Get the initial length of the sequence
         initial_len = generator.sequence[0].shape[0]
-        # Create an empty list for all tokens
-        all_tokens = []
 
-        # Loop through the max new tokens limit
+        # Generate tokens one by one and yield them as text
         for i in range(params["max_new_tokens"]):
-            # Generate a single token
             token = generator.gen_single_token()
-            # Yield the decoded sequence from the initial length to the end
             yield (generator.tokenizer.decode(generator.sequence[0][initial_len:]))
 
-            # If the token is the end of sentence token
             if token.item() == generator.tokenizer.eos_token_id:
                 # Replace it with a newline token
                 generator.replace_last_token(
