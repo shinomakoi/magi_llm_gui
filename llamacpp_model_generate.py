@@ -18,7 +18,6 @@ class LlamaCppModel:
         return reply
 
     def generate_with_streaming(self, context, **kwargs):
-        print(context)
         # Generate text from a given context and optional keyword arguments in a streaming fashion
         for response in self.model.create_completion(context, stream=True, **kwargs):
             reply = response['choices'][0]['text']
