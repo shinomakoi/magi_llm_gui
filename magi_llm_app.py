@@ -29,6 +29,8 @@ LLAMA_CPP = "llama.cpp"
 
 
 """A class to run text generation in a separate thread."""
+
+
 class TextgenThread(QThread):
 
     resultReady = Signal(str)
@@ -95,7 +97,7 @@ class TextgenThread(QThread):
             "mirostat_mode": self.cpp_params["mirostat_mode"],
             "stop": self.cpp_params["stop"],
             "tfs_z": self.cpp_params["tfs_z"],
-            
+
         }
         # print(kwargs)
 
@@ -115,7 +117,7 @@ class TextgenThread(QThread):
             response_list.append(response)
 
         # Join the message and the responses and emit as final_resultReady signal
-        final_text = f"{self.message}{''.join(response_list)}"
+        final_text = f"{''.join(response_list)}"
         self.final_resultReady.emit(final_text)
 
     def stop(self):
@@ -339,6 +341,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.setWindowIcon(icon)
 
         self.model_load = False
+        self.continue_textgen_mode = False
 
         # Load chat presets
         self.load_presets(CHAT_PRESETS_DIR, self.instructPresetComboBox)
@@ -349,35 +352,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Load settings
         self.load_settings(SETTINGS_FILE)
 
-        self.set_preset_params('instruct')
+        self.name_history = []
+        self.message_history = []
 
-    def load_presets(self, directory, combo_box):
-        # Load presets from a given directory and populate a combo box.
-        presets = glob.glob(f"{directory}/*.yaml")
-        presets = sorted(presets)  # sort the list of files alphabetically
+        # Quit from menu
+        self.actionSettings.triggered.connect(self.settings_win.show)
+        self.actionExit.triggered.connect(app.exit)
 
-        for preset in presets:
-            preset_stem = Path(preset).stem
-            combo_box.addItem(preset_stem)
-
-    def load_prompts(self, filename):
-        # Load prompts from a CSV file and populate a combo box.
-        with open(filename, "r",  encoding="utf-8") as csvfile:
-            datareader = csv.reader(csvfile)
-            # sort the list of files alphabetically
-            datareader = sorted(datareader)
-
-            for row in datareader:
-                self.awesomePresetComboBox.addItem(row[0])
-            self.awesomePresetComboBox.removeItem(0)
-
-    def load_settings(self, filename: str):
-
-        # Load settings from an INI file and set the corresponding widgets.
-        config = configparser.ConfigParser()
-        config.read(filename)
-        self.cppModelPath.setText(config["Settings"]["cpp_model_path"])
-        self.exllamaModelPath.setText(config["Settings"]["exllama_model_path"])
+        # Status bar
+        self.statusbar.showMessage("Status: Ready")
 
         # Button clicks
         self.defaultGenerateButton.clicked.connect(
@@ -402,8 +385,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.settingsPathSaveButton.clicked.connect(self.save_settings)
 
-        self.chatClearButton.clicked.connect(
-            partial(self.set_preset_params, 'instruct'))
+        self.chatClearButton.clicked.connect(self.set_preset_params)
 
         self.cppModelSelect.clicked.connect(self.cpp_model_select)
         self.exllamaModelSelect.clicked.connect(self.exllama_model_select)
@@ -420,12 +402,36 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.awesomePresetComboBox.currentTextChanged.connect(
             self.awesome_prompts)
 
-        # Quit from menu
-        self.actionSettings.triggered.connect(self.settings_win.show)
-        self.actionExit.triggered.connect(app.exit)
+        self.set_preset_params('instruct')
 
-        # Status bar
-        self.statusbar.showMessage("Status: Ready")
+    def load_presets(self, directory, combo_box):
+        # Load presets from a given directory and populate a combo box.
+        presets = glob.glob(f"{directory}/*.yaml")
+        presets = sorted(presets)  # sort the list of files alphabetically
+
+        for preset in presets:
+            preset_stem = Path(preset).stem
+            combo_box.addItem(preset_stem)
+
+    def load_prompts(self, filename):
+        # Load prompts from a CSV file and populate a combo box.
+        with open(filename, "r",  encoding="utf-8") as csvfile:
+            datareader = csv.reader(csvfile)
+            # sort the list of files alphabetically
+            datareader = sorted(datareader)
+
+            for row in datareader:
+                self.awesomePresetComboBox.addItem(row[0])
+            self.awesomePresetComboBox.removeItem(0)
+
+    def load_settings(self, filename: str):
+        # Load settings from an INI file and set the corresponding widgets.
+        config = configparser.ConfigParser()
+        config.read(filename)
+        self.cppModelPath.setText(config["Settings"]["cpp_model_path"])
+        self.exllamaModelPath.setText(config["Settings"]["exllama_model_path"])
+        self.botNameLine.setText(config["Settings"]["bot_name"])
+        self.yourNameLine.setText(config["Settings"]["user_name"])
 
     # Define a helper function to get the file path from a dialog
     def get_file_path(self, title, filter):
@@ -453,19 +459,21 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.exllamaModelPath.setText(exllama_model)
 
     def save_settings(self):
-
         config = configparser.ConfigParser()
         config.read("settings.ini")
+
         config.set("Settings", "cpp_model_path", self.cppModelPath.text())
         config.set("Settings", "exllama_model_path",
                    self.exllamaModelPath.text())
+        config.set("Settings", "user_name", self.yourNameLine.text())
+        config.set("Settings", "bot_name", self.botNameLine.text())
 
         with open("settings.ini", "w") as f:
             # Write the ConfigParser object to the file
             config.write(f)
         f.close()
 
-        print('--- Model paths saved')
+        print('--- Settings saved')
 
     def history_readonly_logic(self, readonly_mode: bool):
         """Set the history widget and the buttons to readonly mode or not.
@@ -476,7 +484,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # A dictionary to map the textgen modes to the corresponding widgets
         mode_widgets = {
             "notebook_mode": self.notebook_modeTextHistory,
-            "chat_mode": self.chat_modeTextHistory,
         }
 
         # Set the history widget to readonly mode based on the textgen mode
@@ -501,6 +508,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.defaultClearButton,
             self.notebookClearButton,
             self.chatClearButton,
+            self.instructRadioButton,
+            self.charactersRadioButton
         ]
 
         # Iterate over the buttons and set their enabled status
@@ -517,6 +526,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Continue button logic
     def continue_textgen(self, text_tab):
+        self.continue_textgen_mode = True
 
         if not self.exllamaCheck.isEnabled():
             if self.exllamaCheck.isChecked():
@@ -531,9 +541,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             # Launch the backend with the history text and the run backend
             self.launch_backend(history_text, run_backend)
 
-            # Set the history readonly logic to True
-            self.history_readonly_logic(True)
-
     # Define a helper function to insert text and scroll to the end of a text widget
     def insert_text_and_scroll(self, text_widget, text):
         cursor = text_widget.textCursor()
@@ -544,7 +551,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     @Slot(str)
     def handleResult(self, reply):
-
         # Get the text widget from the textgen mode
         text_widget = getattr(self, textgen_mode + 'TextHistory')
 
@@ -554,15 +560,17 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Handle the final response from textgen
     @Slot(str)
     def final_handleResult(self, final_text):
-
-        if not self.streamEnabledCheck.isChecked():
-            # Get the text widget from the textgen mode
-            text_widget = getattr(self, textgen_mode + 'TextHistory')
-
-            # Set the plain text to the final text
-            text_widget.setPlainText(final_text)
-
         # Write chat log
+        if textgen_mode == 'chat_mode':
+            if self.continue_textgen_mode:
+                print('continue_chat_mode')
+                updated = str(
+                    (self.message_history[-1].rstrip())+final_text.rstrip()+'\n\n')
+                self.message_history[-1] = updated
+                self.continue_textgen_mode = False
+            else:
+                self.message_history.append(final_text.rstrip()+'\n\n')
+
         if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
             current_date = self.get_chat_date()
 
@@ -586,11 +594,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         elif self.charactersRadioButton.isChecked():
             stop_strings.append(self.yourNameLine.text()+':')
 
+        # print('stopstrings', stop_strings)
         return stop_strings
 
     # Get the llama.cpp parameters
     def get_llama_cpp_params(self):
-
         stop_strings = self.get_stop_strings()
 
         cpp_params = {
@@ -604,12 +612,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'tfs_z': float(self.settings_win.cpp_tfszSpin.value()),
 
         }
-
+        # print('--- cpp_params:', cpp_params)
         return cpp_params
 
     # Get the Exllama parameters
     def get_exllama_params(self):
-
         exllama_params = {
             'max_new_tokens': self.settings_win.max_new_tokensSpin.value(),
             'temperature': self.settings_win.temperatureSpin.value(),
@@ -621,7 +628,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'min_p': self.settings_win.minPSpin.value(),
             'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySpin.value(),
         }
-
+        # print('--- exllama_params:', exllama_params)
         return exllama_params
 
     # Get data for chat log save
@@ -631,7 +638,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         month = today.month
         year = today.year
         return (f'{day}-{month}-{year}')
-    
+
         # Get chat presets from a YAML file
     def get_chat_presets(self, chat_mode):
         preset_name = getattr(self, chat_mode + 'PresetComboBox').currentText()
@@ -697,9 +704,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                   self.get_cpp_model_params())
 
     def set_textgen_things(self):
-        # Set the history to read-only mode
-        self.history_readonly_logic(True)
-
         # Enable the stop buttons for each mode
         self.defaultStopButton.setEnabled(True)
         self.notebookStopButton.setEnabled(True)
@@ -757,9 +761,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             # If the input message is not empty
             if input_message:
                 # Generate a final prompt by calling the prompt_generation method with the pre-textgen mode argument
-                final_prompt = self.prompt_generation(pre_textgen_mode)
-                # Set the chat mode text history widget to show the final prompt
-                self.chat_modeTextHistory.setPlainText(final_prompt)
+                final_prompt = self.prompt_generation()
+
+                chat_input = self.chat_modeTextInput.toPlainText().strip()
+
+                self.chat_modeTextHistory.append(
+                    '<br><b>'+self.yourNameLine.text().strip()+":</b>")
+                self.chat_modeTextHistory.append(chat_input)
+                self.chat_modeTextHistory.append(
+                    "<b>"+self.botNameLine.text().strip()+":</b><br>")
 
                 # Choose the backend based on the cpp checkbox status
                 backend = 'llama.cpp' if self.cppCheck.isChecked() else 'exllama'
@@ -793,78 +803,111 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Set the textgen things
         self.set_textgen_things()
 
-    def prompt_generation(self, pre_textgen_mode):
-        # Generate a final prompt based on the pre-textgen mode and the user input
+        # Set the history to read-only mode
+        self.history_readonly_logic(True)
 
-        # if pre_textgen_mode == 'default_mode':
+    # Define a function to process the turn template for chat mode
+    def process_instruct_turn_template(self):
 
-        # if pre_textgen_mode == 'notebook_mode':
+        if self.instructRadioButton.isChecked():
+            chat_preset = self.get_chat_presets("instruct")
+            first_turn_template = str(chat_preset["turn_template"])
 
-        if pre_textgen_mode == 'chat_mode':
-            if self.instructRadioButton.isChecked():
-                # Get the chat preset for instruct mode from a file
-                chat_preset = self.get_chat_presets("instruct")
-
-                # Replace the placeholders in the turn template with the user and bot names and messages
-                final_prompt = chat_preset["turn_template"]\
-                    .replace("<|user|>", chat_preset["user"])\
-                    .replace("<|user-message|>", self.chat_modeTextInput.toPlainText())\
-                    .replace("<|bot|>", chat_preset["bot"])
-
-                # Remove the bot message placeholder from the final prompt
-                match = "<|bot-message|>"
-                end_newlines = final_prompt.split(match)[1]
-                final_prompt = final_prompt.split(match)[0]
-                final_prompt = final_prompt.replace(
-                    "<|bot-message|>", "")
-
-                # Add the previous chat history and any newlines to the final prompt
-                final_prompt = (
-                    f"{self.chat_modeTextHistory.toPlainText()}{end_newlines}{final_prompt}")
-                if self.customResponsePrefixCheck.isChecked():
-                    final_prompt += ' '+self.customResponsePrefix.text().strip()
-
-            else:
-                # Get the chat preset for character mode from a file
-                chat_preset = self.get_chat_presets("character")
-                # Add the user name, input message and character name to the final prompt
-                final_prompt = self.chat_modeTextHistory.toPlainText()+'\n\n'+self.yourNameLine.text()+": "+self.chat_modeTextInput.toPlainText()+'\n' +\
-                    chat_preset["name"]+":"
-            # Return the final prompt
-            return final_prompt
-
-    # Get chat presets from files
-    def set_preset_params(self, preset_mode, partial=None):
-        # Set the preset parameters based on the preset mode
-
-        if preset_mode == 'instruct':
-            # If the preset mode is chat
-            self.instructRadioButton.setChecked(True)
-
-            # Get the chat preset for instruct mode from a file
-            chat_preset = self.get_chat_presets('instruct')
-            # Set the chat mode text history widget to show the context from the preset
-            self.chat_modeTextHistory.setPlainText(
-                chat_preset["context"])
-
-        if preset_mode == 'character':
-            # Check the character radio button
-            self.charactersRadioButton.setChecked(True)
-            # Get the chat preset for character mode from a file
+        elif self.charactersRadioButton.isChecked():
             chat_preset = self.get_chat_presets("character")
+            first_turn_template = "<|user|>:\n<|user-message|>\n\n<|bot|>:\n<|bot-message|>\n\n"
 
-            # Replace the placeholders in the example dialogue with the character and user names
-            final_example_dialogue = chat_preset["example_dialogue"]\
-                .replace(r"{{char}}", chat_preset["name"])\
-                .replace(r"{{user}}", self.yourNameLine.text())
+        # Get the context string from the chat preset
+        pre_prompt = chat_preset["context"]
 
-            # Add the context, greeting and example dialogue to the final prompt
-            final_prompt = (chat_preset["context"])\
-                + '\n\n'+chat_preset["greeting"]\
-                + '\n\n'+final_example_dialogue
+        # Split the turn template string by the user message placeholder
+        turn_template = first_turn_template.split("<|user-message|>")
+        # Get the first part of the turn template as the user template
+        template_user = turn_template[0]
 
-            # Set the chat mode text history widget to show the final prompt
-            self.chat_modeTextHistory.setPlainText(final_prompt)
+        # Remove the user template from the turn template and split by the bot placeholder
+        turn_template = first_turn_template.replace(template_user, "")
+        turn_template = turn_template.split("<|bot|>")
+        # Get the first part of the turn template as the user message template
+        template_user_msg = turn_template[0]
+
+        # Remove the user template and user message template from the turn template and split by the bot message placeholder
+        turn_template = first_turn_template.replace(
+            template_user, "").replace(template_user_msg, "")
+        turn_template = turn_template.split("<|bot-message|>")
+        # Get the first part of the turn template as the bot template
+        template_bot = turn_template[0]
+
+        # Get the remaining part of the turn template as the bot message template
+        template_bot_msg = first_turn_template.replace(
+            template_user, "").replace(template_user_msg, "").replace(template_bot, "")
+
+        if self.instructRadioButton.isChecked():
+            user = template_user.replace("<|user|>", chat_preset["user"])
+            bot = template_bot.replace("<|bot|>", chat_preset["bot"])
+        elif self.charactersRadioButton.isChecked():
+            user = template_user.replace("<|user|>", self.yourNameLine.text())
+            bot = template_bot.replace("<|bot|>", chat_preset["name"])
+
+            # Replace the user message placeholder with the input text from the chat mode text input widget
+        user_msg = template_user_msg.replace(
+            "<|user-message|>", self.chat_modeTextInput.toPlainText().strip())
+
+        # Return a tuple of user, user message, bot, bot message and pre prompt
+        return user, user_msg, bot, template_bot_msg, pre_prompt
+
+    # Define a function to generate a final prompt for text generation based on the mode
+    def prompt_generation(self):
+
+        # Call process_turn_template function and get a tuple of values
+        user, user_msg, bot, bot_msg, pre_prompt = self.process_instruct_turn_template()
+
+        # Append user and user message to name history and message history lists
+        self.name_history.append(user)
+        self.message_history.append(user_msg)
+        # Append bot to name history list
+        self.name_history.append(bot)
+
+        # Initialize an empty string for prompt
+        prompt = ''
+        # Loop through name history and message history lists and concatenate them into prompt string
+        for user, msg in zip(self.name_history, self.message_history):
+            prompt += user + msg
+
+        # Add pre prompt and prompt strings together and assign to final prompt variable
+        final_prompt = pre_prompt+'\n'+prompt+bot
+
+        # print('==='+final_prompt+'===')
+        return final_prompt
+
+    # Define a function to set the preset parameters based on the preset mode
+    def set_preset_params(self, preset_mode=None, partial=None):
+        # Clear chat histories
+        self.name_history = []
+        self.message_history = []
+        self.chat_modeTextHistory.clear()
+
+        # Use a dictionary to map the preset modes to the radio buttons and file names
+        preset_dict = {"instruct": (self.instructRadioButton, "instruct"),
+                       "character": (self.charactersRadioButton, "character")}
+
+        # If no preset mode is given, use the checked radio button to determine it
+        if not preset_mode:
+            for mode, (radio_button, file_name) in preset_dict.items():
+                if radio_button.isChecked():
+                    preset_mode = mode
+                    break
+
+        # Check the radio button for the preset mode
+        radio_button, file_name = preset_dict[preset_mode]
+        radio_button.setChecked(True)
+
+        # Get the chat preset dictionary for the preset mode from a file
+        chat_preset = self.get_chat_presets(file_name)
+
+        # Get the context string from the chat preset and append it to the chat mode text history widget
+        pre_prompt = str(chat_preset["context"]).strip()
+        self.chat_modeTextHistory.append(pre_prompt)
 
     def awesome_prompts(self):
         # Get awesome prompts from a csv file
