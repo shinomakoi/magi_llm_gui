@@ -28,6 +28,9 @@ class Ui_magi_llm_window(object):
         if not magi_llm_window.objectName():
             magi_llm_window.setObjectName(u"magi_llm_window")
         magi_llm_window.resize(819, 987)
+        font = QFont()
+        font.setPointSize(11)
+        magi_llm_window.setFont(font)
         self.actionSettings = QAction(magi_llm_window)
         self.actionSettings.setObjectName(u"actionSettings")
         self.actionExit = QAction(magi_llm_window)
@@ -50,25 +53,25 @@ class Ui_magi_llm_window(object):
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.defaultTextInput = QPlainTextEdit(self.default_textgenTab)
         self.defaultTextInput.setObjectName(u"defaultTextInput")
-        font = QFont()
-        font.setFamilies([u"Lato"])
-        font.setPointSize(12)
-        self.defaultTextInput.setFont(font)
+        font1 = QFont()
+        font1.setPointSize(12)
+        self.defaultTextInput.setFont(font1)
 
         self.gridLayout_6.addWidget(self.defaultTextInput, 1, 0, 1, 2)
 
         self.default_modeTextHistory = QPlainTextEdit(self.default_textgenTab)
         self.default_modeTextHistory.setObjectName(u"default_modeTextHistory")
-        self.default_modeTextHistory.setFont(font)
+        self.default_modeTextHistory.setFont(font1)
         self.default_modeTextHistory.setReadOnly(True)
 
         self.gridLayout_6.addWidget(self.default_modeTextHistory, 0, 0, 1, 2)
 
         self.defaultGenerateButton = QPushButton(self.default_textgenTab)
         self.defaultGenerateButton.setObjectName(u"defaultGenerateButton")
-        font1 = QFont()
-        font1.setBold(True)
-        self.defaultGenerateButton.setFont(font1)
+        font2 = QFont()
+        font2.setPointSize(12)
+        font2.setBold(True)
+        self.defaultGenerateButton.setFont(font2)
 
         self.gridLayout_6.addWidget(self.defaultGenerateButton, 2, 0, 1, 1)
 
@@ -103,13 +106,13 @@ class Ui_magi_llm_window(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.notebook_modeTextHistory = QPlainTextEdit(self.notebook_textgenTab)
         self.notebook_modeTextHistory.setObjectName(u"notebook_modeTextHistory")
-        self.notebook_modeTextHistory.setFont(font)
+        self.notebook_modeTextHistory.setFont(font1)
 
         self.gridLayout_2.addWidget(self.notebook_modeTextHistory, 0, 0, 1, 2)
 
         self.notebookGenerateButton = QPushButton(self.notebook_textgenTab)
         self.notebookGenerateButton.setObjectName(u"notebookGenerateButton")
-        self.notebookGenerateButton.setFont(font1)
+        self.notebookGenerateButton.setFont(font2)
 
         self.gridLayout_2.addWidget(self.notebookGenerateButton, 1, 0, 1, 1)
 
@@ -144,7 +147,7 @@ class Ui_magi_llm_window(object):
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.chat_modeTextHistory = QTextEdit(self.chat_textgenTab)
         self.chat_modeTextHistory.setObjectName(u"chat_modeTextHistory")
-        self.chat_modeTextHistory.setFont(font)
+        self.chat_modeTextHistory.setFont(font1)
         self.chat_modeTextHistory.setReadOnly(True)
 
         self.gridLayout_3.addWidget(self.chat_modeTextHistory, 2, 0, 1, 2)
@@ -218,13 +221,18 @@ class Ui_magi_llm_window(object):
 
         self.chat_modeTextInput = QPlainTextEdit(self.chat_textgenTab)
         self.chat_modeTextInput.setObjectName(u"chat_modeTextInput")
-        self.chat_modeTextInput.setFont(font)
+        self.chat_modeTextInput.setFont(font1)
 
         self.gridLayout_3.addWidget(self.chat_modeTextInput, 4, 0, 1, 2, Qt.AlignBottom)
 
         self.chatGenerateButton = QPushButton(self.chat_textgenTab)
         self.chatGenerateButton.setObjectName(u"chatGenerateButton")
-        self.chatGenerateButton.setFont(font1)
+        font3 = QFont()
+        font3.setPointSize(12)
+        font3.setBold(True)
+        font3.setItalic(False)
+        font3.setUnderline(False)
+        self.chatGenerateButton.setFont(font3)
 
         self.gridLayout_3.addWidget(self.chatGenerateButton, 6, 0, 1, 1)
 
@@ -370,7 +378,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 819, 23))
+        self.llm_menubar.setGeometry(QRect(0, 0, 819, 26))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)

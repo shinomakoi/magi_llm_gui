@@ -25,6 +25,9 @@ class Ui_Settings_Dialog(object):
         if not Settings_Dialog.objectName():
             Settings_Dialog.setObjectName(u"Settings_Dialog")
         Settings_Dialog.resize(632, 690)
+        font = QFont()
+        font.setPointSize(11)
+        Settings_Dialog.setFont(font)
         self.verticalLayout = QVBoxLayout(Settings_Dialog)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.parametersTab = QTabWidget(Settings_Dialog)

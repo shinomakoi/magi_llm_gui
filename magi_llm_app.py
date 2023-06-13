@@ -389,7 +389,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.name_history = []
         self.message_history = []
-
         self.chat_input_history = []
 
         # Quit from menu
@@ -485,7 +484,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.chat_modeTextInput.setPlainText(text)
 
     # Define a helper function to get the file path from a dialog
-
     def get_file_path(self, title, filter):
         file_path = (QFileDialog.getOpenFileName(
             self, title, '', filter)[0])
@@ -951,7 +949,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
-        print('==='+final_prompt+'===')
+        # print('==='+final_prompt+'===')
         return final_prompt
 
     # Define a function to set the preset parameters based on the preset mode
