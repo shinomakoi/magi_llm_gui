@@ -397,6 +397,7 @@ class Ui_magi_llm_window(object):
 
         self.retranslateUi(magi_llm_window)
         self.defaultClearButton.clicked.connect(self.default_modeTextHistory.clear)
+        self.notebookClearButton.clicked.connect(self.notebook_modeTextHistory.clear)
 
         self.textgenTab.setCurrentIndex(2)
 

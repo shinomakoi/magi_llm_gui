@@ -377,7 +377,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.model_load = False
         self.continue_textgen_mode = False
-        self.textgen_mode = "chat"
+        self.textgen_mode = 'chat_mode'
 
         # Load chat presets
         self.load_presets(CHAT_PRESETS_DIR, self.instructPresetComboBox)
@@ -586,12 +586,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         elif self.tsServerCheck.isChecked():
             run_backend = 'ts-server'
 
-            # Get the history text from the corresponding tab
-            history_text = getattr(self, text_tab.replace(
-                'Continue', 'TextHistory')).toPlainText()
+        # Get the history text from the corresponding tab
+        history_text = getattr(self, text_tab.replace(
+            'Continue', 'TextHistory')).toPlainText()
 
-            # Launch the backend with the history text and the run backend
-            self.launch_backend(history_text, run_backend)
+        # Launch the backend with the history text and the run backend
+        self.launch_backend(history_text, run_backend)
 
     # Define a helper function to insert text and scroll to the end of a text widget
     def insert_text_and_scroll(self, text_widget, text):
@@ -616,7 +616,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Write chat log
         if self.textgen_mode == 'chat_mode':
             if self.continue_textgen_mode:
-                # print('continue_chat_mode')
                 updated = str(
                     (self.message_history[-1].rstrip())+final_text.rstrip()+'\n\n')
                 self.message_history[-1] = updated
