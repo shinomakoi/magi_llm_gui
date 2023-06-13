@@ -48,7 +48,7 @@ class ExllamaModel:
                         f"More than one {ext} model has been found. The last one will be selected. It could be wrong."
                     )
                 model_path = found[-1]
-                print(model_path)
+                print('--- Exllama model:',model_path)
                 break
 
         # Set the model path and max sequence length in the config

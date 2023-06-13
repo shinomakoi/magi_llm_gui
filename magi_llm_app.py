@@ -837,19 +837,29 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # Generate a final prompt by calling the prompt_generation method with the pre-textgen mode argument
                 final_prompt = self.prompt_generation()
 
-                chat_input = self.chat_modeTextInput.toPlainText().strip()
+                # Get the chat input and strip any leading or trailing whitespace
+                chat_input = input_message.strip()
 
-                self.chat_modeTextHistory.append(
-                    '<br><b>'+self.yourNameLine.text().strip()+":</b>")
-                self.chat_modeTextHistory.append(chat_input)
+                # Create a list of paragraphs for the text history
+                paragraphs = []
 
-                # Add custom response prefix
+                # Add a paragraph with the user name and chat input
+                paragraphs.append(
+                    f"<b style='color: red'>{self.yourNameLine.text()}:</b><br>{chat_input}")
+
+                # Add a paragraph with the bot name and custom response prefix if checked
                 if self.customResponsePrefixCheck.isChecked():
-                    self.chat_modeTextHistory.append(
-                        "<b>"+self.botNameLine.text().strip()+":</b><br>"+self.customResponsePrefix.text())
+                    paragraphs.append(
+                        f"<b style='color: mediumblue'>{self.botNameLine.text()}:</b><br>{self.customResponsePrefix.text()}")
                 else:
-                    self.chat_modeTextHistory.append(
-                        "<b>"+self.botNameLine.text().strip()+":</b><br>")
+                    paragraphs.append(
+                        f"<b style='color: mediumblue'>{self.botNameLine.text()}:</b><br>")
+
+                # Join the paragraphs with line breaks and wrap them in <p> tags
+                text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
+
+                # Append the text to the chat mode text history widget
+                self.chat_modeTextHistory.append(text)
 
                 # Launch the backend with the final prompt and the backend name
                 self.launch_backend(final_prompt, backend)
@@ -859,6 +869,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chat_modeTextInput.clear()
 
     # Launch QThread to textgen
+
     def launch_backend(self, message, run_backend):
         # Get the exllama and cpp parameters from their respective methods
         exllama_params = self.get_exllama_params()
@@ -959,7 +970,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
-        # print('==='+final_prompt+'===')
+        print('==='+final_prompt+'===')
         return final_prompt
 
     # Define a function to set the preset parameters based on the preset mode
