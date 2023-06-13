@@ -1,12 +1,14 @@
 import configparser
 import csv
 import glob
+import json
 import platform
 import sys
 from datetime import datetime
 from functools import partial
 from pathlib import Path
 
+import requests
 import yaml
 from PySide6 import QtWidgets
 from PySide6.QtCore import QSize, QThread, Signal, Slot
@@ -26,6 +28,7 @@ SETTINGS_FILE = Path("settings.ini")
 # Use constants for the backend names
 EXLLAMA = "exllama"
 LLAMA_CPP = "llama.cpp"
+TS_SERVER = "ts-server"
 
 
 """A class to run text generation in a separate thread."""
@@ -43,6 +46,7 @@ class TextgenThread(QThread):
         stream_enabled: bool,
         run_backend: str,
         cpp_params: dict,
+        ts_model: str,
     ):
         super().__init__()
         self.exllama_params = exllama_params
@@ -50,6 +54,7 @@ class TextgenThread(QThread):
         self.stream_enabled = stream_enabled
         self.run_backend = run_backend
         self.cpp_params = cpp_params
+        self.ts_model = ts_model
 
         self.stop_flag = False
 
@@ -58,6 +63,7 @@ class TextgenThread(QThread):
         backend_methods = {
             EXLLAMA: self.run_exllama,
             LLAMA_CPP: self.run_llama_cpp,
+            TS_SERVER: self.run_ts_server,
         }
         # Call the appropriate method based on the run_backend attribute
         backend_method = backend_methods.get(self.run_backend)
@@ -118,6 +124,35 @@ class TextgenThread(QThread):
 
         # Join the message and the responses and emit as final_resultReady signal
         final_text = f"{''.join(response_list)}"
+        self.final_resultReady.emit(final_text)
+
+    def run_ts_server(self):
+        ts_args = {
+            "prompt": self.message,
+            "max_tokens": self.cpp_params["max_new_tokens"],
+            "temperature": self.cpp_params["temperature"],
+            "top_p": self.cpp_params["top_p"],
+            "top_k": self.cpp_params["top_k"],
+            "repetition_penalty": self.cpp_params["repetition_penalty"],
+            "stop": self.cpp_params["stop"],
+        }
+
+        # Set the URL
+        url = f"http://localhost:8080/v1/engines/{self.ts_model}/completions"
+        # Set the headers
+        headers = {"Content-Type": "application/json"}
+        # Set the data
+        data = ts_args
+        # Make a post request and get the response
+        response = requests.post(url, headers=headers, json=data)
+        # Decode the bytes to a string using utf-8 encoding
+        response_str = response.content.decode("utf-8")
+        # Load the string as a json object
+        response_json = json.loads(response_str)
+        # Get the "text" value from the json object
+        final_text = response_json["text"]
+
+        self.resultReady.emit(final_text)
         self.final_resultReady.emit(final_text)
 
     def stop(self):
@@ -355,6 +390,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.name_history = []
         self.message_history = []
 
+        self.chat_input_history = []
+
         # Quit from menu
         self.actionSettings.triggered.connect(self.settings_win.show)
         self.actionExit.triggered.connect(app.exit)
@@ -402,6 +439,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.awesomePresetComboBox.currentTextChanged.connect(
             self.awesome_prompts)
 
+        self.chatInputSessionCombo.currentIndexChanged.connect(
+            lambda: self.chat_input_history_set())
+
         self.set_preset_params('instruct')
 
     def load_presets(self, directory, combo_box):
@@ -433,7 +473,19 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.botNameLine.setText(config["Settings"]["bot_name"])
         self.yourNameLine.setText(config["Settings"]["user_name"])
 
+    def chat_input_history_add(self, chat_input):
+        self.chatInputSessionCombo.addItem(
+            str(chat_input[:96]))
+        self.chat_input_history.append(chat_input)
+
+    def chat_input_history_set(self):
+        if self.chatInputSessionCombo.count() > 0:
+            text = self.chat_input_history[int(
+                self.chatInputSessionCombo.currentIndex())]
+            self.chat_modeTextInput.setPlainText(text)
+
     # Define a helper function to get the file path from a dialog
+
     def get_file_path(self, title, filter):
         file_path = (QFileDialog.getOpenFileName(
             self, title, '', filter)[0])
@@ -509,7 +561,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.notebookClearButton,
             self.chatClearButton,
             self.instructRadioButton,
-            self.charactersRadioButton
+            self.charactersRadioButton,
+            self.tsServerCheck
         ]
 
         # Iterate over the buttons and set their enabled status
@@ -528,11 +581,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def continue_textgen(self, text_tab):
         self.continue_textgen_mode = True
 
-        if not self.exllamaCheck.isEnabled():
-            if self.exllamaCheck.isChecked():
-                run_backend = 'exllama'
-            else:
-                run_backend = 'llama.cpp'
+        if self.cppCheck.isChecked():
+            run_backend = 'llama.cpp'
+        elif self.exllamaCheck.isChecked():
+            run_backend = 'exllama'
+        elif self.tsServerCheck.isChecked():
+            run_backend = 'ts-server'
 
             # Get the history text from the corresponding tab
             history_text = getattr(self, text_tab.replace(
@@ -543,6 +597,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Define a helper function to insert text and scroll to the end of a text widget
     def insert_text_and_scroll(self, text_widget, text):
+
         cursor = text_widget.textCursor()
         cursor.movePosition(QTextCursor.End)  # Move it to the end
         cursor.insertText(text)
@@ -563,7 +618,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Write chat log
         if textgen_mode == 'chat_mode':
             if self.continue_textgen_mode:
-                print('continue_chat_mode')
+                # print('continue_chat_mode')
                 updated = str(
                     (self.message_history[-1].rstrip())+final_text.rstrip()+'\n\n')
                 self.message_history[-1] = updated
@@ -718,18 +773,28 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.load_model('llama.cpp')
             elif self.exllamaCheck.isChecked():
                 self.load_model('Exllama')
+            elif self.tsServerCheck.isChecked():
+                # TS Server
+                pass
 
             # Set the model_load flag to True
             self.model_load = True
-            # self.chatGenerateButton.setText("Generate")
 
             # Disable the cpp and exllama checkboxes
             self.cppCheck.setEnabled(False)
             self.exllamaCheck.setEnabled(False)
+            self.tsServerCheck.setEnabled(False)
 
         # Declare a global variable for the textgen mode
         global textgen_mode
         textgen_mode = pre_textgen_mode
+
+        if self.cppCheck.isChecked():
+            backend = 'llama.cpp'
+        elif self.exllamaCheck.isChecked():
+            backend = 'exllama'
+        elif self.tsServerCheck.isChecked():
+            backend = 'ts-server'
 
         # If the pre-textgen mode is default mode
         if pre_textgen_mode == 'default_mode':
@@ -738,8 +803,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             if input_message:
                 # Set the default mode text history widget to show the input message
                 self.default_modeTextHistory.setPlainText(input_message)
-                # Choose the backend based on the cpp checkbox status
-                backend = 'llama.cpp' if self.cppCheck.isChecked() else 'exllama'
                 # Launch the backend with the input message and the backend name
                 self.launch_backend(input_message, backend)
 
@@ -748,13 +811,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             input_message = self.notebook_modeTextHistory.toPlainText()
             # If the input message is not empty
             if input_message:
-                # Choose the backend based on the cpp checkbox status
-                backend = 'llama.cpp' if self.cppCheck.isChecked() else 'exllama'
                 # Launch the backend with the input message and the backend name
                 self.launch_backend(input_message, backend)
 
         # If the pre-textgen mode is chat mode
         if pre_textgen_mode == 'chat_mode':
+
             # Get the input message from the chat mode text input widget
             input_message = self.chat_modeTextInput.toPlainText()
 
@@ -771,12 +833,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chat_modeTextHistory.append(
                     "<b>"+self.botNameLine.text().strip()+":</b><br>")
 
-                # Choose the backend based on the cpp checkbox status
-                backend = 'llama.cpp' if self.cppCheck.isChecked() else 'exllama'
                 # Launch the backend with the final prompt and the backend name
                 self.launch_backend(final_prompt, backend)
 
                 # Clear the chat mode text input widget
+                self.chat_input_history_add(input_message)
                 self.chat_modeTextInput.clear()
 
     # Launch QThread to textgen
@@ -791,7 +852,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Create a textgenThread object with the exllama and cpp parameters, the message, the stream enabled status, and the backend name
         self.textgenThread = TextgenThread(
             exllama_params, message,
-            self.streamEnabledCheck.isChecked(), run_backend, cpp_params)
+            self.streamEnabledCheck.isChecked(), run_backend, cpp_params, self.settings_win.tsModelLine.text())
 
         # Connect signals and slots
         self.textgenThread.resultReady.connect(self.handleResult)

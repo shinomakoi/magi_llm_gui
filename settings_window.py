@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
-    QFrame, QGridLayout, QGroupBox, QLabel,
-    QLineEdit, QSizePolicy, QSlider, QSpinBox,
-    QTabWidget, QVBoxLayout, QWidget)
+    QFrame, QGridLayout, QGroupBox, QHBoxLayout,
+    QLabel, QLineEdit, QSizePolicy, QSlider,
+    QSpinBox, QTabWidget, QVBoxLayout, QWidget)
 
 class Ui_Settings_Dialog(object):
     def setupUi(self, Settings_Dialog):
@@ -29,12 +29,12 @@ class Ui_Settings_Dialog(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.parametersTab = QTabWidget(Settings_Dialog)
         self.parametersTab.setObjectName(u"parametersTab")
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.tab.setAutoFillBackground(True)
-        self.gridLayout_3 = QGridLayout(self.tab)
+        self.sharedParamTab = QWidget()
+        self.sharedParamTab.setObjectName(u"sharedParamTab")
+        self.sharedParamTab.setAutoFillBackground(True)
+        self.gridLayout_3 = QGridLayout(self.sharedParamTab)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.groupBox_2 = QGroupBox(self.tab)
+        self.groupBox_2 = QGroupBox(self.sharedParamTab)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout_2 = QGridLayout(self.groupBox_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -181,7 +181,7 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_3.addWidget(self.groupBox_2, 2, 0, 1, 3)
 
-        self.parametersTab.addTab(self.tab, "")
+        self.parametersTab.addTab(self.sharedParamTab, "")
         self.exllamaParamTab = QWidget()
         self.exllamaParamTab.setObjectName(u"exllamaParamTab")
         self.exllamaParamTab.setAutoFillBackground(True)
@@ -347,7 +347,7 @@ class Ui_Settings_Dialog(object):
         self.gpuLayersSlider.setObjectName(u"gpuLayersSlider")
         self.gpuLayersSlider.setMinimum(1)
         self.gpuLayersSlider.setMaximum(80)
-        self.gpuLayersSlider.setValue(22)
+        self.gpuLayersSlider.setValue(18)
         self.gpuLayersSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_4.addWidget(self.gpuLayersSlider, 7, 2, 1, 1)
@@ -424,7 +424,7 @@ class Ui_Settings_Dialog(object):
         self.gpuLayersSpin.setObjectName(u"gpuLayersSpin")
         self.gpuLayersSpin.setMinimum(1)
         self.gpuLayersSpin.setMaximum(80)
-        self.gpuLayersSpin.setValue(22)
+        self.gpuLayersSpin.setValue(18)
 
         self.gridLayout_4.addWidget(self.gpuLayersSpin, 7, 3, 1, 1)
 
@@ -457,6 +457,22 @@ class Ui_Settings_Dialog(object):
         self.verticalLayout_4.addWidget(self.groupBox_5)
 
         self.parametersTab.addTab(self.llamacppParamTab, "")
+        self.tsParamTab = QWidget()
+        self.tsParamTab.setObjectName(u"tsParamTab")
+        self.tsParamTab.setAutoFillBackground(True)
+        self.horizontalLayout = QHBoxLayout(self.tsParamTab)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.label_3 = QLabel(self.tsParamTab)
+        self.label_3.setObjectName(u"label_3")
+
+        self.horizontalLayout.addWidget(self.label_3)
+
+        self.tsModelLine = QLineEdit(self.tsParamTab)
+        self.tsModelLine.setObjectName(u"tsModelLine")
+
+        self.horizontalLayout.addWidget(self.tsModelLine)
+
+        self.parametersTab.addTab(self.tsParamTab, "")
 
         self.verticalLayout.addWidget(self.parametersTab)
 
@@ -533,7 +549,7 @@ class Ui_Settings_Dialog(object):
 #if QT_CONFIG(tooltip)
         self.paramPresets_comboBox.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Parameter preset", None))
 #endif // QT_CONFIG(tooltip)
-        self.parametersTab.setTabText(self.parametersTab.indexOf(self.tab), QCoreApplication.translate("Settings_Dialog", u"Shared", None))
+        self.parametersTab.setTabText(self.parametersTab.indexOf(self.sharedParamTab), QCoreApplication.translate("Settings_Dialog", u"Shared", None))
         self.groupBox.setTitle(QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
 #if QT_CONFIG(tooltip)
         self.beamLengthSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam length value", None))
@@ -622,5 +638,8 @@ class Ui_Settings_Dialog(object):
         self.cppBatchSizeSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Batch size to use", None))
 #endif // QT_CONFIG(tooltip)
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
+        self.label_3.setText(QCoreApplication.translate("Settings_Dialog", u"Model:", None))
+        self.tsModelLine.setPlaceholderText(QCoreApplication.translate("Settings_Dialog", u"pythia_deduped_1.4B", None))
+        self.parametersTab.setTabText(self.parametersTab.indexOf(self.tsParamTab), QCoreApplication.translate("Settings_Dialog", u"TextSynth", None))
     # retranslateUi
 
