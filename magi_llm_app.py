@@ -845,15 +845,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
                 # Add a paragraph with the user name and chat input
                 paragraphs.append(
-                    f"<b style='color: red'>{self.yourNameLine.text()}:</b><br>{chat_input}")
+                    f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}")
 
                 # Add a paragraph with the bot name and custom response prefix if checked
                 if self.customResponsePrefixCheck.isChecked():
                     paragraphs.append(
-                        f"<b style='color: mediumblue'>{self.botNameLine.text()}:</b><br>{self.customResponsePrefix.text()}")
+                        f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>{self.customResponsePrefix.text()}")
                 else:
                     paragraphs.append(
-                        f"<b style='color: mediumblue'>{self.botNameLine.text()}:</b><br>")
+                        f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>")
 
                 # Join the paragraphs with line breaks and wrap them in <p> tags
                 text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
