@@ -623,7 +623,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.message_history[-1] = updated
                 self.continue_textgen_mode = False
             else:
-                self.message_history.append(final_text.rstrip()+'\n\n')
+                if self.customResponsePrefixCheck.isChecked():
+                    self.message_history.append(
+                        self.customResponsePrefix.text()+final_text.rstrip()+'\n\n')
+                else:
+                    self.message_history.append(final_text.rstrip()+'\n\n')
 
         if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
             current_date = self.get_chat_date()
@@ -788,12 +792,13 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         global textgen_mode
         textgen_mode = pre_textgen_mode
 
-        if self.cppCheck.isChecked():
-            backend = 'llama.cpp'
-        elif self.exllamaCheck.isChecked():
-            backend = 'exllama'
-        elif self.tsServerCheck.isChecked():
-            backend = 'ts-server'
+        if not self.cppCheck.isEnabled():
+            if self.cppCheck.isChecked():
+                backend = 'llama.cpp'
+            elif self.exllamaCheck.isChecked():
+                backend = 'exllama'
+            elif self.tsServerCheck.isChecked():
+                backend = 'ts-server'
 
         # If the pre-textgen mode is default mode
         if pre_textgen_mode == 'default_mode':
@@ -829,8 +834,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chat_modeTextHistory.append(
                     '<br><b>'+self.yourNameLine.text().strip()+":</b>")
                 self.chat_modeTextHistory.append(chat_input)
-                self.chat_modeTextHistory.append(
-                    "<b>"+self.botNameLine.text().strip()+":</b><br>")
+
+                # Add custom response prefix
+                if self.customResponsePrefixCheck.isChecked():
+                    self.chat_modeTextHistory.append(
+                        "<b>"+self.botNameLine.text().strip()+":</b><br>"+self.customResponsePrefix.text())
+                else:
+                    self.chat_modeTextHistory.append(
+                        "<b>"+self.botNameLine.text().strip()+":</b><br>")
 
                 # Launch the backend with the final prompt and the backend name
                 self.launch_backend(final_prompt, backend)
@@ -937,7 +948,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Add pre prompt and prompt strings together and assign to final prompt variable
         final_prompt = pre_prompt+'\n'+prompt+bot
 
-        # print('==='+final_prompt+'===')
+        if self.customResponsePrefixCheck.isChecked():
+            final_prompt = final_prompt+self.customResponsePrefix.text()
+
+        print('==='+final_prompt+'===')
         return final_prompt
 
     # Define a function to set the preset parameters based on the preset mode
