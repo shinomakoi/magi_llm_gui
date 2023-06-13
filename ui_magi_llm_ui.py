@@ -59,13 +59,6 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_6.addWidget(self.defaultTextInput, 1, 0, 1, 2)
 
-        self.default_modeTextHistory = QPlainTextEdit(self.default_textgenTab)
-        self.default_modeTextHistory.setObjectName(u"default_modeTextHistory")
-        self.default_modeTextHistory.setFont(font1)
-        self.default_modeTextHistory.setReadOnly(True)
-
-        self.gridLayout_6.addWidget(self.default_modeTextHistory, 0, 0, 1, 2)
-
         self.defaultGenerateButton = QPushButton(self.default_textgenTab)
         self.defaultGenerateButton.setObjectName(u"defaultGenerateButton")
         font2 = QFont()
@@ -98,18 +91,19 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_6.addWidget(self.frame_7, 2, 1, 1, 1)
 
+        self.default_modeTextHistory = QTextEdit(self.default_textgenTab)
+        self.default_modeTextHistory.setObjectName(u"default_modeTextHistory")
+        self.default_modeTextHistory.setFont(font1)
+        self.default_modeTextHistory.setReadOnly(True)
+
+        self.gridLayout_6.addWidget(self.default_modeTextHistory, 0, 0, 1, 2)
+
         self.textgenTab.addTab(self.default_textgenTab, "")
         self.notebook_textgenTab = QWidget()
         self.notebook_textgenTab.setObjectName(u"notebook_textgenTab")
         self.notebook_textgenTab.setAutoFillBackground(True)
         self.gridLayout_2 = QGridLayout(self.notebook_textgenTab)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.notebook_modeTextHistory = QPlainTextEdit(self.notebook_textgenTab)
-        self.notebook_modeTextHistory.setObjectName(u"notebook_modeTextHistory")
-        self.notebook_modeTextHistory.setFont(font1)
-
-        self.gridLayout_2.addWidget(self.notebook_modeTextHistory, 0, 0, 1, 2)
-
         self.notebookGenerateButton = QPushButton(self.notebook_textgenTab)
         self.notebookGenerateButton.setObjectName(u"notebookGenerateButton")
         self.notebookGenerateButton.setFont(font2)
@@ -138,6 +132,13 @@ class Ui_magi_llm_window(object):
 
 
         self.gridLayout_2.addWidget(self.frame_4, 1, 1, 1, 1)
+
+        self.notebook_modeTextHistory = QTextEdit(self.notebook_textgenTab)
+        self.notebook_modeTextHistory.setObjectName(u"notebook_modeTextHistory")
+        self.notebook_modeTextHistory.setFont(font1)
+        self.notebook_modeTextHistory.setAcceptRichText(False)
+
+        self.gridLayout_2.addWidget(self.notebook_modeTextHistory, 0, 0, 1, 2)
 
         self.textgenTab.addTab(self.notebook_textgenTab, "")
         self.chat_textgenTab = QWidget()
@@ -378,7 +379,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 819, 26))
+        self.llm_menubar.setGeometry(QRect(0, 0, 819, 27))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -396,7 +397,6 @@ class Ui_magi_llm_window(object):
 
         self.retranslateUi(magi_llm_window)
         self.defaultClearButton.clicked.connect(self.default_modeTextHistory.clear)
-        self.notebookClearButton.clicked.connect(self.notebook_modeTextHistory.clear)
 
         self.textgenTab.setCurrentIndex(2)
 
@@ -411,7 +411,6 @@ class Ui_magi_llm_window(object):
         self.actionAbout.setText(QCoreApplication.translate("magi_llm_window", u"About", None))
         self.actionStop.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.defaultTextInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
-        self.default_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Output appears here", None))
         self.defaultGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
 #if QT_CONFIG(shortcut)
         self.defaultGenerateButton.setShortcut(QCoreApplication.translate("magi_llm_window", u"Ctrl+Return", None))
@@ -419,8 +418,8 @@ class Ui_magi_llm_window(object):
         self.defaultContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.defaultClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
         self.defaultStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
+        self.default_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Output appears here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.default_textgenTab), QCoreApplication.translate("magi_llm_window", u"Default", None))
-        self.notebook_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
         self.notebookGenerateButton.setText(QCoreApplication.translate("magi_llm_window", u"Generate", None))
 #if QT_CONFIG(shortcut)
         self.notebookGenerateButton.setShortcut(QCoreApplication.translate("magi_llm_window", u"Ctrl+Return", None))
@@ -428,6 +427,7 @@ class Ui_magi_llm_window(object):
         self.notebookClearButton.setText(QCoreApplication.translate("magi_llm_window", u"Clear", None))
         self.notebookContinueButton.setText(QCoreApplication.translate("magi_llm_window", u"Continue", None))
         self.notebookStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
+        self.notebook_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
         self.chat_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Output goes here", None))
         self.chatInputSessionCombo.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Chat input history", None))

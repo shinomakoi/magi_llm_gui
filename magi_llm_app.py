@@ -359,7 +359,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             print("--- Applied parameter preset:", Path(preset_file).stem)
 
         # Connect the function to the combo box signal
-        self.paramPresets_comboBox.currentTextChanged.connect(
+        self.paramPresets_comboBox.textActivated.connect(
             lambda: apply_params_preset())
 
 
@@ -377,6 +377,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.model_load = False
         self.continue_textgen_mode = False
+        self.textgen_mode = "chat"
 
         # Load chat presets
         self.load_presets(CHAT_PRESETS_DIR, self.instructPresetComboBox)
@@ -426,19 +427,19 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.cppModelSelect.clicked.connect(self.cpp_model_select)
         self.exllamaModelSelect.clicked.connect(self.exllama_model_select)
 
-        self.instructPresetComboBox.currentTextChanged.connect(
+        self.instructPresetComboBox.textActivated.connect(
             partial(self.set_preset_params, 'instruct'))
-        self.characterPresetComboBox.currentTextChanged.connect(
+        self.characterPresetComboBox.textActivated.connect(
             partial(self.set_preset_params, 'character'))
         self.instructRadioButton.clicked.connect(
             partial(self.set_preset_params, 'instruct'))
         self.charactersRadioButton.clicked.connect(
             partial(self.set_preset_params, 'character'))
 
-        self.awesomePresetComboBox.currentTextChanged.connect(
+        self.awesomePresetComboBox.textActivated.connect(
             self.awesome_prompts)
 
-        self.chatInputSessionCombo.currentIndexChanged.connect(
+        self.chatInputSessionCombo.textActivated.connect(
             lambda: self.chat_input_history_set())
 
         self.set_preset_params('instruct')
@@ -537,7 +538,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         }
 
         # Set the history widget to readonly mode based on the textgen mode
-        history_widget = mode_widgets.get(textgen_mode)
+        history_widget = mode_widgets.get(self.textgen_mode)
         if history_widget:
             history_widget.setReadOnly(readonly_mode)
 
@@ -604,7 +605,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     @Slot(str)
     def handleResult(self, reply):
         # Get the text widget from the textgen mode
-        text_widget = getattr(self, textgen_mode + 'TextHistory')
+        text_widget = getattr(self, self.textgen_mode + 'TextHistory')
 
         # Insert the reply and scroll to the end
         self.insert_text_and_scroll(text_widget, reply)
@@ -613,7 +614,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     @Slot(str)
     def final_handleResult(self, final_text):
         # Write chat log
-        if textgen_mode == 'chat_mode':
+        if self.textgen_mode == 'chat_mode':
             if self.continue_textgen_mode:
                 # print('continue_chat_mode')
                 updated = str(
@@ -627,18 +628,29 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 else:
                     self.message_history.append(final_text.rstrip()+'\n\n')
 
-        if textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
-            current_date = self.get_chat_date()
-
-            with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
-                f.write('\n'+final_text)
-            print('--- Wrote chat log')
+        # Write chatlog with write_chatlog, no new session
+        if self.textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
+            self.write_chatlog(False)
 
         self.statusbar.showMessage(f"Status: Generation complete")
         self.history_readonly_logic(False)
 
         # Stop the textgen thread
         self.stop_textgen()
+
+    def write_chatlog(self, new_session):
+        current_date = self.get_chat_date()
+        log_text = ''
+
+        if not new_session:
+            log_text = self.name_history[-2]+self.message_history[-2] + \
+                self.name_history[-1]+self.message_history[-1]
+        else:
+            log_text = '\n############ New session ############\n'
+
+        with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
+            f.write('\n'+log_text)
+        print('--- Wrote chat log')
 
     def get_stop_strings(self):
         stop_strings = []
@@ -744,7 +756,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.statusbar.showMessage(f'Status: Loading {model_name} model...')
 
         if model_name == 'Exllama':
-            from api_fetch import ExllamaModel
+            from exllama_generate import ExllamaModel
             global exllama_model
             exllama_model = ExllamaModel.from_pretrained(
                 self.get_exllama_model_params())
@@ -752,7 +764,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                   self.get_exllama_model_params())
 
         elif model_name == 'llama.cpp':
-            from llamacpp_model_generate import LlamaCppModel
+            from llamacpp_generate import LlamaCppModel
             global cpp_model
             cpp_model = LlamaCppModel.from_pretrained(
                 self.get_cpp_model_params())
@@ -766,7 +778,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.chatStopButton.setEnabled(True)
 
     # Main launcher logic
-    def textgen_switcher(self, pre_textgen_mode):
+    def textgen_switcher(self, textgen_mode):
+        self.textgen_mode = textgen_mode
         # Check if the model has been loaded
         if not self.model_load:
             # Load the model based on the user's choice of cpp or exllama
@@ -787,8 +800,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.tsServerCheck.setEnabled(False)
 
         # Declare a global variable for the textgen mode
-        global textgen_mode
-        textgen_mode = pre_textgen_mode
 
         if not self.cppCheck.isEnabled():
             if self.cppCheck.isChecked():
@@ -799,7 +810,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 backend = 'ts-server'
 
         # If the pre-textgen mode is default mode
-        if pre_textgen_mode == 'default_mode':
+        if self.textgen_mode == 'default_mode':
             input_message = self.defaultTextInput.toPlainText()
             # If the input message is not empty
             if input_message:
@@ -809,7 +820,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.launch_backend(input_message, backend)
 
         # If the pre-textgen mode is notebook mode
-        if pre_textgen_mode == 'notebook_mode':
+        if self.textgen_mode == 'notebook_mode':
             input_message = self.notebook_modeTextHistory.toPlainText()
             # If the input message is not empty
             if input_message:
@@ -817,7 +828,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.launch_backend(input_message, backend)
 
         # If the pre-textgen mode is chat mode
-        if pre_textgen_mode == 'chat_mode':
+        if self.textgen_mode == 'chat_mode':
 
             # Get the input message from the chat mode text input widget
             input_message = self.chat_modeTextInput.toPlainText()
@@ -980,6 +991,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Get the context string from the chat preset and append it to the chat mode text history widget
         pre_prompt = str(chat_preset["context"]).strip()
         self.chat_modeTextHistory.append(pre_prompt)
+
+        # New session text in chatlog
+        if self.textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
+            self.write_chatlog(True)
 
     def awesome_prompts(self):
         # Get awesome prompts from a csv file

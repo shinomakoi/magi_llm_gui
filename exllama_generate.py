@@ -6,11 +6,11 @@ import torch
 # Add the exllama module to the system path
 sys.path.insert(0, str(Path("exllama")))
 
+# Import the necessary classes from exllama
 from exllama.generator import ExLlamaGenerator
 from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
 
-# Import the necessary classes from exllama
 
 # Define some constants for paths and extensions
 MODEL_EXTENSIONS = [".safetensors", ".pt", ".bin"]
@@ -55,7 +55,7 @@ class ExllamaModel:
         config.model_path = str(model_path)
         config.max_seq_len = 2048
 
-        # Set some other parameters in the config based on params
+        # Multi-gpu mode
         if params["gpu_split"]:
             config.set_auto_map(params["gpu_split_values"])
             config.gpu_peer_fix = True
@@ -77,10 +77,9 @@ class ExllamaModel:
         result.tokenizer = tokenizer
 
         return result
-
+    
+    # Generate text from a given context and parameters
     def generate(self, context, params):
-        # Generate text from a given context and parameters
-
         # Disable gradient computation and initialize CUDA device
         torch.set_grad_enabled(False)
         torch.cuda._lazy_init()
