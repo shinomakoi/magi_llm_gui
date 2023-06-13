@@ -562,7 +562,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.chatClearButton,
             self.instructRadioButton,
             self.charactersRadioButton,
-            self.tsServerCheck
         ]
 
         # Iterate over the buttons and set their enabled status
