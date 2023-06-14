@@ -21,6 +21,12 @@ source ./.magi_venv/bin/activate ### For Linux
 ```
 pip install -r requirements.txt
 ```
+**llama.cpp**
+
+llama-cpp-python is including as a backend for CPU, but you can optionally install with GPU support, e.g. ```CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python``` for CUDA acceleration. 
+See: 
+https://github.com/abetlen/llama-cpp-python/#installation-with-openblas--cublas--clblast--metal
+
 **Exllama**
 
 To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Also requires CUDA Toolkit installed (installed with Linux package manager or downloaded from NVIDIA for Windows). Tested working on Linux. For Windows, good luck.
