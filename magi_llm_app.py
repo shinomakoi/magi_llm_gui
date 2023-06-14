@@ -14,12 +14,13 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import QSize, QThread, Signal, Slot
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
+from qt_material import apply_stylesheet
 
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
 # Constants for the directories and file names
-APP_ICON = Path("appicon.png")
+APP_ICON = Path("assets/icons/appicon.png")
 CHAT_PRESETS_DIR = Path("presets/instruct")
 CHARACTER_PRESETS_DIR = Path("presets/character")
 PROMPTS_FILE = Path("presets/prompts.csv")
@@ -31,9 +32,7 @@ LLAMA_CPP = "llama.cpp"
 TS_SERVER = "ts-server"
 
 
-"""A class to run text generation in a separate thread."""
-
-
+# A class to run text generation in a separate thread.
 class TextgenThread(QThread):
 
     resultReady = Signal(str)
@@ -222,7 +221,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             param_preset_load = sorted(param_preset_load)
             for param_preset in param_preset_load:
                 param_preset_stem = Path(param_preset).stem
-                self.paramPresets_comboBox.addItem(param_preset_stem)
+                self.paramPresets_comboBox.addItem(
+                    param_preset_stem)
 
             # Set the default preset to Magi-Default
             self.paramPresets_comboBox.setCurrentText("Magi-Default")
@@ -265,6 +265,9 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             use_mmap = config["Params-LlamaCPP"]["use_mmap"]
             use_mlock = config["Params-LlamaCPP"]["use_mlock"]
             use_gpu_accel = config["Params-LlamaCPP"]["use_gpu_accel"]
+
+            # Params-TextSynth
+            ts_model = config["Params-TextSynth"]["ts_model"]
 
             ### Set params ###
             # Params-Shared
@@ -325,6 +328,10 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.cppMmapCheck.setChecked(eval(use_mmap))
             self.cppMlockCheck.setChecked((eval(use_mlock)))
             self.gpuAccelCheck.setChecked(eval(use_gpu_accel))
+
+            # Params-TextSynth
+
+            self.tsModelLine.setText(str(ts_model))
 
         set_params()
 
@@ -442,7 +449,30 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.chatInputSessionCombo.textActivated.connect(
             lambda: self.chat_input_history_set())
 
+        self.themeDarkCheck.clicked.connect(lambda: self.set_themes('dark'))
+        self.themeLightCheck.clicked.connect(lambda: self.set_themes('light'))
+        self.themeNativeCheck.clicked.connect(
+            lambda: self.set_themes('native'))
+
         self.set_preset_params('instruct')
+
+    # Set themes
+    def set_themes(self, theme):
+
+        extra = {
+            'pyside6': True,
+            'density_scale': '-1',
+        }
+
+        if theme == 'dark':
+            apply_stylesheet(app, theme='dark_lightgreen.xml',
+                             css_file='assets/dark_theme.css', extra=extra)
+        if theme == 'light':
+            apply_stylesheet(app, theme='light_lightgreen.xml',
+                             css_file='assets/light_theme.css', extra=extra)
+        if theme == 'native':
+            app.setStyleSheet('')
+        print('--- Set theme to:', theme)
 
     def load_presets(self, directory, combo_box):
         # Load presets from a given directory and populate a combo box.
@@ -461,8 +491,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             datareader = sorted(datareader)
 
             for row in datareader:
-                self.awesomePresetComboBox.addItem(row[0])
+                item = row[0]
+                self.awesomePresetComboBox.addItem(item)
             self.awesomePresetComboBox.removeItem(0)
+            self.awesomePresetComboBox.addItem(item)
 
     def load_settings(self, filename: str):
         # Load settings from an INI file and set the corresponding widgets.
@@ -474,8 +506,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.yourNameLine.setText(config["Settings"]["user_name"])
 
     def chat_input_history_add(self, chat_input):
-        self.chatInputSessionCombo.addItem(
-            str(chat_input[:96]))
+        self.chatInputSessionCombo.addItem(str(chat_input[:96]))
         self.chat_input_history.append(chat_input)
 
     def chat_input_history_set(self):
@@ -518,6 +549,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                    self.exllamaModelPath.text())
         config.set("Settings", "user_name", self.yourNameLine.text())
         config.set("Settings", "bot_name", self.botNameLine.text())
+        config.set("Params-TextSynth", "ts_model",
+                   self.settings_win.tsModelLine.text())
 
         with open("settings.ini", "w") as f:
             # Write the ConfigParser object to the file
@@ -776,6 +809,26 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.notebookStopButton.setEnabled(True)
         self.chatStopButton.setEnabled(True)
 
+    def chat_formatting(self, input_message):
+        # Get the chat input and strip any leading or trailing whitespace
+        chat_input = input_message.strip()
+        # Create a list of paragraphs for the text history
+        paragraphs = []
+        # Add a paragraph with the user name and chat input
+        paragraphs.append(
+            f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}")
+        # Add a paragraph with the bot name and custom response prefix if checked
+        if self.customResponsePrefixCheck.isChecked():
+            paragraphs.append(
+                f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>{self.customResponsePrefix.text()}")
+        else:
+            paragraphs.append(
+                f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>")
+        # Join the paragraphs with line breaks and wrap them in <p> tags
+        chat_text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
+
+        return chat_text
+
     # Main launcher logic
     def textgen_switcher(self, textgen_mode):
         self.textgen_mode = textgen_mode
@@ -837,29 +890,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # Generate a final prompt by calling the prompt_generation method with the pre-textgen mode argument
                 final_prompt = self.prompt_generation()
 
-                # Get the chat input and strip any leading or trailing whitespace
-                chat_input = input_message.strip()
-
-                # Create a list of paragraphs for the text history
-                paragraphs = []
-
-                # Add a paragraph with the user name and chat input
-                paragraphs.append(
-                    f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}")
-
-                # Add a paragraph with the bot name and custom response prefix if checked
-                if self.customResponsePrefixCheck.isChecked():
-                    paragraphs.append(
-                        f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>{self.customResponsePrefix.text()}")
-                else:
-                    paragraphs.append(
-                        f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>")
-
-                # Join the paragraphs with line breaks and wrap them in <p> tags
-                text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
+                # Get formatted chat text
+                chat_text = self.chat_formatting(input_message)
 
                 # Append the text to the chat mode text history widget
-                self.chat_modeTextHistory.append(text)
+                self.chat_modeTextHistory.append(chat_text)
 
                 # Launch the backend with the final prompt and the backend name
                 self.launch_backend(final_prompt, backend)
@@ -869,8 +904,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chat_modeTextInput.clear()
 
     # Launch QThread to textgen
-
     def launch_backend(self, message, run_backend):
+
         # Get the exllama and cpp parameters from their respective methods
         exllama_params = self.get_exllama_params()
         cpp_params = self.get_llama_cpp_params()
@@ -970,7 +1005,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
-        print('==='+final_prompt+'===')
+        # print('==='+final_prompt+'===')
         return final_prompt
 
     # Define a function to set the preset parameters based on the preset mode
