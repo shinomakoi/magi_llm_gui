@@ -21,12 +21,18 @@ source ./.magi_venv/bin/activate ### For Linux
 ```
 pip install -r requirements.txt
 ```
+**Exllama**
+
 To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Also requires CUDA Toolkit installed (installed with Linux package manager or downloaded from NVIDIA for Windows). Tested working on Linux. For Windows, good luck.
 ```
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu118
 pip install safetensors sentencepiece ninja
 git clone https://github.com/turboderp/exllama
 ```
+**TextSynth server**
+
+To use the TextSynth backend, download a model and set up according to the documentation at https://bellard.org/ts_server/. Then run the server with ```./ts_server ts_server.cfg``` and enter the 'model' (e.g, "pythia_deduped_1.4B") in the 'TextSynth' tab under File > Parameters. Then you can generate text like with the other backends.
+
 **Usage:**
 
 To launch the Magi LLM GUI, use: 
