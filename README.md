@@ -50,3 +50,5 @@ You can set the generation parameters in File > Parameters
 ![gfj](https://github.com/shinomakoi/magi_llm_gui/assets/112139428/f0234f46-c765-4e42-9860-d1c07b0beb73)
 
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
+
+Uses https://github.com/UN-GCPDS/qt-material for themes
