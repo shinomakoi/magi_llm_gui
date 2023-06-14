@@ -1,7 +1,7 @@
 # Magi LLM GUI
 A Qt GUI for large language models for Windows, Linux (and Mac?)
 
-Uses Exllama and llama.cpp as backends.
+Uses Exllama, llama.cpp and TextSynth server as backends.
 
 
 **Installation:**
