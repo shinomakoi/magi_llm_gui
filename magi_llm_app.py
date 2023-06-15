@@ -469,7 +469,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                              css_file='assets/dark_theme.css', extra=extra)
         if theme == 'light':
             apply_stylesheet(app, theme='light_lightgreen.xml',
-                             css_file='assets/light_theme.css', extra=extra)
+                             css_file='assets/light_theme.css', extra=extra, invert_secondary=False)
         if theme == 'native':
             app.setStyleSheet('')
         print('--- Set theme to:', theme)
@@ -816,7 +816,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         paragraphs = []
         # Add a paragraph with the user name and chat input
         paragraphs.append(
-            f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}")
+            f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}<br>")
         # Add a paragraph with the bot name and custom response prefix if checked
         if self.customResponsePrefixCheck.isChecked():
             paragraphs.append(
