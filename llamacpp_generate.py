@@ -1,15 +1,19 @@
-from llama_cpp import Llama
+from llama_cpp import Llama, LlamaCache
 
 
 class LlamaCppModel:
-    def __init__(self, **params):
+    def __init__(self, use_cache, **params):
         # Initialize the model with the given parameters
-        self.model = Llama(**params)
+        self.model: Llama = Llama(**params)
+        if use_cache:
+            print('--- LLama.cpp cache:', use_cache)
+            cache = LlamaCache()
+            self.model.set_cache(cache)
 
     @classmethod
-    def from_pretrained(cls, params):
+    def from_pretrained(cls, use_cache, params):
         # Create an instance of the class from a pretrained model
-        return cls(**params)
+        return cls(use_cache, **params)
 
     def generate(self, context, **kwargs):
         # Generate text from a given context and optional keyword arguments

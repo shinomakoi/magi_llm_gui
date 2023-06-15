@@ -265,6 +265,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             use_mmap = config["Params-LlamaCPP"]["use_mmap"]
             use_mlock = config["Params-LlamaCPP"]["use_mlock"]
             use_gpu_accel = config["Params-LlamaCPP"]["use_gpu_accel"]
+            use_cache = config["Params-LlamaCPP"]["use_cache"]
+            use_verbose = config["Params-LlamaCPP"]["use_verbose"]
 
             # Params-TextSynth
             ts_model = config["Params-TextSynth"]["ts_model"]
@@ -328,6 +330,9 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.cppMmapCheck.setChecked(eval(use_mmap))
             self.cppMlockCheck.setChecked((eval(use_mlock)))
             self.gpuAccelCheck.setChecked(eval(use_gpu_accel))
+
+            self.cppCacheCheck.setChecked(eval(use_cache))
+            self.cppVerboseCheck.setChecked(eval(use_verbose))
 
             # Params-TextSynth
 
@@ -429,7 +434,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.settingsPathSaveButton.clicked.connect(self.save_settings)
 
-        self.chatClearButton.clicked.connect(self.set_preset_params)
+        self.chatClearButton.clicked.connect(self.clear_histories)
 
         self.cppModelSelect.clicked.connect(self.cpp_model_select)
         self.exllamaModelSelect.clicked.connect(self.exllama_model_select)
@@ -773,7 +778,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'n_ctx': self.settings_win.CPP_ctxsize_Spin.value(),
             'use_mmap': self.settings_win.cppMmapCheck.isChecked(),
             'use_mlock': self.settings_win.cppMlockCheck.isChecked(),
+            'verbose': self.settings_win.cppVerboseCheck.isChecked(),
         }
+
         if self.settings_win.gpuAccelCheck.isChecked():
             cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value(
             )
@@ -796,10 +803,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                   self.get_exllama_model_params())
 
         elif model_name == 'llama.cpp':
+            use_cache = bool(self.settings_win.cppCacheCheck.isChecked())
             from llamacpp_generate import LlamaCppModel
             global cpp_model
-            cpp_model = LlamaCppModel.from_pretrained(
-                self.get_cpp_model_params())
+            cpp_model = LlamaCppModel.from_pretrained(use_cache,
+                                                      self.get_cpp_model_params())
             print('--- llama.cpp model load parameters:',
                   self.get_cpp_model_params())
 
@@ -1008,41 +1016,45 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # print('==='+final_prompt+'===')
         return final_prompt
 
-    # Define a function to set the preset parameters based on the preset mode
-    def set_preset_params(self, preset_mode=None, partial=None):
-        # Clear chat histories
+    def clear_histories(self):
         self.name_history = []
         self.message_history = []
         self.chat_modeTextHistory.clear()
 
-        # Use a dictionary to map the preset modes to the radio buttons and file names
-        preset_dict = {"instruct": (self.instructRadioButton, "instruct"),
-                       "character": (self.charactersRadioButton, "character")}
+        self.set_preset_params()
 
-        # If no preset mode is given, use the checked radio button to determine it
-        if not preset_mode:
-            for mode, (radio_button, file_name) in preset_dict.items():
-                if radio_button.isChecked():
-                    preset_mode = mode
-                    break
+    # Define a function to set the preset parameters based on the preset mode
+    def set_preset_params(self, preset_mode=None, partial=None):
 
-        # Check the radio button for the preset mode
-        radio_button, file_name = preset_dict[preset_mode]
-        radio_button.setChecked(True)
+        if len(self.name_history) == 0:
+            self.name_history = []
+            self.message_history = []
+            self.chat_modeTextHistory.clear()
 
-        # Get the chat preset dictionary for the preset mode from a file
-        chat_preset = self.get_chat_presets(file_name)
+            # Use a dictionary to map the preset modes to the radio buttons and file names
+            preset_dict = {"instruct": (self.instructRadioButton, "instruct"),
+                           "character": (self.charactersRadioButton, "character")}
 
-        # Get the context string from the chat preset and append it to the chat mode text history widget
-        pre_prompt = str(chat_preset["context"]).strip()
-        self.chat_modeTextHistory.append(pre_prompt)
+            # If no preset mode is given, use the checked radio button to determine it
+            if not preset_mode:
+                for mode, (radio_button, file_name) in preset_dict.items():
+                    if radio_button.isChecked():
+                        preset_mode = mode
+                        break
 
-        # New session text in chatlog
-        if self.textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
-            self.write_chatlog(True)
+            # Check the radio button for the preset mode
+            radio_button, file_name = preset_dict[preset_mode]
+            radio_button.setChecked(True)
 
+            # Get the chat preset dictionary for the preset mode from a file
+            chat_preset = self.get_chat_presets(file_name)
+
+            # Get the context string from the chat preset and append it to the chat mode text history widget
+            pre_prompt = str(chat_preset["context"]).strip()
+            self.chat_modeTextHistory.append(pre_prompt)
+
+    # Get awesome prompts from a csv file
     def awesome_prompts(self):
-        # Get awesome prompts from a csv file
         filename = "presets/prompts.csv"
         with open(filename, "r",  encoding="utf-8") as csvfile:
             datareader = csv.reader(csvfile)
