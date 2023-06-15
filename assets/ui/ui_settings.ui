@@ -525,10 +525,52 @@
           <string>llama.cpp</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="5" column="2">
+           <widget class="QSlider" name="cpp_tfszSlider">
+            <property name="toolTip">
+             <string>Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS</string>
+            </property>
+            <property name="minimum">
+             <number>100</number>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Mirostat mode:</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_16">
             <property name="text">
              <string>Threads:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="3">
+           <widget class="QSpinBox" name="gpuLayersSpin">
+            <property name="toolTip">
+             <string>Number of GPU layers to use</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>80</number>
+            </property>
+            <property name="value">
+             <number>18</number>
             </property>
            </widget>
           </item>
@@ -557,81 +599,32 @@
             </property>
            </widget>
           </item>
-          <item row="12" column="0" colspan="4">
-           <widget class="QGroupBox" name="groupBox_3">
-            <property name="title">
-             <string/>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Tail Free Sampling:</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_5">
-             <item row="1" column="1">
-              <widget class="QCheckBox" name="cppMlockCheck">
-               <property name="toolTip">
-                <string>Force the system to keep the model in RAM</string>
-               </property>
-               <property name="text">
-                <string>Use MLOCK</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="cppMmapCheck">
-               <property name="toolTip">
-                <string>Use mmap if possible</string>
-               </property>
-               <property name="text">
-                <string>Use MMAP</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QCheckBox" name="cppCacheCheck">
-               <property name="text">
-                <string>Use cache</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QCheckBox" name="cppVerboseCheck">
-               <property name="text">
-                <string>Verbose</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="gpuAccelCheck">
-               <property name="text">
-                <string>Use GPU acceleration</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
-          <item row="10" column="2">
-           <widget class="QSlider" name="gpuLayersSlider">
+          <item row="2" column="3">
+           <widget class="QSpinBox" name="CPP_ctxsize_Spin">
             <property name="toolTip">
-             <string>Number of GPU layers to use</string>
+             <string>Maximum length of the prompt and output combined (in tokens)</string>
+            </property>
+            <property name="suffix">
+             <string/>
             </property>
             <property name="minimum">
-             <number>1</number>
+             <number>64</number>
             </property>
             <property name="maximum">
-             <number>80</number>
+             <number>4096</number>
+            </property>
+            <property name="singleStep">
+             <number>32</number>
             </property>
             <property name="value">
-             <number>18</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <number>2048</number>
             </property>
            </widget>
           </item>
@@ -660,10 +653,88 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_14">
+          <item row="2" column="0" colspan="2">
+           <widget class="QLabel" name="label_12">
             <property name="text">
-             <string>Mirostat mode:</string>
+             <string>Context size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="3">
+           <widget class="QSpinBox" name="cppMirastatMode">
+            <property name="toolTip">
+             <string>Mirostat algorithim mode</string>
+            </property>
+            <property name="maximum">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2">
+           <widget class="QSlider" name="gpuLayersSlider">
+            <property name="toolTip">
+             <string>Number of GPU layers to use</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>80</number>
+            </property>
+            <property name="value">
+             <number>18</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QSpinBox" name="cppThreads">
+            <property name="toolTip">
+             <string>CPU threads to use</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>64</number>
+            </property>
+            <property name="value">
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="2">
+           <widget class="QLineEdit" name="cppLoraLineEdit"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Batch size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>GPU Layers:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="3">
+           <widget class="QDoubleSpinBox" name="cpp_tfszSpin">
+            <property name="toolTip">
+             <string>Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS</string>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.010000000000000</double>
             </property>
            </widget>
           </item>
@@ -686,78 +757,6 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Batch size:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="3">
-           <widget class="QSpinBox" name="gpuLayersSpin">
-            <property name="toolTip">
-             <string>Number of GPU layers to use</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>80</number>
-            </property>
-            <property name="value">
-             <number>18</number>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="3">
-           <widget class="QSpinBox" name="cppMirastatMode">
-            <property name="toolTip">
-             <string>Mirostat algorithim mode</string>
-            </property>
-            <property name="maximum">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QSpinBox" name="CPP_ctxsize_Spin">
-            <property name="toolTip">
-             <string>Maximum length of the prompt and output combined (in tokens)</string>
-            </property>
-            <property name="suffix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>64</number>
-            </property>
-            <property name="maximum">
-             <number>4096</number>
-            </property>
-            <property name="singleStep">
-             <number>32</number>
-            </property>
-            <property name="value">
-             <number>2048</number>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>GPU Layers:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="2">
-           <widget class="QLineEdit" name="cppLoraLineEdit"/>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Context size:</string>
-            </property>
-           </widget>
-          </item>
           <item row="11" column="0">
            <widget class="QLabel" name="label_18">
             <property name="text">
@@ -765,61 +764,62 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
-           <widget class="QSpinBox" name="cppThreads">
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="cppMlockCheck">
             <property name="toolTip">
-             <string>CPU threads to use</string>
+             <string>Force the system to keep the model in RAM</string>
             </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>64</number>
-            </property>
-            <property name="value">
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="label_31">
             <property name="text">
-             <string>Tail Free Sampling:</string>
+             <string>Use MLOCK</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="2">
-           <widget class="QSlider" name="cpp_tfszSlider">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="cppMmapCheck">
             <property name="toolTip">
-             <string>Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS</string>
+             <string>Use mmap if possible</string>
             </property>
-            <property name="minimum">
-             <number>100</number>
+            <property name="text">
+             <string>Use MMAP</string>
             </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="9" column="3">
-           <widget class="QDoubleSpinBox" name="cpp_tfszSpin">
-            <property name="toolTip">
-             <string>Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS</string>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="cppVerboseCheck">
+            <property name="text">
+             <string>Verbose</string>
             </property>
-            <property name="minimum">
-             <double>1.000000000000000</double>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="gpuAccelCheck">
+            <property name="text">
+             <string>Use GPU acceleration</string>
             </property>
-            <property name="maximum">
-             <double>5.000000000000000</double>
+            <property name="checked">
+             <bool>true</bool>
             </property>
-            <property name="singleStep">
-             <double>0.010000000000000</double>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="cppCacheCheck">
+            <property name="text">
+             <string>Use cache</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

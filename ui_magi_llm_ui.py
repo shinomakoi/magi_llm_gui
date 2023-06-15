@@ -60,12 +60,6 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_3.addWidget(self.chat_modeTextHistory, 2, 0, 1, 2)
 
-        self.chatInputSessionCombo = QComboBox(self.chat_textgenTab)
-        self.chatInputSessionCombo.setObjectName(u"chatInputSessionCombo")
-        self.chatInputSessionCombo.setMaxCount(128)
-
-        self.gridLayout_3.addWidget(self.chatInputSessionCombo, 3, 0, 1, 2)
-
         self.groupBox_4 = QGroupBox(self.chat_textgenTab)
         self.groupBox_4.setObjectName(u"groupBox_4")
         self.gridLayout_10 = QGridLayout(self.groupBox_4)
@@ -125,14 +119,14 @@ class Ui_magi_llm_window(object):
         self.gridLayout_11.addWidget(self.chatContinueButton, 0, 0, 1, 1)
 
 
-        self.gridLayout_3.addWidget(self.frame_6, 6, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.frame_6, 8, 1, 1, 1)
 
         self.chat_modeTextInput = QPlainTextEdit(self.chat_textgenTab)
         self.chat_modeTextInput.setObjectName(u"chat_modeTextInput")
         self.chat_modeTextInput.setMaximumSize(QSize(16777215, 128))
         self.chat_modeTextInput.setFont(font1)
 
-        self.gridLayout_3.addWidget(self.chat_modeTextInput, 4, 0, 1, 2, Qt.AlignBottom)
+        self.gridLayout_3.addWidget(self.chat_modeTextInput, 6, 0, 1, 2, Qt.AlignBottom)
 
         self.chatGenerateButton = QPushButton(self.chat_textgenTab)
         self.chatGenerateButton.setObjectName(u"chatGenerateButton")
@@ -143,7 +137,18 @@ class Ui_magi_llm_window(object):
         font2.setUnderline(False)
         self.chatGenerateButton.setFont(font2)
 
-        self.gridLayout_3.addWidget(self.chatGenerateButton, 6, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.chatGenerateButton, 8, 0, 1, 1)
+
+        self.chatHistorySessionCombo = QComboBox(self.chat_textgenTab)
+        self.chatHistorySessionCombo.setObjectName(u"chatHistorySessionCombo")
+
+        self.gridLayout_3.addWidget(self.chatHistorySessionCombo, 4, 1, 1, 1)
+
+        self.chatInputSessionCombo = QComboBox(self.chat_textgenTab)
+        self.chatInputSessionCombo.setObjectName(u"chatInputSessionCombo")
+        self.chatInputSessionCombo.setMaxCount(128)
+
+        self.gridLayout_3.addWidget(self.chatInputSessionCombo, 4, 0, 1, 1)
 
         self.textgenTab.addTab(self.chat_textgenTab, "")
         self.standard_textgenTab = QWidget()
@@ -249,7 +254,7 @@ class Ui_magi_llm_window(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 374, 477))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 777, 836))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
@@ -452,7 +457,6 @@ class Ui_magi_llm_window(object):
         self.textgenTab.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.chat_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Output goes here", None))
-        self.chatInputSessionCombo.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Chat input history", None))
         self.groupBox_4.setTitle("")
 #if QT_CONFIG(tooltip)
         self.instructPresetComboBox.setToolTip(QCoreApplication.translate("magi_llm_window", u"Select instruct format", None))
@@ -484,6 +488,8 @@ class Ui_magi_llm_window(object):
 #if QT_CONFIG(shortcut)
         self.chatGenerateButton.setShortcut(QCoreApplication.translate("magi_llm_window", u"Ctrl+Return", None))
 #endif // QT_CONFIG(shortcut)
+        self.chatHistorySessionCombo.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Chat history", None))
+        self.chatInputSessionCombo.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"User input history", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.chat_textgenTab), QCoreApplication.translate("magi_llm_window", u"Chat", None))
         self.defaultTextInput.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
 #if QT_CONFIG(tooltip)

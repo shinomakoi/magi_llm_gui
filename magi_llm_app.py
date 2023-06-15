@@ -404,6 +404,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.message_history = []
         self.chat_input_history = []
 
+        self.name_history_sessions = []
+        self.message_history_sessions = []
+        self.chat_history_session_text = []
+
         # Quit from menu
         self.actionSettings.triggered.connect(self.settings_win.show)
         self.actionExit.triggered.connect(app.exit)
@@ -454,6 +458,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.chatInputSessionCombo.textActivated.connect(
             lambda: self.chat_input_history_set())
 
+        self.chatHistorySessionCombo.textActivated.connect(
+            lambda: self.chat_output_history_set())
+
         self.themeDarkCheck.clicked.connect(lambda: self.set_themes('dark'))
         self.themeLightCheck.clicked.connect(lambda: self.set_themes('light'))
         self.themeNativeCheck.clicked.connect(
@@ -467,6 +474,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         extra = {
             'pyside6': True,
             'density_scale': '-1',
+            'font_family': ''
         }
 
         if theme == 'dark':
@@ -509,6 +517,18 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.exllamaModelPath.setText(config["Settings"]["exllama_model_path"])
         self.botNameLine.setText(config["Settings"]["bot_name"])
         self.yourNameLine.setText(config["Settings"]["user_name"])
+
+    # Set the saved session chat history into chat output when combo box toggled
+    def chat_output_history_set(self):
+
+        index = self.chatHistorySessionCombo.currentIndex()
+        self.chat_modeTextHistory.clear()
+        self.chat_modeTextHistory.append(self.chat_history_session_text[index])
+        self.name_history = self.name_history_sessions[index]
+        self.message_history = self.message_history_sessions[index]
+
+        # print(self.name_history)
+        # print(self.message_history)
 
     def chat_input_history_add(self, chat_input):
         self.chatInputSessionCombo.addItem(str(chat_input[:96]))
@@ -1008,6 +1028,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             prompt += user + msg
 
         # Add pre prompt and prompt strings together and assign to final prompt variable
+        ##### todo: pre_prompt should be left alone based on if saved session or changed instruct mode #####
         final_prompt = pre_prompt+'\n'+prompt+bot
 
         if self.customResponsePrefixCheck.isChecked():
@@ -1016,12 +1037,24 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # print('==='+final_prompt+'===')
         return final_prompt
 
+    # Save chat session when clear button pressed
+    def add_output_session(self):
+        self.name_history_sessions.append(self.name_history)
+        self.message_history_sessions.append(self.message_history)
+        self.chat_history_session_text.append(
+            self.chat_modeTextHistory.toHtml())
+        count = self.chatHistorySessionCombo.count()+1
+        session_name = f'Session {count}'
+        self.chatHistorySessionCombo.addItem(session_name)
+
     def clear_histories(self):
+
+        self.add_output_session()
+        self.set_preset_params()
+
         self.name_history = []
         self.message_history = []
         self.chat_modeTextHistory.clear()
-
-        self.set_preset_params()
 
     # Define a function to set the preset parameters based on the preset mode
     def set_preset_params(self, preset_mode=None, partial=None):
