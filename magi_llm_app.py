@@ -470,11 +470,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Set themes
     def set_themes(self, theme):
-
         extra = {
             'pyside6': True,
             'density_scale': '-1',
-            'font_family': ''
+            'font_family': 'Roboto'
         }
 
         if theme == 'dark':
@@ -1048,20 +1047,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.chatHistorySessionCombo.addItem(session_name)
 
     def clear_histories(self):
-
-        self.add_output_session()
+        if len(self.name_history) > 0:
+            self.add_output_session()
+            self.name_history = []
+            self.message_history = []
         self.set_preset_params()
-
-        self.name_history = []
-        self.message_history = []
-        self.chat_modeTextHistory.clear()
 
     # Define a function to set the preset parameters based on the preset mode
     def set_preset_params(self, preset_mode=None, partial=None):
-
         if len(self.name_history) == 0:
-            self.name_history = []
-            self.message_history = []
             self.chat_modeTextHistory.clear()
 
             # Use a dictionary to map the preset modes to the radio buttons and file names

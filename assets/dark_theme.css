@@ -1,4 +1,10 @@
 QWidget {{
   color: rgb(239, 240, 241);
-  font: 11pt ;
+  font: 11pt;
+  font-weight: 450;
+}}
+QTextEdit {{
+  color: rgb(239, 240, 241);
+  font: 12pt;
+  font-weight: 450;
 }}

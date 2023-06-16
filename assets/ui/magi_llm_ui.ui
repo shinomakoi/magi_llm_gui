@@ -39,21 +39,6 @@
         <string>Chat</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="2" column="0" colspan="2">
-         <widget class="QTextEdit" name="chat_modeTextHistory">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="placeholderText">
-           <string>Output goes here</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0" colspan="2">
          <widget class="QGroupBox" name="groupBox_4">
           <property name="title">
@@ -104,9 +89,47 @@
           </layout>
          </widget>
         </item>
+        <item row="8" column="0">
+         <widget class="QPushButton" name="chatGenerateButton">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+            <underline>false</underline>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Send. Control+Enter shortcut</string>
+          </property>
+          <property name="text">
+           <string>Generate</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Return</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="chatHistorySessionCombo">
+          <property name="placeholderText">
+           <string>Chat history</string>
+          </property>
+         </widget>
+        </item>
         <item row="8" column="1">
          <widget class="QFrame" name="frame_6">
           <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="1">
+            <widget class="QPushButton" name="chatClearButton">
+             <property name="toolTip">
+              <string>Clear the output</string>
+             </property>
+             <property name="text">
+              <string>Clear</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="2">
             <widget class="QPushButton" name="chatStopButton">
              <property name="enabled">
@@ -117,16 +140,6 @@
              </property>
              <property name="text">
               <string>Stop</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="chatClearButton">
-             <property name="toolTip">
-              <string>Clear the output</string>
-             </property>
-             <property name="text">
-              <string>Clear</string>
              </property>
             </widget>
            </item>
@@ -143,7 +156,17 @@
           </layout>
          </widget>
         </item>
-        <item row="6" column="0" colspan="2" alignment="Qt::AlignBottom">
+        <item row="4" column="0">
+         <widget class="QComboBox" name="chatInputSessionCombo">
+          <property name="maxCount">
+           <number>128</number>
+          </property>
+          <property name="placeholderText">
+           <string>User input history</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="2">
          <widget class="QPlainTextEdit" name="chat_modeTextInput">
           <property name="maximumSize">
            <size>
@@ -164,41 +187,18 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
-         <widget class="QPushButton" name="chatGenerateButton">
+        <item row="2" column="0" colspan="2">
+         <widget class="QTextEdit" name="chat_modeTextHistory">
           <property name="font">
            <font>
             <pointsize>12</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
-            <underline>false</underline>
            </font>
           </property>
-          <property name="toolTip">
-           <string>Send. Control+Enter shortcut</string>
-          </property>
-          <property name="text">
-           <string>Send</string>
-          </property>
-          <property name="shortcut">
-           <string>Ctrl+Return</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QComboBox" name="chatHistorySessionCombo">
-          <property name="placeholderText">
-           <string>Chat history</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QComboBox" name="chatInputSessionCombo">
-          <property name="maxCount">
-           <number>128</number>
+          <property name="readOnly">
+           <bool>true</bool>
           </property>
           <property name="placeholderText">
-           <string>User input history</string>
+           <string>Output goes here</string>
           </property>
          </widget>
         </item>
@@ -397,8 +397,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>777</width>
-             <height>836</height>
+             <width>775</width>
+             <height>842</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -675,7 +675,7 @@
      <x>0</x>
      <y>0</y>
      <width>819</width>
-     <height>27</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
