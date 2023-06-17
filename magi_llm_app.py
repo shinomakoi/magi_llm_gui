@@ -78,18 +78,18 @@ class TextgenThread(QThread):
         ) if self.stream_enabled else [exllama_model.generate(self.message, self.exllama_params)]
 
         # Use a variable to store the previous response
-        prev_response = ""
+        final_response = ''
         for response in responses:
+            final_response += response
             if self.stop_flag:
                 break
             # Strip the previous response from the current one
-            stripped_response = response.replace(prev_response, "")
-            prev_response = response
+
             # Emit the stripped response as resultReady signal
-            self.resultReady.emit(stripped_response)
+            self.resultReady.emit(response)
 
         # Emit the final response as final_resultReady signal
-        self.final_resultReady.emit(response)
+        self.final_resultReady.emit(final_response)
 
     def run_llama_cpp(self):
         # Use keyword arguments to pass the cpp_params to the model methods
@@ -648,6 +648,10 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     @Slot(str)
     def final_handleResult(self, final_text):
         # Write chat log
+
+        if final_text.endswith('USER:'):
+            final_text = final_text.rstrip("USER:")
+
         if self.textgen_mode == 'chat_mode':
             if self.continue_textgen_mode:
                 updated = str(
@@ -720,6 +724,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Get the Exllama parameters
     def get_exllama_params(self):
+
+        stop_strings = self.get_stop_strings()
+
         exllama_params = {
             'max_new_tokens': self.settings_win.max_new_tokensSpin.value(),
             'temperature': self.settings_win.temperatureSpin.value(),
@@ -730,6 +737,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'beam_length': self.settings_win.beamLengthSpin.value(),
             'min_p': self.settings_win.minPSpin.value(),
             'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySpin.value(),
+            'stop': str(stop_strings[0]),
         }
         # print('--- exllama_params:', exllama_params)
         return exllama_params

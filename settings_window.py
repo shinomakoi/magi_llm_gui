@@ -24,7 +24,7 @@ class Ui_Settings_Dialog(object):
     def setupUi(self, Settings_Dialog):
         if not Settings_Dialog.objectName():
             Settings_Dialog.setObjectName(u"Settings_Dialog")
-        Settings_Dialog.resize(632, 690)
+        Settings_Dialog.resize(648, 726)
         font = QFont()
         font.setPointSize(11)
         Settings_Dialog.setFont(font)
@@ -76,7 +76,7 @@ class Ui_Settings_Dialog(object):
         self.max_new_tokensSlider.setMinimum(32)
         self.max_new_tokensSlider.setMaximum(2048)
         self.max_new_tokensSlider.setPageStep(32)
-        self.max_new_tokensSlider.setValue(256)
+        self.max_new_tokensSlider.setValue(512)
         self.max_new_tokensSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.max_new_tokensSlider, 7, 1, 1, 1)
@@ -146,7 +146,7 @@ class Ui_Settings_Dialog(object):
         self.max_new_tokensSpin.setMinimum(32)
         self.max_new_tokensSpin.setMaximum(2048)
         self.max_new_tokensSpin.setSingleStep(32)
-        self.max_new_tokensSpin.setValue(256)
+        self.max_new_tokensSpin.setValue(512)
 
         self.gridLayout_2.addWidget(self.max_new_tokensSpin, 7, 3, 1, 1)
 
