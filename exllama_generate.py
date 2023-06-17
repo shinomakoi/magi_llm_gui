@@ -83,7 +83,7 @@ class ExllamaModel:
 
         # Define some constants for the response length
         min_response_tokens = 4
-        max_response_tokens = 256
+        max_response_tokens = params["max_new_tokens"]
 
         # Create an instance of ExLlamaGenerator with the model, tokenizer and cache
         generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)
@@ -119,8 +119,6 @@ class ExllamaModel:
 
         # Feed the tokens to the generator
         generator.gen_feed_tokens(in_tokens)
-
-        sys.stdout.flush()
 
         # Start the beam search
         generator.begin_beam_search()

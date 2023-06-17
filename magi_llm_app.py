@@ -74,8 +74,7 @@ class TextgenThread(QThread):
     def run_exllama(self):
         # Use a generator expression to iterate over the responses
         responses = exllama_model.generate_with_streaming(
-            self.message, self.exllama_params
-        ) if self.stream_enabled else [exllama_model.generate(self.message, self.exllama_params)]
+            self.message, self.exllama_params)
 
         # Use a variable to store the previous response
         final_response = ''
@@ -83,10 +82,12 @@ class TextgenThread(QThread):
             final_response += response
             if self.stop_flag:
                 break
-            # Strip the previous response from the current one
 
             # Emit the stripped response as resultReady signal
-            self.resultReady.emit(response)
+            if self.stream_enabled:
+                self.resultReady.emit(response)
+        if not self.stream_enabled:
+            self.resultReady.emit(final_response)
 
         # Emit the final response as final_resultReady signal
         self.final_resultReady.emit(final_response)
@@ -1046,7 +1047,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
-        # print('==='+final_prompt+'===')
+        print('==='+final_prompt+'===')
         return final_prompt
 
     def chat_rewind(self):
