@@ -1019,7 +1019,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
-        print('==='+final_prompt+'===')
+        # print('==='+final_prompt+'===')
         return final_prompt
 
     def chat_rewind(self):
