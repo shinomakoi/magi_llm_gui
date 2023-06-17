@@ -1,0 +1,4 @@
+user: "###Human:"
+bot: "###Assistant:"
+turn_template: "<|user|> <|user-message|>\n\n<|bot|><|bot-message|>\n\n"
+context: "Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n"

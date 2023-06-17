@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>632</width>
-    <height>690</height>
+    <width>648</width>
+    <height>726</height>
    </rect>
   </property>
   <property name="font">
@@ -314,7 +314,7 @@
           <string>Exllama</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="6" column="3">
+          <item row="5" column="3">
            <widget class="QSlider" name="beamLengthSlider">
             <property name="toolTip">
              <string>Beam length value</string>
@@ -333,45 +333,6 @@
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QSlider" name="minPSlider">
-            <property name="toolTip">
-             <string>If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.</string>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Num beams:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QSpinBox" name="token_repetition_penalty_decaySpin">
-            <property name="toolTip">
-             <string>Token repetition penalty sustain</string>
-            </property>
-            <property name="maximum">
-             <number>512</number>
-            </property>
-            <property name="singleStep">
-             <number>16</number>
-            </property>
-            <property name="value">
-             <number>256</number>
             </property>
            </widget>
           </item>
@@ -397,7 +358,73 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="4">
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Min P:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QSlider" name="minPSlider">
+            <property name="toolTip">
+             <string>If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.</string>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QSpinBox" name="minPSpin">
+            <property name="toolTip">
+             <string>Minimum P value</string>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLabel" name="label25">
+            <property name="text">
+             <string>Token repetition penalty sustain:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="3">
+           <widget class="QLineEdit" name="exllamaGpuSplitLine">
+            <property name="toolTip">
+             <string>Comma-separated list of VRAM (in GB) to use per GPU device for model layers, e.g: - 8,6,4</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>8,6</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QSpinBox" name="numbeamsSpin">
+            <property name="toolTip">
+             <string>Number of beams. Slower, more VRAm</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="4">
            <widget class="QSpinBox" name="beamLengthSpin">
             <property name="toolTip">
              <string>Beam length value</string>
@@ -410,7 +437,47 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="3">
+          <item row="1" column="4">
+           <widget class="QSpinBox" name="token_repetition_penalty_decaySpin">
+            <property name="toolTip">
+             <string>Token repetition penalty sustain</string>
+            </property>
+            <property name="maximum">
+             <number>512</number>
+            </property>
+            <property name="singleStep">
+             <number>16</number>
+            </property>
+            <property name="value">
+             <number>256</number>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QCheckBox" name="exllamaGpuSplitCheck">
+            <property name="toolTip">
+             <string>Split memory across multiple GPUs</string>
+            </property>
+            <property name="text">
+             <string>Multi-GPU split</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Beam length:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Num beams:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
            <widget class="QSlider" name="numbeamsSlider">
             <property name="toolTip">
              <string>Number of beams. Slower, more VRAM</string>
@@ -429,80 +496,6 @@
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="4">
-           <widget class="QSpinBox" name="numbeamsSpin">
-            <property name="toolTip">
-             <string>Number of beams. Slower, more VRAm</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_19">
-            <property name="text">
-             <string>Min P:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QLabel" name="label25">
-            <property name="text">
-             <string>Token repetition penalty sustain:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>Beam length:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QSpinBox" name="minPSpin">
-            <property name="toolTip">
-             <string>Minimum P value</string>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="3">
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QCheckBox" name="exllamaGpuSplitCheck">
-            <property name="toolTip">
-             <string>Split memory across multiple GPUs</string>
-            </property>
-            <property name="text">
-             <string>Multi-GPU split</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="3">
-           <widget class="QLineEdit" name="exllamaGpuSplitLine">
-            <property name="toolTip">
-             <string>Comma-separated list of VRAM (in GB) to use per GPU device for model layers, e.g: - 8,6,4</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="placeholderText">
-             <string>8,6</string>
             </property>
            </widget>
           </item>
@@ -526,6 +519,22 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="5" column="2">
+           <widget class="QSpinBox" name="gpuLayersSpin">
+            <property name="toolTip">
+             <string>Number of GPU layers to use</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>80</number>
+            </property>
+            <property name="value">
+             <number>18</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
            <widget class="QSlider" name="cpp_tfszSlider">
             <property name="toolTip">
              <string>Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS</string>
@@ -544,91 +553,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Mirostat mode:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>Threads:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="3">
-           <widget class="QSpinBox" name="gpuLayersSpin">
-            <property name="toolTip">
-             <string>Number of GPU layers to use</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>80</number>
-            </property>
-            <property name="value">
-             <number>18</number>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QSlider" name="cppBatchSizeSlider">
-            <property name="toolTip">
-             <string>Batch size to use</string>
-            </property>
-            <property name="minimum">
-             <number>8</number>
-            </property>
-            <property name="maximum">
-             <number>1024</number>
-            </property>
-            <property name="singleStep">
-             <number>8</number>
-            </property>
-            <property name="pageStep">
-             <number>8</number>
-            </property>
-            <property name="value">
-             <number>512</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="label_31">
-            <property name="text">
-             <string>Tail Free Sampling:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QSpinBox" name="CPP_ctxsize_Spin">
-            <property name="toolTip">
-             <string>Maximum length of the prompt and output combined (in tokens)</string>
-            </property>
-            <property name="suffix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>64</number>
-            </property>
-            <property name="maximum">
-             <number>4096</number>
-            </property>
-            <property name="singleStep">
-             <number>32</number>
-            </property>
-            <property name="value">
-             <number>2048</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
+          <item row="1" column="1">
            <widget class="QSlider" name="CPP_ctxsize_Slider">
             <property name="toolTip">
              <string>Maximum length of the prompt and output combined (in tokens)</string>
@@ -653,76 +578,38 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Context size:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="3">
-           <widget class="QSpinBox" name="cppMirastatMode">
-            <property name="toolTip">
-             <string>Mirostat algorithim mode</string>
-            </property>
-            <property name="maximum">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="2">
-           <widget class="QSlider" name="gpuLayersSlider">
-            <property name="toolTip">
-             <string>Number of GPU layers to use</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>80</number>
-            </property>
-            <property name="value">
-             <number>18</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QSpinBox" name="cppThreads">
-            <property name="toolTip">
-             <string>CPU threads to use</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>64</number>
-            </property>
-            <property name="value">
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="2">
-           <widget class="QLineEdit" name="cppLoraLineEdit"/>
-          </item>
-          <item row="4" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Batch size:</string>
             </property>
            </widget>
           </item>
-          <item row="10" column="0">
+          <item row="11" column="1">
+           <widget class="QCheckBox" name="cppVerboseCheck">
+            <property name="text">
+             <string>Verbose</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
              <string>GPU Layers:</string>
             </property>
            </widget>
           </item>
-          <item row="9" column="3">
+          <item row="11" column="0">
+           <widget class="QCheckBox" name="cppCacheCheck">
+            <property name="text">
+             <string>Use cache</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
            <widget class="QDoubleSpinBox" name="cpp_tfszSpin">
             <property name="toolTip">
              <string>Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS</string>
@@ -738,7 +625,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="3">
+          <item row="2" column="2">
            <widget class="QSpinBox" name="cppBatchSizeSpin">
             <property name="toolTip">
              <string>Batch size to use</string>
@@ -757,23 +644,45 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="0">
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>LoRA path:</string>
+          <item row="3" column="2">
+           <widget class="QSpinBox" name="cppMirastatMode">
+            <property name="toolTip">
+             <string>Mirostat algorithim mode</string>
+            </property>
+            <property name="maximum">
+             <number>2</number>
             </property>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="1">
+          <item row="2" column="1">
+           <widget class="QSlider" name="cppBatchSizeSlider">
+            <property name="toolTip">
+             <string>Batch size to use</string>
+            </property>
+            <property name="minimum">
+             <number>8</number>
+            </property>
+            <property name="maximum">
+             <number>1024</number>
+            </property>
+            <property name="singleStep">
+             <number>8</number>
+            </property>
+            <property name="pageStep">
+             <number>8</number>
+            </property>
+            <property name="value">
+             <number>512</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="cppLoraLineEdit"/>
+          </item>
+          <item row="9" column="0">
            <widget class="QCheckBox" name="cppMlockCheck">
             <property name="toolTip">
              <string>Force the system to keep the model in RAM</string>
@@ -783,7 +692,28 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>LoRA path:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Threads:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Tail Free Sampling:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
            <widget class="QCheckBox" name="cppMmapCheck">
             <property name="toolTip">
              <string>Use mmap if possible</string>
@@ -796,14 +726,56 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QCheckBox" name="cppVerboseCheck">
-            <property name="text">
-             <string>Verbose</string>
+          <item row="5" column="1">
+           <widget class="QSlider" name="gpuLayersSlider">
+            <property name="toolTip">
+             <string>Number of GPU layers to use</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>80</number>
+            </property>
+            <property name="value">
+             <number>18</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Mirostat mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Context size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QSpinBox" name="cppThreads">
+            <property name="toolTip">
+             <string>CPU threads to use</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>64</number>
+            </property>
+            <property name="value">
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
            <widget class="QCheckBox" name="gpuAccelCheck">
             <property name="text">
              <string>Use GPU acceleration</string>
@@ -813,13 +785,32 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="cppCacheCheck">
-            <property name="text">
-             <string>Use cache</string>
+          <item row="1" column="2">
+           <widget class="QSpinBox" name="CPP_ctxsize_Spin">
+            <property name="toolTip">
+             <string>Maximum length of the prompt and output combined (in tokens)</string>
             </property>
-            <property name="checked">
-             <bool>true</bool>
+            <property name="suffix">
+             <string/>
+            </property>
+            <property name="minimum">
+             <number>64</number>
+            </property>
+            <property name="maximum">
+             <number>4096</number>
+            </property>
+            <property name="singleStep">
+             <number>32</number>
+            </property>
+            <property name="value">
+             <number>2048</number>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="3">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
