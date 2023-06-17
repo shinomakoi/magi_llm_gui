@@ -1,3 +1,4 @@
+
 import sys
 from pathlib import Path
 
@@ -7,10 +8,9 @@ import torch
 sys.path.insert(0, str(Path("exllama")))
 
 # Import the necessary classes from exllama
-from exllama.generator import ExLlamaGenerator
-from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
-
+from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
+from exllama.generator import ExLlamaGenerator
 
 # Define some constants for paths and extensions
 MODEL_EXTENSIONS = [".safetensors", ".pt", ".bin"]
@@ -48,7 +48,7 @@ class ExllamaModel:
                         f"More than one {ext} model has been found. The last one will be selected. It could be wrong."
                     )
                 model_path = found[-1]
-                print('--- Exllama model:',model_path)
+                print('--- Exllama model:', model_path)
                 break
 
         # Set the model path and max sequence length in the config
@@ -77,7 +77,7 @@ class ExllamaModel:
         result.tokenizer = tokenizer
 
         return result
-    
+
     # Generate text from a given context and parameters
     def generate(self, context, params):
         # Disable gradient computation and initialize CUDA device
@@ -134,11 +134,15 @@ class ExllamaModel:
         )
         generator.settings.beam_length = params["beam_length"]
 
-        # End the previous beam search if any
-        generator.end_beam_search()
-
+  
         # Encode the context into ids using the tokenizer
         ids = generator.tokenizer.encode(context)
+
+        # Prevent going over context limit. Refine this later by pruning context
+        if ids.shape[-1] >= 2048:
+            print('Warning: Context limit exceeded')
+            yield ''
+            return
 
         # Begin the generation process with the ids
         generator.gen_begin(ids)
@@ -146,16 +150,29 @@ class ExllamaModel:
         # Get the initial length of the sequence
         initial_len = generator.sequence[0].shape[0]
 
+        min_response_tokens = 4
+        generator.begin_beam_search()
+
         # Generate tokens one by one and yield them as text
         for i in range(params["max_new_tokens"]):
-            token = generator.gen_single_token()
-            yield (generator.tokenizer.decode(generator.sequence[0][initial_len:]))
 
+            if i < min_response_tokens:
+                generator.disallow_tokens(
+                    [generator.tokenizer.newline_token_id, generator.tokenizer.eos_token_id])
+            else:
+                generator.disallow_tokens(None)
+
+            token = generator.gen_single_token()
             if token.item() == generator.tokenizer.eos_token_id:
                 # Replace it with a newline token
                 generator.replace_last_token(
                     generator.tokenizer.newline_token_id)
                 break
+
+            yield (generator.tokenizer.decode(generator.sequence[0][initial_len:]))
+
+      # End the previous beam search if any
+        generator.end_beam_search()
 
     def encode(self, string, **kwargs):
         # Encode a string into ids using the tokenizer

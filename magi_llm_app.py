@@ -817,6 +817,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                   self.get_cpp_model_params())
 
     # Enable the stop buttons for each mode
+
     def set_textgen_things(self):
         self.defaultStopButton.setEnabled(True)
         self.notebookStopButton.setEnabled(True)
@@ -851,15 +852,33 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if not self.model_load:
             # Load the model based on the user's choice of cpp or exllama
             if self.cppCheck.isChecked():
-                self.load_model('llama.cpp')
+                try:
+                    self.load_model('llama.cpp')
+                except Exception as error:
+                    print('--- Error: Could not load llama.cpp model')
+                    print(error)
+                    self.statusbar.showMessage(
+                        'Status: Error! Could not load llama.cpp model')
+                    return
+                else:
+                    self.model_load = True
+
             elif self.exllamaCheck.isChecked():
-                self.load_model('Exllama')
+                try:
+                    self.load_model('Exllama')
+                except Exception as error:
+                    print('--- Error: Could not load Exllama model')
+                    print(error)
+                    self.statusbar.showMessage(
+                        'Status: Error! Could not load Exllama model')
+                    return
+                else:
+                    self.model_load = True
             elif self.tsServerCheck.isChecked():
                 # TS Server
                 pass
 
             # Set the model_load flag to True
-            self.model_load = True
 
             # Disable the cpp and exllama checkboxes
             self.cppCheck.setEnabled(False)
