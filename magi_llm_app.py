@@ -508,12 +508,37 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     def load_settings(self, filename: str):
         # Load settings from an INI file and set the corresponding widgets.
+
+        # Create a ConfigParser object
         config = configparser.ConfigParser()
+
+        # Read the settings from the file
         config.read(filename)
+
+        # Set the widgets based on the values from the settings section
         self.cppModelPath.setText(config["Settings"]["cpp_model_path"])
         self.exllamaModelPath.setText(config["Settings"]["exllama_model_path"])
         self.botNameLine.setText(config["Settings"]["bot_name"])
         self.yourNameLine.setText(config["Settings"]["user_name"])
+
+        # Set backend based on the value from the settings section
+        if config["Settings"]["backend"] == 'llama_cpp':
+            self.cppCheck.setChecked(True)
+        elif config["Settings"]["backend"] == 'exllama':
+            self.exllamaCheck.setChecked(True)
+        elif config["Settings"]["backend"] == 'text_synth':
+            self.tsServerCheck.setChecked(True)
+
+        # Set theme based on the value from the settings section
+        if config["Settings"]["theme"] == 'dark':
+            self.themeDarkCheck.setChecked(True)
+        elif config["Settings"]["theme"] == 'light':
+            self.themeLightCheck.setChecked(True)
+        elif config["Settings"]["theme"] == 'native':
+            self.themeNativeCheck.setChecked(True)
+
+        # Set themes by calling set_themes method with theme argument
+        self.set_themes(config["Settings"]["theme"])
 
     # Define a helper function to get the file path from a dialog
 
@@ -531,20 +556,23 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Browse for the GGML model
     def cpp_model_select(self):
         cpp_model = self.get_file_path('Open file', "GGML models (*bin)")
-
         if cpp_model:
             self.cppModelPath.setText(cpp_model)
+    # Browse for the exllama model
 
     def exllama_model_select(self):
         exllama_model = self.get_directory_path("Select Directory")
-
         if exllama_model:
             self.exllamaModelPath.setText(exllama_model)
 
+    # Save the current settings to an INI file
     def save_settings(self):
+        # Create a ConfigParser object
         config = configparser.ConfigParser()
-        config.read("settings.ini")
+        # Read the existing settings from the file
+        config.read(SETTINGS_FILE)
 
+        # Set the values for the settings section based on the widgets
         config.set("Settings", "cpp_model_path", self.cppModelPath.text())
         config.set("Settings", "exllama_model_path",
                    self.exllamaModelPath.text())
@@ -553,9 +581,28 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         config.set("Params-TextSynth", "ts_model",
                    self.settings_win.tsModelLine.text())
 
+        # Save backend based on the checked radio button
+        if self.cppCheck.isChecked():
+            config.set("Settings", "backend", "llama_cpp")
+        elif self.exllamaCheck.isChecked():
+            config.set("Settings", "backend", "exllama")
+        elif self.tsServerCheck.isChecked():
+            config.set("Settings", "backend", "text_synth")
+
+        # Save theme based on the checked radio button
+        if self.themeDarkCheck.isChecked():
+            config.set("Settings", "theme", "dark")
+        elif self.themeLightCheck.isChecked():
+            config.set("Settings", "theme", "light")
+        elif self.themeNativeCheck.isChecked():
+            config.set("Settings", "theme", "native")
+
+        # Open the file in write mode
         with open("settings.ini", "w") as f:
             # Write the ConfigParser object to the file
             config.write(f)
+
+        # Close the file
         f.close()
 
         print('--- Settings saved')

@@ -161,6 +161,9 @@
           <layout class="QGridLayout" name="gridLayout_11">
            <item row="0" column="0">
             <widget class="QPushButton" name="chatContinueButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="toolTip">
               <string>Continue the last generation</string>
              </property>
@@ -171,6 +174,9 @@
            </item>
            <item row="0" column="2">
             <widget class="QPushButton" name="chatClearButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="toolTip">
               <string>Clear the output</string>
              </property>
@@ -194,6 +200,9 @@
            </item>
            <item row="0" column="1">
             <widget class="QPushButton" name="chatRewindButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Rewind</string>
              </property>
@@ -248,6 +257,9 @@
           <layout class="QGridLayout" name="gridLayout_12">
            <item row="0" column="0">
             <widget class="QPushButton" name="defaultContinueButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="toolTip">
               <string>Continue the last generation</string>
              </property>
@@ -258,6 +270,9 @@
            </item>
            <item row="0" column="1">
             <widget class="QPushButton" name="defaultClearButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="toolTip">
               <string>Clear the output</string>
              </property>
@@ -331,6 +346,9 @@
           <layout class="QGridLayout" name="gridLayout_9">
            <item row="0" column="1">
             <widget class="QPushButton" name="notebookClearButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="toolTip">
               <string>Clear the output</string>
              </property>
@@ -341,6 +359,9 @@
            </item>
            <item row="0" column="0">
             <widget class="QPushButton" name="notebookContinueButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="toolTip">
               <string>Continue the last generation</string>
              </property>
@@ -397,8 +418,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>812</width>
-             <height>871</height>
+             <width>810</width>
+             <height>877</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -675,7 +696,7 @@
      <x>0</x>
      <y>0</y>
      <width>854</width>
-     <height>27</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

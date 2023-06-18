@@ -8,3 +8,8 @@ QTextEdit {{
   font: 12pt;
   font-weight: bolder;
 }}
+QPlainTextEdit{{
+  color: rgb(239, 240, 241);
+  font: 12pt;
+  font-weight: bolder;
+}}

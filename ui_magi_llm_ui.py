@@ -128,11 +128,13 @@ class Ui_magi_llm_window(object):
         self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.chatContinueButton = QPushButton(self.frame_6)
         self.chatContinueButton.setObjectName(u"chatContinueButton")
+        self.chatContinueButton.setEnabled(False)
 
         self.gridLayout_11.addWidget(self.chatContinueButton, 0, 0, 1, 1)
 
         self.chatClearButton = QPushButton(self.frame_6)
         self.chatClearButton.setObjectName(u"chatClearButton")
+        self.chatClearButton.setEnabled(False)
 
         self.gridLayout_11.addWidget(self.chatClearButton, 0, 2, 1, 1)
 
@@ -144,6 +146,7 @@ class Ui_magi_llm_window(object):
 
         self.chatRewindButton = QPushButton(self.frame_6)
         self.chatRewindButton.setObjectName(u"chatRewindButton")
+        self.chatRewindButton.setEnabled(False)
 
         self.gridLayout_11.addWidget(self.chatRewindButton, 0, 1, 1, 1)
 
@@ -177,11 +180,13 @@ class Ui_magi_llm_window(object):
         self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.defaultContinueButton = QPushButton(self.frame_7)
         self.defaultContinueButton.setObjectName(u"defaultContinueButton")
+        self.defaultContinueButton.setEnabled(False)
 
         self.gridLayout_12.addWidget(self.defaultContinueButton, 0, 0, 1, 1)
 
         self.defaultClearButton = QPushButton(self.frame_7)
         self.defaultClearButton.setObjectName(u"defaultClearButton")
+        self.defaultClearButton.setEnabled(False)
 
         self.gridLayout_12.addWidget(self.defaultClearButton, 0, 1, 1, 1)
 
@@ -219,11 +224,13 @@ class Ui_magi_llm_window(object):
         self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.notebookClearButton = QPushButton(self.frame_4)
         self.notebookClearButton.setObjectName(u"notebookClearButton")
+        self.notebookClearButton.setEnabled(False)
 
         self.gridLayout_9.addWidget(self.notebookClearButton, 0, 1, 1, 1)
 
         self.notebookContinueButton = QPushButton(self.frame_4)
         self.notebookContinueButton.setObjectName(u"notebookContinueButton")
+        self.notebookContinueButton.setEnabled(False)
 
         self.gridLayout_9.addWidget(self.notebookContinueButton, 0, 0, 1, 1)
 
@@ -254,7 +261,7 @@ class Ui_magi_llm_window(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 812, 871))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 810, 877))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
@@ -421,7 +428,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 854, 27))
+        self.llm_menubar.setGeometry(QRect(0, 0, 854, 26))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
