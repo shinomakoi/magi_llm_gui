@@ -471,7 +471,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         extra = {
             'pyside6': True,
             'density_scale': '-1',
-            'font_family': 'Roboto'
+            'font_family': ''
         }
 
         if theme == 'dark':
