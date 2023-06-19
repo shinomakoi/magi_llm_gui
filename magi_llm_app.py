@@ -29,6 +29,7 @@ SETTINGS_FILE = Path("settings.ini")
 # Use constants for the backend names
 EXLLAMA = "exllama"
 LLAMA_CPP = "llama.cpp"
+LLAMA_CPP_SERVER = "llama.cpp_server"
 TS_SERVER = "ts-server"
 
 
@@ -62,6 +63,7 @@ class TextgenThread(QThread):
         backend_methods = {
             EXLLAMA: self.run_exllama,
             LLAMA_CPP: self.run_llama_cpp,
+            LLAMA_CPP_SERVER: self.run_llama_cpp_server,
             TS_SERVER: self.run_ts_server,
         }
         # Call the appropriate method based on the run_backend attribute
@@ -124,6 +126,16 @@ class TextgenThread(QThread):
 
         # Join the message and the responses and emit as final_resultReady signal
         final_text = f"{''.join(response_list)}"
+        self.final_resultReady.emit(final_text)
+
+    def run_llama_cpp_server(self):
+        import llamacpp_server_generate
+        final_text = ''
+        for response in llamacpp_server_generate.generate(self.message, self.cpp_params):
+            if self.stop_flag:
+                break
+            final_text += response
+            self.resultReady.emit(response)
         self.final_resultReady.emit(final_text)
 
     def run_ts_server(self):
@@ -662,7 +674,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.continue_textgen_mode = True
 
         if self.cppCheck.isChecked():
-            run_backend = 'llama.cpp'
+            if not self.cppServerCheck.isChecked():
+                run_backend = 'llama.cpp'
+            else:
+                run_backend = 'llama.cpp_server'
+
         elif self.exllamaCheck.isChecked():
             run_backend = 'exllama'
         elif self.tsServerCheck.isChecked():
@@ -705,6 +721,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 updated = str(
                     (self.message_history[-1].rstrip())+final_text.rstrip()+'\n\n')
                 self.message_history[-1] = updated
+                self.chat_output_list.pop(-1)
                 self.continue_textgen_mode = False
             else:
                 if self.customResponsePrefixCheck.isChecked():
@@ -907,7 +924,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Check if the model has been loaded
         if not self.model_load:
             # Load the model based on the user's choice of cpp or exllama
-            if self.cppCheck.isChecked():
+            if self.cppCheck.isChecked() and not self.cppServerCheck.isChecked():
                 try:
                     self.load_model('llama.cpp')
                 except Exception as error:
@@ -940,10 +957,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.cppCheck.setEnabled(False)
             self.exllamaCheck.setEnabled(False)
             self.tsServerCheck.setEnabled(False)
+            self.cppServerCheck.setEnabled(False)
 
         if not self.cppCheck.isEnabled():
             if self.cppCheck.isChecked():
-                backend = 'llama.cpp'
+                if not self.cppServerCheck.isChecked():
+                    backend = 'llama.cpp'
+                else:
+                    backend = 'llama.cpp_server'
             elif self.exllamaCheck.isChecked():
                 backend = 'exllama'
             elif self.tsServerCheck.isChecked():

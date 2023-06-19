@@ -261,35 +261,40 @@ class Ui_magi_llm_window(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 810, 877))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 812, 871))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
         self.groupBox_5.setObjectName(u"groupBox_5")
-        self.verticalLayout_3 = QVBoxLayout(self.groupBox_5)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.gridLayout_10 = QGridLayout(self.groupBox_5)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.paramWinShowButton = QPushButton(self.groupBox_5)
+        self.paramWinShowButton.setObjectName(u"paramWinShowButton")
+
+        self.gridLayout_10.addWidget(self.paramWinShowButton, 3, 0, 1, 1)
+
         self.cppCheck = QRadioButton(self.groupBox_5)
         self.cppCheck.setObjectName(u"cppCheck")
         self.cppCheck.setChecked(True)
 
-        self.verticalLayout_3.addWidget(self.cppCheck)
+        self.gridLayout_10.addWidget(self.cppCheck, 0, 0, 1, 1)
 
         self.exllamaCheck = QRadioButton(self.groupBox_5)
         self.exllamaCheck.setObjectName(u"exllamaCheck")
         self.exllamaCheck.setChecked(False)
 
-        self.verticalLayout_3.addWidget(self.exllamaCheck)
+        self.gridLayout_10.addWidget(self.exllamaCheck, 1, 0, 1, 1)
 
         self.tsServerCheck = QRadioButton(self.groupBox_5)
         self.tsServerCheck.setObjectName(u"tsServerCheck")
         self.tsServerCheck.setChecked(False)
 
-        self.verticalLayout_3.addWidget(self.tsServerCheck)
+        self.gridLayout_10.addWidget(self.tsServerCheck, 2, 0, 1, 1)
 
-        self.paramWinShowButton = QPushButton(self.groupBox_5)
-        self.paramWinShowButton.setObjectName(u"paramWinShowButton")
+        self.cppServerCheck = QCheckBox(self.groupBox_5)
+        self.cppServerCheck.setObjectName(u"cppServerCheck")
 
-        self.verticalLayout_3.addWidget(self.paramWinShowButton)
+        self.gridLayout_10.addWidget(self.cppServerCheck, 0, 1, 1, 1)
 
 
         self.gridLayout_4.addWidget(self.groupBox_5, 0, 0, 1, 1)
@@ -428,7 +433,7 @@ class Ui_magi_llm_window(object):
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 854, 26))
+        self.llm_menubar.setGeometry(QRect(0, 0, 854, 27))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -448,7 +453,7 @@ class Ui_magi_llm_window(object):
         self.defaultClearButton.clicked.connect(self.default_modeTextHistory.clear)
         self.notebookClearButton.clicked.connect(self.notebook_modeTextHistory.clear)
 
-        self.textgenTab.setCurrentIndex(0)
+        self.textgenTab.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(magi_llm_window)
@@ -540,6 +545,10 @@ class Ui_magi_llm_window(object):
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
 #if QT_CONFIG(tooltip)
+        self.paramWinShowButton.setToolTip(QCoreApplication.translate("magi_llm_window", u"Open parameter window", None))
+#endif // QT_CONFIG(tooltip)
+        self.paramWinShowButton.setText(QCoreApplication.translate("magi_llm_window", u"Parameters", None))
+#if QT_CONFIG(tooltip)
         self.cppCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use llama.cpp backend", None))
 #endif // QT_CONFIG(tooltip)
         self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
@@ -548,10 +557,7 @@ class Ui_magi_llm_window(object):
 #endif // QT_CONFIG(tooltip)
         self.exllamaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Exllama", None))
         self.tsServerCheck.setText(QCoreApplication.translate("magi_llm_window", u"TextSynth", None))
-#if QT_CONFIG(tooltip)
-        self.paramWinShowButton.setToolTip(QCoreApplication.translate("magi_llm_window", u"Open parameter window", None))
-#endif // QT_CONFIG(tooltip)
-        self.paramWinShowButton.setText(QCoreApplication.translate("magi_llm_window", u"Parameters", None))
+        self.cppServerCheck.setText(QCoreApplication.translate("magi_llm_window", u"Server", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("magi_llm_window", u"Themes", None))
         self.themeDarkCheck.setText(QCoreApplication.translate("magi_llm_window", u"Dark", None))
         self.themeLightCheck.setText(QCoreApplication.translate("magi_llm_window", u"Light", None))

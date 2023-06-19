@@ -29,7 +29,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="chat_textgenTab">
        <property name="autoFillBackground">
@@ -418,8 +418,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>810</width>
-             <height>877</height>
+             <width>812</width>
+             <height>871</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -428,8 +428,18 @@
               <property name="title">
                <string>Backend:</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <item>
+              <layout class="QGridLayout" name="gridLayout_10">
+               <item row="3" column="0">
+                <widget class="QPushButton" name="paramWinShowButton">
+                 <property name="toolTip">
+                  <string>Open parameter window</string>
+                 </property>
+                 <property name="text">
+                  <string>Parameters</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
                 <widget class="QRadioButton" name="cppCheck">
                  <property name="toolTip">
                   <string>Use llama.cpp backend</string>
@@ -442,7 +452,7 @@
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="1" column="0">
                 <widget class="QRadioButton" name="exllamaCheck">
                  <property name="toolTip">
                   <string>Use Exllama backend</string>
@@ -455,7 +465,7 @@
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="2" column="0">
                 <widget class="QRadioButton" name="tsServerCheck">
                  <property name="text">
                   <string>TextSynth</string>
@@ -465,13 +475,10 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QPushButton" name="paramWinShowButton">
-                 <property name="toolTip">
-                  <string>Open parameter window</string>
-                 </property>
+               <item row="0" column="1">
+                <widget class="QCheckBox" name="cppServerCheck">
                  <property name="text">
-                  <string>Parameters</string>
+                  <string>Server</string>
                  </property>
                 </widget>
                </item>
@@ -696,7 +703,7 @@
      <x>0</x>
      <y>0</y>
      <width>854</width>
-     <height>26</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
