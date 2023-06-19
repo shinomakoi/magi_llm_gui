@@ -453,7 +453,7 @@ class Ui_magi_llm_window(object):
         self.defaultClearButton.clicked.connect(self.default_modeTextHistory.clear)
         self.notebookClearButton.clicked.connect(self.notebook_modeTextHistory.clear)
 
-        self.textgenTab.setCurrentIndex(3)
+        self.textgenTab.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(magi_llm_window)
