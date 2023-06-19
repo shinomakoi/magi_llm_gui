@@ -27,6 +27,8 @@ llama-cpp-python is including as a backend for CPU, but you can optionally insta
 See: 
 https://github.com/abetlen/llama-cpp-python/#installation-with-openblas--cublas--clblast--metal
 
+Can also use the llama.cpp server API if it's launched. See: https://github.com/ggerganov/llama.cpp/tree/master/examples/server
+
 **Exllama**
 
 To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Also requires CUDA Toolkit installed (installed with Linux package manager or downloaded from NVIDIA for Windows). Tested working on Linux. For Windows, good luck.
