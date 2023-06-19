@@ -477,6 +477,9 @@
                </item>
                <item row="0" column="1">
                 <widget class="QCheckBox" name="cppServerCheck">
+                 <property name="toolTip">
+                  <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
+                 </property>
                  <property name="text">
                   <string>Server</string>
                  </property>
