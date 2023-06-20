@@ -128,17 +128,31 @@ class TextgenThread(QThread):
         final_text = f"{''.join(response_list)}"
         self.final_resultReady.emit(final_text)
 
+
+    """Run the llama.cpp server and generate a response.
+    Emits signals with the results.
+    """
     def run_llama_cpp_server(self):
         import llamacpp_server_generate
-        final_text = ''
-        try:
-            for response in llamacpp_server_generate.generate(self.message, self.cpp_params):
+
+        final_text = ""
+        if self.stream_enabled:
+            # Generate a response with streaming
+            for response in llamacpp_server_generate.generate_with_streaming(
+                self.message, self.cpp_params
+            ):
                 if self.stop_flag:
                     break
                 final_text += response
                 self.resultReady.emit(response)
-        except Exception as error:
-            print(error)
+        else:
+            # Generate a response without streaming
+            final_text = llamacpp_server_generate.generate_nostream(
+                self.message, self.cpp_params
+            )
+            self.resultReady.emit(final_text)
+
+        # Emit the final result
         self.final_resultReady.emit(final_text)
 
     def run_ts_server(self):

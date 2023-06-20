@@ -407,295 +407,276 @@
        <attribute name="title">
         <string>Settings</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QScrollArea" name="scrollArea">
-          <property name="widgetResizable">
-           <bool>true</bool>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="2" column="0" colspan="2">
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Settings:</string>
           </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>812</width>
-             <height>871</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_4">
-            <item row="0" column="0">
-             <widget class="QGroupBox" name="groupBox_5">
-              <property name="title">
-               <string>Backend:</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_10">
-               <item row="3" column="0">
-                <widget class="QPushButton" name="paramWinShowButton">
-                 <property name="toolTip">
-                  <string>Open parameter window</string>
-                 </property>
-                 <property name="text">
-                  <string>Parameters</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="cppCheck">
-                 <property name="toolTip">
-                  <string>Use llama.cpp backend</string>
-                 </property>
-                 <property name="text">
-                  <string>llama.cpp</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QRadioButton" name="exllamaCheck">
-                 <property name="toolTip">
-                  <string>Use Exllama backend</string>
-                 </property>
-                 <property name="text">
-                  <string>Exllama</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QRadioButton" name="tsServerCheck">
-                 <property name="text">
-                  <string>TextSynth</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QCheckBox" name="cppServerCheck">
-                 <property name="toolTip">
-                  <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
-                 </property>
-                 <property name="text">
-                  <string>Server</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QGroupBox" name="groupBox_3">
-              <property name="title">
-               <string>Themes</string>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
-               <item>
-                <widget class="QRadioButton" name="themeDarkCheck">
-                 <property name="text">
-                  <string>Dark</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="themeLightCheck">
-                 <property name="text">
-                  <string>Light</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="themeNativeCheck">
-                 <property name="text">
-                  <string>Native</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QGroupBox" name="groupBox_2">
-              <property name="title">
-               <string>Settings:</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_5">
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_28">
-                 <property name="text">
-                  <string>llama.cpp: Model path:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" colspan="2">
-                <widget class="Line" name="line">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="streamEnabledCheck">
-                 <property name="toolTip">
-                  <string>Stream responses</string>
-                 </property>
-                 <property name="text">
-                  <string>Stream responses</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QToolButton" name="cppModelSelect">
-                 <property name="toolTip">
-                  <string>Select GGML model</string>
-                 </property>
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                 <property name="arrowType">
-                  <enum>Qt::NoArrow</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLineEdit" name="cppModelPath">
-                 <property name="toolTip">
-                  <string>Path to GGML model for llama.cpp</string>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_3">
-                 <property name="text">
-                  <string>Exllama: Model directory:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QLineEdit" name="exllamaModelPath">
-                 <property name="toolTip">
-                  <string>Path to Exllama GPTQ model folder (mode file, tokenizer.json, config.json)</string>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QToolButton" name="exllamaModelSelect">
-                 <property name="toolTip">
-                  <string>Select Exllama model folder</string>
-                 </property>
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QCheckBox" name="logChatCheck">
-                 <property name="toolTip">
-                  <string>Write chat logs to file</string>
-                 </property>
-                 <property name="text">
-                  <string>Log chats</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="2">
-             <widget class="QGroupBox" name="groupBox">
-              <property name="title">
-               <string>Chat prefixes:</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_7">
-               <item row="3" column="0">
-                <widget class="QCheckBox" name="customResponsePrefixCheck">
-                 <property name="text">
-                  <string>Response prefix:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLineEdit" name="yourNameLine">
-                 <property name="toolTip">
-                  <string>User name to be used in Character mode</string>
-                 </property>
-                 <property name="text">
-                  <string>User</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="3">
-                <widget class="QLabel" name="label_5">
-                 <property name="text">
-                  <string>Bot name:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>User name:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QLineEdit" name="customResponsePrefix">
-                 <property name="toolTip">
-                  <string>Prefix to apply to prompts</string>
-                 </property>
-                 <property name="text">
-                  <string>Sure! </string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="4">
-                <widget class="QLineEdit" name="botNameLine">
-                 <property name="text">
-                  <string>Assistant</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="0" colspan="2">
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="streamEnabledCheck">
+             <property name="toolTip">
+              <string>Stream responses</string>
+             </property>
+             <property name="text">
+              <string>Stream responses</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="cppModelSelect">
+             <property name="toolTip">
+              <string>Select GGML model</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="arrowType">
+              <enum>Qt::NoArrow</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="cppModelPath">
+             <property name="toolTip">
+              <string>Path to GGML model for llama.cpp</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Exllama: Model directory:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="exllamaModelPath">
+             <property name="toolTip">
+              <string>Path to Exllama GPTQ model folder (mode file, tokenizer.json, config.json)</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="exllamaModelSelect">
+             <property name="toolTip">
+              <string>Select Exllama model folder</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="logChatCheck">
+             <property name="toolTip">
+              <string>Write chat logs to file</string>
+             </property>
+             <property name="text">
+              <string>Log chats</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_28">
+             <property name="text">
+              <string>llama.cpp: Model path:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="settingsPathSaveButton">
-          <property name="toolTip">
-           <string>Save model paths</string>
+        <item row="3" column="0" colspan="2">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Chat prefixes:</string>
           </property>
-          <property name="text">
-           <string>Save settings</string>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="customResponsePrefix">
+             <property name="toolTip">
+              <string>Prefix to apply to prompts</string>
+             </property>
+             <property name="text">
+              <string>Sure! </string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLineEdit" name="botNameLine">
+             <property name="text">
+              <string>Assistant</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="yourNameLine">
+             <property name="toolTip">
+              <string>User name to be used in Character mode</string>
+             </property>
+             <property name="text">
+              <string>User</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="customResponsePrefixCheck">
+             <property name="text">
+              <string>Response prefix:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>User name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Bot name:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="title">
+           <string>Backend:</string>
           </property>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="tsServerCheck">
+             <property name="text">
+              <string>TextSynth</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="cppServerCheck">
+             <property name="toolTip">
+              <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
+             </property>
+             <property name="text">
+              <string>Server</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="exllamaCheck">
+             <property name="toolTip">
+              <string>Use Exllama backend</string>
+             </property>
+             <property name="text">
+              <string>Exllama</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="cppCheck">
+             <property name="toolTip">
+              <string>Use llama.cpp backend</string>
+             </property>
+             <property name="text">
+              <string>llama.cpp</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QPushButton" name="paramWinShowButton">
+             <property name="toolTip">
+              <string>Open parameter window</string>
+             </property>
+             <property name="text">
+              <string>Parameters</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Themes</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QRadioButton" name="themeDarkCheck">
+             <property name="text">
+              <string>Dark</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="themeLightCheck">
+             <property name="text">
+              <string>Light</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="themeNativeCheck">
+             <property name="text">
+              <string>Native</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="settingsPathSaveButton">
+      <property name="toolTip">
+       <string>Save model paths</string>
+      </property>
+      <property name="text">
+       <string>Save settings</string>
+      </property>
      </widget>
     </item>
    </layout>
@@ -706,7 +687,7 @@
      <x>0</x>
      <y>0</y>
      <width>854</width>
-     <height>27</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -19,9 +19,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QGridLayout, QGroupBox, QLabel, QLineEdit,
     QMainWindow, QMenu, QMenuBar, QPlainTextEdit,
-    QPushButton, QRadioButton, QScrollArea, QSizePolicy,
-    QStatusBar, QTabWidget, QTextEdit, QToolButton,
-    QVBoxLayout, QWidget)
+    QPushButton, QRadioButton, QSizePolicy, QStatusBar,
+    QTabWidget, QTextEdit, QToolButton, QVBoxLayout,
+    QWidget)
 
 class Ui_magi_llm_window(object):
     def setupUi(self, magi_llm_window):
@@ -254,84 +254,12 @@ class Ui_magi_llm_window(object):
         self.settingsTab = QWidget()
         self.settingsTab.setObjectName(u"settingsTab")
         self.settingsTab.setAutoFillBackground(True)
-        self.verticalLayout = QVBoxLayout(self.settingsTab)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.scrollArea = QScrollArea(self.settingsTab)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 812, 871))
-        self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout_4 = QGridLayout(self.settingsTab)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.gridLayout_10 = QGridLayout(self.groupBox_5)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.paramWinShowButton = QPushButton(self.groupBox_5)
-        self.paramWinShowButton.setObjectName(u"paramWinShowButton")
-
-        self.gridLayout_10.addWidget(self.paramWinShowButton, 3, 0, 1, 1)
-
-        self.cppCheck = QRadioButton(self.groupBox_5)
-        self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(True)
-
-        self.gridLayout_10.addWidget(self.cppCheck, 0, 0, 1, 1)
-
-        self.exllamaCheck = QRadioButton(self.groupBox_5)
-        self.exllamaCheck.setObjectName(u"exllamaCheck")
-        self.exllamaCheck.setChecked(False)
-
-        self.gridLayout_10.addWidget(self.exllamaCheck, 1, 0, 1, 1)
-
-        self.tsServerCheck = QRadioButton(self.groupBox_5)
-        self.tsServerCheck.setObjectName(u"tsServerCheck")
-        self.tsServerCheck.setChecked(False)
-
-        self.gridLayout_10.addWidget(self.tsServerCheck, 2, 0, 1, 1)
-
-        self.cppServerCheck = QCheckBox(self.groupBox_5)
-        self.cppServerCheck.setObjectName(u"cppServerCheck")
-
-        self.gridLayout_10.addWidget(self.cppServerCheck, 0, 1, 1, 1)
-
-
-        self.gridLayout_4.addWidget(self.groupBox_5, 0, 0, 1, 1)
-
-        self.groupBox_3 = QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.verticalLayout_2 = QVBoxLayout(self.groupBox_3)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.themeDarkCheck = QRadioButton(self.groupBox_3)
-        self.themeDarkCheck.setObjectName(u"themeDarkCheck")
-        self.themeDarkCheck.setChecked(False)
-
-        self.verticalLayout_2.addWidget(self.themeDarkCheck)
-
-        self.themeLightCheck = QRadioButton(self.groupBox_3)
-        self.themeLightCheck.setObjectName(u"themeLightCheck")
-
-        self.verticalLayout_2.addWidget(self.themeLightCheck)
-
-        self.themeNativeCheck = QRadioButton(self.groupBox_3)
-        self.themeNativeCheck.setObjectName(u"themeNativeCheck")
-        self.themeNativeCheck.setChecked(True)
-
-        self.verticalLayout_2.addWidget(self.themeNativeCheck)
-
-
-        self.gridLayout_4.addWidget(self.groupBox_3, 0, 1, 1, 1)
-
-        self.groupBox_2 = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox_2 = QGroupBox(self.settingsTab)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout_5 = QGridLayout(self.groupBox_2)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.label_28 = QLabel(self.groupBox_2)
-        self.label_28.setObjectName(u"label_28")
-
-        self.gridLayout_5.addWidget(self.label_28, 2, 0, 1, 1)
-
         self.line = QFrame(self.groupBox_2)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.HLine)
@@ -377,33 +305,18 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
 
+        self.label_28 = QLabel(self.groupBox_2)
+        self.label_28.setObjectName(u"label_28")
 
-        self.gridLayout_4.addWidget(self.groupBox_2, 1, 0, 1, 2)
+        self.gridLayout_5.addWidget(self.label_28, 2, 0, 1, 1)
 
-        self.groupBox = QGroupBox(self.scrollAreaWidgetContents)
+
+        self.gridLayout_4.addWidget(self.groupBox_2, 2, 0, 1, 2)
+
+        self.groupBox = QGroupBox(self.settingsTab)
         self.groupBox.setObjectName(u"groupBox")
         self.gridLayout_7 = QGridLayout(self.groupBox)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.customResponsePrefixCheck = QCheckBox(self.groupBox)
-        self.customResponsePrefixCheck.setObjectName(u"customResponsePrefixCheck")
-
-        self.gridLayout_7.addWidget(self.customResponsePrefixCheck, 3, 0, 1, 1)
-
-        self.yourNameLine = QLineEdit(self.groupBox)
-        self.yourNameLine.setObjectName(u"yourNameLine")
-
-        self.gridLayout_7.addWidget(self.yourNameLine, 1, 2, 1, 1)
-
-        self.label_5 = QLabel(self.groupBox)
-        self.label_5.setObjectName(u"label_5")
-
-        self.gridLayout_7.addWidget(self.label_5, 1, 3, 1, 1)
-
-        self.label_4 = QLabel(self.groupBox)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_7.addWidget(self.label_4, 1, 0, 1, 1)
-
         self.customResponsePrefix = QLineEdit(self.groupBox)
         self.customResponsePrefix.setObjectName(u"customResponsePrefix")
 
@@ -414,26 +327,101 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_7.addWidget(self.botNameLine, 1, 4, 1, 1)
 
+        self.yourNameLine = QLineEdit(self.groupBox)
+        self.yourNameLine.setObjectName(u"yourNameLine")
 
-        self.gridLayout_4.addWidget(self.groupBox, 2, 0, 1, 2)
+        self.gridLayout_7.addWidget(self.yourNameLine, 1, 2, 1, 1)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.customResponsePrefixCheck = QCheckBox(self.groupBox)
+        self.customResponsePrefixCheck.setObjectName(u"customResponsePrefixCheck")
 
-        self.verticalLayout.addWidget(self.scrollArea)
+        self.gridLayout_7.addWidget(self.customResponsePrefixCheck, 3, 0, 1, 1)
 
-        self.settingsPathSaveButton = QPushButton(self.settingsTab)
-        self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
+        self.label_4 = QLabel(self.groupBox)
+        self.label_4.setObjectName(u"label_4")
 
-        self.verticalLayout.addWidget(self.settingsPathSaveButton)
+        self.gridLayout_7.addWidget(self.label_4, 1, 0, 1, 1)
+
+        self.label_5 = QLabel(self.groupBox)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout_7.addWidget(self.label_5, 1, 3, 1, 1)
+
+
+        self.gridLayout_4.addWidget(self.groupBox, 3, 0, 1, 2)
+
+        self.groupBox_5 = QGroupBox(self.settingsTab)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        self.gridLayout_10 = QGridLayout(self.groupBox_5)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.tsServerCheck = QRadioButton(self.groupBox_5)
+        self.tsServerCheck.setObjectName(u"tsServerCheck")
+        self.tsServerCheck.setChecked(False)
+
+        self.gridLayout_10.addWidget(self.tsServerCheck, 2, 0, 1, 1)
+
+        self.cppServerCheck = QCheckBox(self.groupBox_5)
+        self.cppServerCheck.setObjectName(u"cppServerCheck")
+
+        self.gridLayout_10.addWidget(self.cppServerCheck, 0, 1, 1, 1)
+
+        self.exllamaCheck = QRadioButton(self.groupBox_5)
+        self.exllamaCheck.setObjectName(u"exllamaCheck")
+        self.exllamaCheck.setChecked(False)
+
+        self.gridLayout_10.addWidget(self.exllamaCheck, 1, 0, 1, 1)
+
+        self.cppCheck = QRadioButton(self.groupBox_5)
+        self.cppCheck.setObjectName(u"cppCheck")
+        self.cppCheck.setChecked(True)
+
+        self.gridLayout_10.addWidget(self.cppCheck, 0, 0, 1, 1)
+
+        self.paramWinShowButton = QPushButton(self.groupBox_5)
+        self.paramWinShowButton.setObjectName(u"paramWinShowButton")
+
+        self.gridLayout_10.addWidget(self.paramWinShowButton, 3, 0, 1, 1)
+
+
+        self.gridLayout_4.addWidget(self.groupBox_5, 0, 0, 1, 1)
+
+        self.groupBox_3 = QGroupBox(self.settingsTab)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.verticalLayout_2 = QVBoxLayout(self.groupBox_3)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.themeDarkCheck = QRadioButton(self.groupBox_3)
+        self.themeDarkCheck.setObjectName(u"themeDarkCheck")
+        self.themeDarkCheck.setChecked(False)
+
+        self.verticalLayout_2.addWidget(self.themeDarkCheck)
+
+        self.themeLightCheck = QRadioButton(self.groupBox_3)
+        self.themeLightCheck.setObjectName(u"themeLightCheck")
+
+        self.verticalLayout_2.addWidget(self.themeLightCheck)
+
+        self.themeNativeCheck = QRadioButton(self.groupBox_3)
+        self.themeNativeCheck.setObjectName(u"themeNativeCheck")
+        self.themeNativeCheck.setChecked(True)
+
+        self.verticalLayout_2.addWidget(self.themeNativeCheck)
+
+
+        self.gridLayout_4.addWidget(self.groupBox_3, 0, 1, 1, 1)
 
         self.textgenTab.addTab(self.settingsTab, "")
 
         self.gridLayout.addWidget(self.textgenTab, 0, 0, 1, 1)
 
+        self.settingsPathSaveButton = QPushButton(self.centralwidget)
+        self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
+
+        self.gridLayout.addWidget(self.settingsPathSaveButton, 1, 0, 1, 1)
+
         magi_llm_window.setCentralWidget(self.centralwidget)
         self.llm_menubar = QMenuBar(magi_llm_window)
         self.llm_menubar.setObjectName(u"llm_menubar")
-        self.llm_menubar.setGeometry(QRect(0, 0, 854, 27))
+        self.llm_menubar.setGeometry(QRect(0, 0, 854, 26))
         self.menuFile = QMenu(self.llm_menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.llm_menubar)
@@ -543,30 +531,7 @@ class Ui_magi_llm_window(object):
         self.notebookStopButton.setText(QCoreApplication.translate("magi_llm_window", u"Stop", None))
         self.notebook_modeTextHistory.setPlaceholderText(QCoreApplication.translate("magi_llm_window", u"Type something here", None))
         self.textgenTab.setTabText(self.textgenTab.indexOf(self.notebook_textgenTab), QCoreApplication.translate("magi_llm_window", u"Notebook", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
-#if QT_CONFIG(tooltip)
-        self.paramWinShowButton.setToolTip(QCoreApplication.translate("magi_llm_window", u"Open parameter window", None))
-#endif // QT_CONFIG(tooltip)
-        self.paramWinShowButton.setText(QCoreApplication.translate("magi_llm_window", u"Parameters", None))
-#if QT_CONFIG(tooltip)
-        self.cppCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use llama.cpp backend", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
-#if QT_CONFIG(tooltip)
-        self.exllamaCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use Exllama backend", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Exllama", None))
-        self.tsServerCheck.setText(QCoreApplication.translate("magi_llm_window", u"TextSynth", None))
-#if QT_CONFIG(tooltip)
-        self.cppServerCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Connects to a launched llama.cpp server instead of llama-cpp-python", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppServerCheck.setText(QCoreApplication.translate("magi_llm_window", u"Server", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("magi_llm_window", u"Themes", None))
-        self.themeDarkCheck.setText(QCoreApplication.translate("magi_llm_window", u"Dark", None))
-        self.themeLightCheck.setText(QCoreApplication.translate("magi_llm_window", u"Light", None))
-        self.themeNativeCheck.setText(QCoreApplication.translate("magi_llm_window", u"Native", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("magi_llm_window", u"Settings:", None))
-        self.label_28.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp: Model path:", None))
 #if QT_CONFIG(tooltip)
         self.streamEnabledCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Stream responses", None))
 #endif // QT_CONFIG(tooltip)
@@ -592,24 +557,47 @@ class Ui_magi_llm_window(object):
         self.logChatCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Write chat logs to file", None))
 #endif // QT_CONFIG(tooltip)
         self.logChatCheck.setText(QCoreApplication.translate("magi_llm_window", u"Log chats", None))
+        self.label_28.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp: Model path:", None))
         self.groupBox.setTitle(QCoreApplication.translate("magi_llm_window", u"Chat prefixes:", None))
-        self.customResponsePrefixCheck.setText(QCoreApplication.translate("magi_llm_window", u"Response prefix:", None))
-#if QT_CONFIG(tooltip)
-        self.yourNameLine.setToolTip(QCoreApplication.translate("magi_llm_window", u"User name to be used in Character mode", None))
-#endif // QT_CONFIG(tooltip)
-        self.yourNameLine.setText(QCoreApplication.translate("magi_llm_window", u"User", None))
-        self.label_5.setText(QCoreApplication.translate("magi_llm_window", u"Bot name:", None))
-        self.label_4.setText(QCoreApplication.translate("magi_llm_window", u"User name:", None))
 #if QT_CONFIG(tooltip)
         self.customResponsePrefix.setToolTip(QCoreApplication.translate("magi_llm_window", u"Prefix to apply to prompts", None))
 #endif // QT_CONFIG(tooltip)
         self.customResponsePrefix.setText(QCoreApplication.translate("magi_llm_window", u"Sure! ", None))
         self.botNameLine.setText(QCoreApplication.translate("magi_llm_window", u"Assistant", None))
 #if QT_CONFIG(tooltip)
+        self.yourNameLine.setToolTip(QCoreApplication.translate("magi_llm_window", u"User name to be used in Character mode", None))
+#endif // QT_CONFIG(tooltip)
+        self.yourNameLine.setText(QCoreApplication.translate("magi_llm_window", u"User", None))
+        self.customResponsePrefixCheck.setText(QCoreApplication.translate("magi_llm_window", u"Response prefix:", None))
+        self.label_4.setText(QCoreApplication.translate("magi_llm_window", u"User name:", None))
+        self.label_5.setText(QCoreApplication.translate("magi_llm_window", u"Bot name:", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("magi_llm_window", u"Backend:", None))
+        self.tsServerCheck.setText(QCoreApplication.translate("magi_llm_window", u"TextSynth", None))
+#if QT_CONFIG(tooltip)
+        self.cppServerCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Connects to a launched llama.cpp server instead of llama-cpp-python", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppServerCheck.setText(QCoreApplication.translate("magi_llm_window", u"Server", None))
+#if QT_CONFIG(tooltip)
+        self.exllamaCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use Exllama backend", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaCheck.setText(QCoreApplication.translate("magi_llm_window", u"Exllama", None))
+#if QT_CONFIG(tooltip)
+        self.cppCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use llama.cpp backend", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
+#if QT_CONFIG(tooltip)
+        self.paramWinShowButton.setToolTip(QCoreApplication.translate("magi_llm_window", u"Open parameter window", None))
+#endif // QT_CONFIG(tooltip)
+        self.paramWinShowButton.setText(QCoreApplication.translate("magi_llm_window", u"Parameters", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("magi_llm_window", u"Themes", None))
+        self.themeDarkCheck.setText(QCoreApplication.translate("magi_llm_window", u"Dark", None))
+        self.themeLightCheck.setText(QCoreApplication.translate("magi_llm_window", u"Light", None))
+        self.themeNativeCheck.setText(QCoreApplication.translate("magi_llm_window", u"Native", None))
+        self.textgenTab.setTabText(self.textgenTab.indexOf(self.settingsTab), QCoreApplication.translate("magi_llm_window", u"Settings", None))
+#if QT_CONFIG(tooltip)
         self.settingsPathSaveButton.setToolTip(QCoreApplication.translate("magi_llm_window", u"Save model paths", None))
 #endif // QT_CONFIG(tooltip)
         self.settingsPathSaveButton.setText(QCoreApplication.translate("magi_llm_window", u"Save settings", None))
-        self.textgenTab.setTabText(self.textgenTab.indexOf(self.settingsTab), QCoreApplication.translate("magi_llm_window", u"Settings", None))
         self.menuFile.setTitle(QCoreApplication.translate("magi_llm_window", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("magi_llm_window", u"Help", None))
     # retranslateUi
