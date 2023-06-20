@@ -131,11 +131,14 @@ class TextgenThread(QThread):
     def run_llama_cpp_server(self):
         import llamacpp_server_generate
         final_text = ''
-        for response in llamacpp_server_generate.generate(self.message, self.cpp_params):
-            if self.stop_flag:
-                break
-            final_text += response
-            self.resultReady.emit(response)
+        try:
+            for response in llamacpp_server_generate.generate(self.message, self.cpp_params):
+                if self.stop_flag:
+                    break
+                final_text += response
+                self.resultReady.emit(response)
+        except Exception as error:
+            print(error)
         self.final_resultReady.emit(final_text)
 
     def run_ts_server(self):
@@ -671,25 +674,25 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Continue button logic
     def continue_textgen(self, text_tab):
-        self.continue_textgen_mode = True
-
-        if self.cppCheck.isChecked():
-            if not self.cppServerCheck.isChecked():
-                run_backend = 'llama.cpp'
-            else:
-                run_backend = 'llama.cpp_server'
-
-        elif self.exllamaCheck.isChecked():
-            run_backend = 'exllama'
-        elif self.tsServerCheck.isChecked():
-            run_backend = 'ts-server'
 
         # Get the history text from the corresponding tab
         history_text = getattr(self, text_tab.replace(
             'Continue', 'TextHistory')).toPlainText()
+        if history_text:
+            self.continue_textgen_mode = True
 
-        # Launch the backend with the history text and the run backend
-        self.launch_backend(history_text, run_backend)
+            if self.cppCheck.isChecked():
+                if not self.cppServerCheck.isChecked():
+                    run_backend = 'llama.cpp'
+                else:
+                    run_backend = 'llama.cpp_server'
+
+            elif self.exllamaCheck.isChecked():
+                run_backend = 'exllama'
+            elif self.tsServerCheck.isChecked():
+                run_backend = 'ts-server'
+            # Launch the backend with the history text and the run backend
+            self.launch_backend(history_text, run_backend)
 
     # Define a helper function to insert text and scroll to the end of a text widget
     def insert_text_and_scroll(self, text_widget, text):

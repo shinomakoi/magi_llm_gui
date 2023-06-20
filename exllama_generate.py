@@ -111,8 +111,9 @@ class ExllamaModel:
         num_res_tokens = in_tokens.shape[-1]
 
         # Check if the context limit is exceeded
-        if num_res_tokens >= 2048:
+        if num_res_tokens >= 1400:
             print('--- Exllama context:', num_res_tokens, 'tokens')
+        if num_res_tokens >= 2048:
             print('Warning: Context limit exceeded')
             yield ''
             return
