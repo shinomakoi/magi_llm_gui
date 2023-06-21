@@ -20,7 +20,10 @@ def create_data(prompt: str, cpp_params: dict, stream: bool = False) -> str:
         "stop": cpp_params["stop"],
         "tfs_z": cpp_params["tfs_z"],
         "stream": stream,
+        "frequency_penalty": cpp_params["frequency_penalty"],
+        "presence_penalty": cpp_params["presence_penalty"],
     }
+
     return json.dumps(data)
 
 

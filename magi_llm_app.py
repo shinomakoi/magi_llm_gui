@@ -31,6 +31,7 @@ EXLLAMA = "exllama"
 LLAMA_CPP = "llama.cpp"
 LLAMA_CPP_SERVER = "llama.cpp_server"
 TS_SERVER = "ts-server"
+RWKV_CPP = "rwkv.cpp"
 
 
 # A class to run text generation in a separate thread.
@@ -65,6 +66,8 @@ class TextgenThread(QThread):
             LLAMA_CPP: self.run_llama_cpp,
             LLAMA_CPP_SERVER: self.run_llama_cpp_server,
             TS_SERVER: self.run_ts_server,
+            RWKV_CPP: self.run_rwkv_cpp,
+
         }
         # Call the appropriate method based on the run_backend attribute
         backend_method = backend_methods.get(self.run_backend)
@@ -105,9 +108,9 @@ class TextgenThread(QThread):
             "mirostat_mode": self.cpp_params["mirostat_mode"],
             "stop": self.cpp_params["stop"],
             "tfs_z": self.cpp_params["tfs_z"],
-
+            "frequency_penalty": self.cpp_params["frequency_penalty"],
+            "presence_penalty": self.cpp_params["presence_penalty"],
         }
-        # print(kwargs)
 
         # Use a generator expression to iterate over the responses
         responses = cpp_model.generate_with_streaming(
@@ -128,10 +131,10 @@ class TextgenThread(QThread):
         final_text = f"{''.join(response_list)}"
         self.final_resultReady.emit(final_text)
 
-
     """Run the llama.cpp server and generate a response.
     Emits signals with the results.
     """
+
     def run_llama_cpp_server(self):
         import llamacpp_server_generate
 
@@ -184,6 +187,25 @@ class TextgenThread(QThread):
         self.resultReady.emit(final_text)
         self.final_resultReady.emit(final_text)
 
+    def run_rwkv_cpp(self):
+
+        rwkv_params = {
+            "max_tokens": self.cpp_params["max_new_tokens"],
+            "temperature": self.cpp_params["temperature"],
+            "top_p": self.cpp_params["top_p"],
+            "repetition_penalty": self.cpp_params["repetition_penalty"],
+            "stop": self.cpp_params["stop"],
+        }
+
+        import rwkvcpp_generate
+        final_text = ""
+        for response in rwkvcpp_generate.generate(self.message, rwkv_cpp_model, rwkv_params):
+            if self.stop_flag:
+                break
+            final_text += response
+            self.resultReady.emit(response)
+        self.final_resultReady.emit(final_text)
+
     def stop(self):
         """Set the stop flag to True."""
         self.stop_flag = True
@@ -224,6 +246,16 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 self.cpp_tfszSlider.value() / 100
             )
         )
+        self.freqPenaltySlider.valueChanged.connect(
+            lambda: self.freqPenaltySpin.setValue(
+                self.freqPenaltySlider.value() / 100
+            )
+        )
+        self.presencePenaltySlider.valueChanged.connect(
+            lambda: self.presencePenaltySpin.setValue(
+                self.presencePenaltySlider.value() / 100
+            )
+        )
 
         # Connect the spin boxes to the settings sliders
         self.temperatureSpin.valueChanged.connect(
@@ -243,8 +275,18 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 self.cpp_tfszSpin.value() * 100
             )
         )
-
+        self.freqPenaltySpin.valueChanged.connect(
+            lambda: self.freqPenaltySlider.setValue(
+                self.freqPenaltySpin.value() * 100
+            )
+        )
+        self.presencePenaltySpin.valueChanged.connect(
+            lambda: self.presencePenaltySlider.setValue(
+                self.presencePenaltySpin.value() * 100
+            )
+        )
         # Define a function to load parameters presets
+
         def load_params():
             param_preset_load = glob.glob("presets/model_params/*.yaml")
             # sort the list of files alphabetically
@@ -291,6 +333,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             mirostat_mode = config["Params-LlamaCPP"]["mirostat_mode"]
             n_gpu_layers = config["Params-LlamaCPP"]["n_gpu_layers"]
             lora_path = config["Params-LlamaCPP"]["lora_path"]
+            frequency_penalty = config["Params-LlamaCPP"]["frequency_penalty"]
+            presence_penalty = config["Params-LlamaCPP"]["presence_penalty"]
 
             use_mmap = config["Params-LlamaCPP"]["use_mmap"]
             use_mlock = config["Params-LlamaCPP"]["use_mlock"]
@@ -356,6 +400,12 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
             self.cppLoraLineEdit.setText(str(lora_path))
             self.cppMirastatMode.setValue(int(mirostat_mode))
+
+            self.freqPenaltySpin.setValue(float(frequency_penalty))
+            self.freqPenaltySlider.setValue(float(frequency_penalty))
+
+            self.presencePenaltySpin.setValue(float(presence_penalty))
+            self.presencePenaltySlider.setValue(float(presence_penalty))
 
             self.cppMmapCheck.setChecked(eval(use_mmap))
             self.cppMlockCheck.setChecked((eval(use_mlock)))
@@ -470,6 +520,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         self.cppModelSelect.clicked.connect(self.cpp_model_select)
         self.exllamaModelSelect.clicked.connect(self.exllama_model_select)
+        self.RWKVcppModelSelect.clicked.connect(self.rwkv_model_select)
 
         self.instructPresetComboBox.textActivated.connect(
             partial(self.chat_preset_refresh, 'instruct'))
@@ -547,6 +598,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Set the widgets based on the values from the settings section
         self.cppModelPath.setText(config["Settings"]["cpp_model_path"])
         self.exllamaModelPath.setText(config["Settings"]["exllama_model_path"])
+        self.rwkvCppModelPath.setText(
+            config["Settings"]["rwkv_cpp_model_path"])
+
         self.botNameLine.setText(config["Settings"]["bot_name"])
         self.yourNameLine.setText(config["Settings"]["user_name"])
 
@@ -557,6 +611,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.exllamaCheck.setChecked(True)
         elif config["Settings"]["backend"] == 'text_synth':
             self.tsServerCheck.setChecked(True)
+        elif config["Settings"]["backend"] == 'rwkv_cpp':
+            self.rwkvCppCheck.setChecked(True)
 
         # Set theme based on the value from the settings section
         if config["Settings"]["theme"] == 'dark':
@@ -594,6 +650,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if exllama_model:
             self.exllamaModelPath.setText(exllama_model)
 
+    def rwkv_model_select(self):
+        rwkv_model = self.get_file_path('Open file', "GGML models (*bin)")
+        if rwkv_model:
+            self.rwkvCppModelPath.setText(rwkv_model)
+
     # Save the current settings to an INI file
     def save_settings(self):
         # Create a ConfigParser object
@@ -605,6 +666,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         config.set("Settings", "cpp_model_path", self.cppModelPath.text())
         config.set("Settings", "exllama_model_path",
                    self.exllamaModelPath.text())
+        config.set("Settings", "rwkv_cpp_model_path",
+                   self.rwkvCppModelPath.text())
+
         config.set("Settings", "user_name", self.yourNameLine.text())
         config.set("Settings", "bot_name", self.botNameLine.text())
         config.set("Params-TextSynth", "ts_model",
@@ -617,6 +681,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             config.set("Settings", "backend", "exllama")
         elif self.tsServerCheck.isChecked():
             config.set("Settings", "backend", "text_synth")
+        elif self.rwkvCppCheck.isChecked():
+            config.set("Settings", "backend", "rwkv_cpp")
 
         # Save theme based on the checked radio button
         if self.themeDarkCheck.isChecked():
@@ -705,6 +771,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 run_backend = 'exllama'
             elif self.tsServerCheck.isChecked():
                 run_backend = 'ts-server'
+            elif self.rwkvCppCheck.isChecked():
+                run_backend = 'rwkv.cpp'
             # Launch the backend with the history text and the run backend
             self.launch_backend(history_text, run_backend)
 
@@ -799,7 +867,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'mirostat_mode': int(self.settings_win.cppMirastatMode.value()),
             'stop': list(stop_strings),
             'tfs_z': float(self.settings_win.cpp_tfszSpin.value()),
-
+            'frequency_penalty': float(self.settings_win.freqPenaltySpin.value()),
+            'presence_penalty': float(self.settings_win.presencePenaltySpin.value()),
         }
         # print('--- cpp_params:', cpp_params)
         return cpp_params
@@ -851,6 +920,19 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Get the model path from a line edit widget
         model_path = line_edit.text().strip()
         return model_path
+
+    def get_rwkv_cpp_model_params(self):
+        # Get the Exllama model parameters from the settings window
+        rwkv_cpp_model_params = {
+            'model_path': self.get_model_path(self.rwkvCppModelPath),
+            'n_threads': self.settings_win.cppThreads.value(),
+            'n_gpu_layers': self.settings_win.gpuLayersSpin.value(),
+        }
+
+        # if self.settings_win.gpuAccelCheck.isChecked():
+        #     rwkv_cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value()
+
+        return rwkv_cpp_model_params
 
     def get_exllama_model_params(self):
         # Get the Exllama model parameters from the settings window
@@ -905,6 +987,13 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                                                       self.get_cpp_model_params())
             print('--- llama.cpp model load parameters:',
                   self.get_cpp_model_params())
+
+        elif model_name == 'rwkv.cpp':
+            import rwkvcpp_generate
+            global rwkv_cpp_model
+            rwkv_cpp_model = rwkvcpp_generate.load_model(
+                self.get_rwkv_cpp_model_params())
+            print('--- rwkv.cpp model load parameters:')
 
     # Enable the stop buttons for each mode
 
@@ -968,13 +1057,24 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # TS Server
                 pass
 
-            # Set the model_load flag to True
+            elif self.rwkvCppCheck.isChecked():
+                try:
+                    self.load_model('rwkv.cpp')
+                except Exception as error:
+                    print('--- Error: Could not load rwkv.cpp model')
+                    print(error)
+                    self.statusbar.showMessage(
+                        'Status: Error! Could not load rwkv.cpp model')
+                    return
+                else:
+                    self.model_load = True
 
             # Disable the cpp and exllama checkboxes
             self.cppCheck.setEnabled(False)
             self.exllamaCheck.setEnabled(False)
             self.tsServerCheck.setEnabled(False)
             self.cppServerCheck.setEnabled(False)
+            self.rwkvCppCheck.setEnabled(False)
 
         if not self.cppCheck.isEnabled():
             if self.cppCheck.isChecked():
@@ -986,6 +1086,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 backend = 'exllama'
             elif self.tsServerCheck.isChecked():
                 backend = 'ts-server'
+            elif self.rwkvCppCheck.isChecked():
+                backend = 'rwkv.cpp'
 
         # If the pre-textgen mode is default mode
         if self.textgen_mode == 'default_mode':
