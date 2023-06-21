@@ -41,6 +41,16 @@ git clone https://github.com/turboderp/exllama
 
 To use the TextSynth backend, download a model and set up according to the documentation at https://bellard.org/ts_server/. Then run the server with ```./ts_server ts_server.cfg``` and enter the 'model' (e.g, "pythia_deduped_1.4B") in the 'TextSynth' tab under File > Parameters. Then you can generate text like with the other backends.
 
+**rwkv.cpp**
+
+To install, in the magi_llm_gui folder do: 
+
+```git clone https://github.com/saharNooby/rwkv.cpp```
+
+Rename created 'rwkv.cpp' folder to 'rwkvcpp'
+
+Download https://github.com/saharNooby/rwkv.cpp/releases/tag/master-6b26e0d, extract and put the librwkv.so/librwkv.dll file in the 'rwkvcpp' folder. You can optionally compile it with CUBLAS support, see: https://github.com/saharNooby/rwkv.cpp
+
 **Usage:**
 
 To launch the Magi LLM GUI, use: 
