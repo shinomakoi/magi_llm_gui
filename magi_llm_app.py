@@ -1248,6 +1248,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.message_history.pop()
             # Set the chat mode text history widget to show the second last chat output
             self.chat_modeTextHistory.setHtml(self.chat_output_list[-2])
+            self.chat_modeTextHistory.verticalScrollBar().setValue(
+            self.chat_modeTextHistory.verticalScrollBar().maximum())
             # Pop the last chat output from the list
             self.chat_output_list.pop()
         # If there are no items in the name history list

@@ -25,7 +25,7 @@ class LlamaCppModel:
             print('--- llama.cpp context:', token_count, 'tokens')
 
         if token_count >= 2048:
-            print('Warning: Context limit reached. Trimming')
+            print('Context limit reached. Trimming')
 
             amount_to_trim = (token_count - 2048) + max_tokens
             trimmed = self.model.tokenize(encoded_string)[amount_to_trim:]
