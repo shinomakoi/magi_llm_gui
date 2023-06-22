@@ -16,7 +16,6 @@ from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 from qt_material import apply_stylesheet
 
-from llama_tokenize import Tokenizer
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
@@ -1140,12 +1139,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chat_input_history_add(input_message)
                 self.chat_modeTextInput.clear()
 
-    def get_token_count(self, message):
-        llama_tokenizer = Tokenizer("assets/tokenizer.model")
-        encoded_string = llama_tokenizer.encode(message, True, True)
-        token_count = len(encoded_string)
-        return token_count
-
     # Launch QThread to textgen
     def launch_backend(self, message, run_backend):
 
@@ -1153,15 +1146,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         exllama_params = self.get_exllama_params()
         cpp_params = self.get_llama_cpp_params()
 
-        try:
-            token_count = self.get_token_count(message)
-            # Show a status message indicating that the generation is in progress
-            self.statusbar.showMessage(
-                f"Status: Generating... (Context: {token_count} tokens)")
-        except Exception as error:
-            print('--- Error. Could not load tokenizer:',error)
-            self.statusbar.showMessage(
-                f"Status: Generating...")
+        self.statusbar.showMessage("Status: Generating...")
 
         # Create a textgenThread object with the exllama and cpp parameters, the message, the stream enabled status, and the backend name
         self.textgenThread = TextgenThread(
