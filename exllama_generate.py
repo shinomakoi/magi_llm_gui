@@ -80,8 +80,6 @@ class ExllamaModel:
 
         token_count = in_tokens.shape[-1]
 
-        if token_count >= 1024:
-            print('--- Exllama context:', token_count, 'tokens')
         if token_count >= 2048:
             print('Context limit reached. Trimming')
 

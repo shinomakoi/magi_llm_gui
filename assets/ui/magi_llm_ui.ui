@@ -39,24 +39,34 @@
         <string>Chat</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="8" column="0">
-         <widget class="QPushButton" name="chatGenerateButton">
+        <item row="4" column="0" colspan="2">
+         <widget class="QComboBox" name="chatInputSessionCombo">
+          <property name="maxCount">
+           <number>128</number>
+          </property>
+          <property name="placeholderText">
+           <string>User input history</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="2">
+         <widget class="QPlainTextEdit" name="chat_modeTextInput">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>128</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
-            <underline>false</underline>
            </font>
           </property>
-          <property name="toolTip">
-           <string>Send. Control+Enter shortcut</string>
+          <property name="plainText">
+           <string/>
           </property>
-          <property name="text">
-           <string>Generate</string>
-          </property>
-          <property name="shortcut">
-           <string>Ctrl+Return</string>
+          <property name="placeholderText">
+           <string>Type something here</string>
           </property>
          </widget>
         </item>
@@ -125,34 +135,24 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0" colspan="2">
-         <widget class="QPlainTextEdit" name="chat_modeTextInput">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>128</height>
-           </size>
-          </property>
+        <item row="8" column="0">
+         <widget class="QPushButton" name="chatGenerateButton">
           <property name="font">
            <font>
             <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+            <underline>false</underline>
            </font>
           </property>
-          <property name="plainText">
-           <string/>
+          <property name="toolTip">
+           <string>Send. Control+Enter shortcut</string>
           </property>
-          <property name="placeholderText">
-           <string>Type something here</string>
+          <property name="text">
+           <string>Generate</string>
           </property>
-         </widget>
-        </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="QComboBox" name="chatInputSessionCombo">
-          <property name="maxCount">
-           <number>128</number>
-          </property>
-          <property name="placeholderText">
-           <string>User input history</string>
+          <property name="shortcut">
+           <string>Ctrl+Return</string>
           </property>
          </widget>
         </item>

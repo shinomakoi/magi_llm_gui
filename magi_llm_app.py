@@ -16,6 +16,7 @@ from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 from qt_material import apply_stylesheet
 
+from llama_tokenize import Tokenizer
 from settings_window import Ui_Settings_Dialog
 from ui_magi_llm_ui import Ui_magi_llm_window
 
@@ -67,12 +68,18 @@ class TextgenThread(QThread):
             LLAMA_CPP_SERVER: self.run_llama_cpp_server,
             TS_SERVER: self.run_ts_server,
             RWKV_CPP: self.run_rwkv_cpp,
-
         }
+
         # Call the appropriate method based on the run_backend attribute
         backend_method = backend_methods.get(self.run_backend)
         if backend_method:
-            backend_method()
+            try:
+                backend_method()
+            except Exception as error:
+                self.final_resultReady.emit('')
+                print('--- Error running backend:\n', error)
+                return
+
         else:
             raise ValueError(f"Invalid run_backend: {self.run_backend}")
 
@@ -1120,6 +1127,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 final_prompt = self.prompt_generation()
 
                 # Get formatted chat text
+                input_message = input_message.strip().replace("\n", "<br>")
                 chat_text = self.chat_formatting(input_message)
 
                 # Append the text to the chat mode text history widget
@@ -1132,6 +1140,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.chat_input_history_add(input_message)
                 self.chat_modeTextInput.clear()
 
+    def get_token_count(self, message):
+        llama_tokenizer = Tokenizer("assets/tokenizer.model")
+        encoded_string = llama_tokenizer.encode(message, True, True)
+        token_count = len(encoded_string)
+        return token_count
+
     # Launch QThread to textgen
     def launch_backend(self, message, run_backend):
 
@@ -1139,8 +1153,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         exllama_params = self.get_exllama_params()
         cpp_params = self.get_llama_cpp_params()
 
+        token_count = self.get_token_count(message)
+
         # Show a status message indicating that the generation is in progress
-        self.statusbar.showMessage(f"Status: Generating...")
+        self.statusbar.showMessage(
+            f"Status: Generating... (Context: {token_count} tokens)")
 
         # Create a textgenThread object with the exllama and cpp parameters, the message, the stream enabled status, and the backend name
         self.textgenThread = TextgenThread(
@@ -1205,7 +1222,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             # Replace the user message placeholder with the input text from the chat mode text input widget
         user_msg = template_user_msg.replace(
-            "<|user-message|>", self.chat_modeTextInput.toPlainText().strip())
+            "<|user-message|>", self.chat_modeTextInput.toPlainText())
 
         # Return a tuple of user, user message, bot, bot message and pre prompt
         return user, user_msg, bot, template_bot_msg, pre_prompt
@@ -1234,6 +1251,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
+        # print('='+final_prompt+'=')
         return final_prompt
 
     def chat_rewind(self):
@@ -1249,7 +1267,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             # Set the chat mode text history widget to show the second last chat output
             self.chat_modeTextHistory.setHtml(self.chat_output_list[-2])
             self.chat_modeTextHistory.verticalScrollBar().setValue(
-            self.chat_modeTextHistory.verticalScrollBar().maximum())
+                self.chat_modeTextHistory.verticalScrollBar().maximum())
             # Pop the last chat output from the list
             self.chat_output_list.pop()
         # If there are no items in the name history list

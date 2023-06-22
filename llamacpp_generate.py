@@ -21,9 +21,6 @@ class LlamaCppModel:
         encoded_string = context.encode()
         token_count = len(self.model.tokenize(encoded_string))
 
-        if token_count >= 1024:
-            print('--- llama.cpp context:', token_count, 'tokens')
-
         if token_count >= 2048:
             print('Context limit reached. Trimming')
 
