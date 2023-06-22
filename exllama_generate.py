@@ -1,4 +1,3 @@
-
 import sys
 from pathlib import Path
 
@@ -6,9 +5,9 @@ import torch
 
 sys.path.insert(0, str(Path("exllama")))
 
-from exllama.generator import ExLlamaGenerator
-from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
+from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
+from exllama.generator import ExLlamaGenerator
 
 # Simple interactive chatbot script
 MODEL_EXTENSIONS = [".safetensors", ".pt", ".bin"]
@@ -76,6 +75,26 @@ class ExllamaModel:
 
         return result
 
+    # Check if exceeded context limit and if so prune it from the start
+    def check_token_count(self, in_tokens, max_response_tokens):
+
+        token_count = in_tokens.shape[-1]
+
+        if token_count >= 1024:
+            print('--- Exllama context:', token_count, 'tokens')
+        if token_count >= 2048:
+            print('Warning: Context limit reached. Trimming')
+
+            amount_to_trim = (token_count - 2048) + max_response_tokens
+            # print('trimming amount', amount_to_trim)
+            in_tokens = torch.cat(
+                (in_tokens[:, :0], in_tokens[:, amount_to_trim:]), axis=1)
+            amount_to_trim = 0
+            trimmed = True
+        else:
+            trimmed = False
+        return in_tokens, trimmed
+
     def generate_with_streaming(self, context, params):
         # Disable gradient computation and initialize CUDA device
         torch.set_grad_enabled(False)
@@ -107,26 +126,26 @@ class ExllamaModel:
         # Encode the context into tokens
         in_tokens = generator.tokenizer.encode(context)
 
+        # Trim if needed and check if trimmed
+        in_tokens, trimmed = self.check_token_count(
+            in_tokens, max_response_tokens)
+        if trimmed:
+            # print('trimmed')
+            # print('new size:', in_tokens.shape[-1])
+            context = generator.tokenizer.decode(in_tokens)
+
         # Get the number of tokens in the context
         num_res_tokens = in_tokens.shape[-1]
-
-        # Check if the context limit is exceeded
-        if num_res_tokens >= 1400:
-            print('--- Exllama context:', num_res_tokens, 'tokens')
-        if num_res_tokens >= 2048:
-            print('Warning: Context limit exceeded')
-            yield ''
-            return
 
         # Feed the tokens to the generator
         generator.gen_feed_tokens(in_tokens)
 
         # Start the beam search
         generator.begin_beam_search()
-        
+
         # Initialize an empty response line
         res_line = ''
-        
+
         # Loop for up to max response tokens
         for i in range(max_response_tokens):
 
@@ -147,7 +166,7 @@ class ExllamaModel:
 
             # Increment the number of response tokens
             num_res_tokens += 1
-            
+
             # Decode the current sequence and get the new text added
             text = generator.tokenizer.decode(
                 generator.sequence_actual[:, -num_res_tokens:][0])

@@ -74,9 +74,9 @@ class Ui_Settings_Dialog(object):
         self.max_new_tokensSlider = QSlider(self.groupBox_2)
         self.max_new_tokensSlider.setObjectName(u"max_new_tokensSlider")
         self.max_new_tokensSlider.setMinimum(32)
-        self.max_new_tokensSlider.setMaximum(2048)
+        self.max_new_tokensSlider.setMaximum(1024)
         self.max_new_tokensSlider.setPageStep(32)
-        self.max_new_tokensSlider.setValue(512)
+        self.max_new_tokensSlider.setValue(256)
         self.max_new_tokensSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.max_new_tokensSlider, 7, 1, 1, 1)
@@ -144,9 +144,9 @@ class Ui_Settings_Dialog(object):
         self.max_new_tokensSpin = QSpinBox(self.groupBox_2)
         self.max_new_tokensSpin.setObjectName(u"max_new_tokensSpin")
         self.max_new_tokensSpin.setMinimum(32)
-        self.max_new_tokensSpin.setMaximum(2048)
+        self.max_new_tokensSpin.setMaximum(1024)
         self.max_new_tokensSpin.setSingleStep(32)
-        self.max_new_tokensSpin.setValue(512)
+        self.max_new_tokensSpin.setValue(256)
 
         self.gridLayout_2.addWidget(self.max_new_tokensSpin, 7, 3, 1, 1)
 
@@ -326,29 +326,24 @@ class Ui_Settings_Dialog(object):
         self.label_18 = QLabel(self.groupBox_5)
         self.label_18.setObjectName(u"label_18")
 
-        self.gridLayout_4.addWidget(self.label_18, 8, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.label_18, 10, 0, 1, 1)
 
         self.cppCacheCheck = QCheckBox(self.groupBox_5)
         self.cppCacheCheck.setObjectName(u"cppCacheCheck")
         self.cppCacheCheck.setChecked(True)
 
-        self.gridLayout_4.addWidget(self.cppCacheCheck, 14, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.cppCacheCheck, 16, 0, 1, 1)
 
         self.label_16 = QLabel(self.groupBox_5)
         self.label_16.setObjectName(u"label_16")
 
         self.gridLayout_4.addWidget(self.label_16, 0, 0, 1, 1)
 
-        self.label_31 = QLabel(self.groupBox_5)
-        self.label_31.setObjectName(u"label_31")
-
-        self.gridLayout_4.addWidget(self.label_31, 4, 0, 1, 1)
-
         self.cppMmapCheck = QCheckBox(self.groupBox_5)
         self.cppMmapCheck.setObjectName(u"cppMmapCheck")
         self.cppMmapCheck.setChecked(True)
 
-        self.gridLayout_4.addWidget(self.cppMmapCheck, 11, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.cppMmapCheck, 13, 0, 1, 1)
 
         self.label_6 = QLabel(self.groupBox_5)
         self.label_6.setObjectName(u"label_6")
@@ -360,36 +355,43 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_4.addWidget(self.label_14, 3, 0, 1, 1)
 
-        self.cppLoraLineEdit = QLineEdit(self.groupBox_5)
-        self.cppLoraLineEdit.setObjectName(u"cppLoraLineEdit")
-
-        self.gridLayout_4.addWidget(self.cppLoraLineEdit, 8, 1, 1, 1)
-
-        self.cppMlockCheck = QCheckBox(self.groupBox_5)
-        self.cppMlockCheck.setObjectName(u"cppMlockCheck")
-
-        self.gridLayout_4.addWidget(self.cppMlockCheck, 11, 1, 1, 1)
-
         self.cpp_tfszSpin = QDoubleSpinBox(self.groupBox_5)
         self.cpp_tfszSpin.setObjectName(u"cpp_tfszSpin")
         self.cpp_tfszSpin.setMinimum(1.000000000000000)
         self.cpp_tfszSpin.setMaximum(5.000000000000000)
         self.cpp_tfszSpin.setSingleStep(0.010000000000000)
 
-        self.gridLayout_4.addWidget(self.cpp_tfszSpin, 4, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.cpp_tfszSpin, 9, 2, 1, 1)
+
+        self.cppLoraLineEdit = QLineEdit(self.groupBox_5)
+        self.cppLoraLineEdit.setObjectName(u"cppLoraLineEdit")
+
+        self.gridLayout_4.addWidget(self.cppLoraLineEdit, 10, 1, 1, 1)
+
+        self.cppMlockCheck = QCheckBox(self.groupBox_5)
+        self.cppMlockCheck.setObjectName(u"cppMlockCheck")
+
+        self.gridLayout_4.addWidget(self.cppMlockCheck, 13, 1, 1, 1)
 
         self.line = QFrame(self.groupBox_5)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_4.addWidget(self.line, 9, 0, 1, 3)
+        self.gridLayout_4.addWidget(self.line, 11, 0, 1, 3)
+
+        self.presencePenaltySpin = QDoubleSpinBox(self.groupBox_5)
+        self.presencePenaltySpin.setObjectName(u"presencePenaltySpin")
+        self.presencePenaltySpin.setMaximum(1.000000000000000)
+        self.presencePenaltySpin.setSingleStep(0.010000000000000)
+
+        self.gridLayout_4.addWidget(self.presencePenaltySpin, 7, 2, 1, 1)
 
         self.gpuAccelCheck = QCheckBox(self.groupBox_5)
         self.gpuAccelCheck.setObjectName(u"gpuAccelCheck")
         self.gpuAccelCheck.setChecked(True)
 
-        self.gridLayout_4.addWidget(self.gpuAccelCheck, 10, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.gpuAccelCheck, 12, 0, 1, 1)
 
         self.cpp_tfszSlider = QSlider(self.groupBox_5)
         self.cpp_tfszSlider.setObjectName(u"cpp_tfszSlider")
@@ -403,7 +405,7 @@ class Ui_Settings_Dialog(object):
         self.cppVerboseCheck = QCheckBox(self.groupBox_5)
         self.cppVerboseCheck.setObjectName(u"cppVerboseCheck")
 
-        self.gridLayout_4.addWidget(self.cppVerboseCheck, 14, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.cppVerboseCheck, 16, 1, 1, 1)
 
         self.gpuLayersSlider = QSlider(self.groupBox_5)
         self.gpuLayersSlider.setObjectName(u"gpuLayersSlider")
@@ -413,6 +415,11 @@ class Ui_Settings_Dialog(object):
         self.gpuLayersSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_4.addWidget(self.gpuLayersSlider, 5, 1, 1, 1)
+
+        self.label_7 = QLabel(self.groupBox_5)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout_4.addWidget(self.label_7, 7, 0, 1, 1)
 
         self.cppMirastatMode = QSpinBox(self.groupBox_5)
         self.cppMirastatMode.setObjectName(u"cppMirastatMode")
@@ -436,6 +443,13 @@ class Ui_Settings_Dialog(object):
         self.gpuLayersSpin.setValue(18)
 
         self.gridLayout_4.addWidget(self.gpuLayersSpin, 5, 2, 1, 1)
+
+        self.presencePenaltySlider = QSlider(self.groupBox_5)
+        self.presencePenaltySlider.setObjectName(u"presencePenaltySlider")
+        self.presencePenaltySlider.setMaximum(100)
+        self.presencePenaltySlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_4.addWidget(self.presencePenaltySlider, 7, 1, 1, 1)
 
         self.cppBatchSizeSlider = QSlider(self.groupBox_5)
         self.cppBatchSizeSlider.setObjectName(u"cppBatchSizeSlider")
@@ -488,24 +502,10 @@ class Ui_Settings_Dialog(object):
 
         self.gridLayout_4.addWidget(self.freqPenaltySlider, 6, 1, 1, 1)
 
-        self.label_7 = QLabel(self.groupBox_5)
-        self.label_7.setObjectName(u"label_7")
+        self.label_31 = QLabel(self.groupBox_5)
+        self.label_31.setObjectName(u"label_31")
 
-        self.gridLayout_4.addWidget(self.label_7, 7, 0, 1, 1)
-
-        self.presencePenaltySlider = QSlider(self.groupBox_5)
-        self.presencePenaltySlider.setObjectName(u"presencePenaltySlider")
-        self.presencePenaltySlider.setMaximum(100)
-        self.presencePenaltySlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout_4.addWidget(self.presencePenaltySlider, 7, 1, 1, 1)
-
-        self.presencePenaltySpin = QDoubleSpinBox(self.groupBox_5)
-        self.presencePenaltySpin.setObjectName(u"presencePenaltySpin")
-        self.presencePenaltySpin.setMaximum(1.000000000000000)
-        self.presencePenaltySpin.setSingleStep(0.010000000000000)
-
-        self.gridLayout_4.addWidget(self.presencePenaltySpin, 7, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.label_31, 9, 0, 1, 1)
 
 
         self.verticalLayout_4.addWidget(self.groupBox_5)
@@ -653,7 +653,6 @@ class Ui_Settings_Dialog(object):
         self.label_18.setText(QCoreApplication.translate("Settings_Dialog", u"LoRA path:", None))
         self.cppCacheCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Use cache", None))
         self.label_16.setText(QCoreApplication.translate("Settings_Dialog", u"Threads:", None))
-        self.label_31.setText(QCoreApplication.translate("Settings_Dialog", u"Tail Free Sampling:", None))
 #if QT_CONFIG(tooltip)
         self.cppMmapCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Use mmap if possible", None))
 #endif // QT_CONFIG(tooltip)
@@ -661,12 +660,12 @@ class Ui_Settings_Dialog(object):
         self.label_6.setText(QCoreApplication.translate("Settings_Dialog", u"Batch size:", None))
         self.label_14.setText(QCoreApplication.translate("Settings_Dialog", u"Mirostat mode:", None))
 #if QT_CONFIG(tooltip)
+        self.cpp_tfszSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
         self.cppMlockCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Force the system to keep the model in RAM", None))
 #endif // QT_CONFIG(tooltip)
         self.cppMlockCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Use MLOCK", None))
-#if QT_CONFIG(tooltip)
-        self.cpp_tfszSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS", None))
-#endif // QT_CONFIG(tooltip)
         self.gpuAccelCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Use GPU acceleration", None))
 #if QT_CONFIG(tooltip)
         self.cpp_tfszSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Higher value of  will further suppress less likely tokens from the tail of the distribution, while a value of 1.0 disables the effect of TFS", None))
@@ -675,6 +674,7 @@ class Ui_Settings_Dialog(object):
 #if QT_CONFIG(tooltip)
         self.gpuLayersSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Number of GPU layers to use", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_7.setText(QCoreApplication.translate("Settings_Dialog", u"Presence penalty:", None))
 #if QT_CONFIG(tooltip)
         self.cppMirastatMode.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Mirostat algorithim mode", None))
 #endif // QT_CONFIG(tooltip)
@@ -694,7 +694,7 @@ class Ui_Settings_Dialog(object):
         self.CPP_ctxsize_Spin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
 #endif // QT_CONFIG(tooltip)
         self.CPP_ctxsize_Spin.setSuffix("")
-        self.label_7.setText(QCoreApplication.translate("Settings_Dialog", u"Presence penalty:", None))
+        self.label_31.setText(QCoreApplication.translate("Settings_Dialog", u"Tail Free Sampling:", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
         self.label_3.setText(QCoreApplication.translate("Settings_Dialog", u"Model:", None))
         self.tsModelLine.setPlaceholderText(QCoreApplication.translate("Settings_Dialog", u"pythia_deduped_1.4B", None))
