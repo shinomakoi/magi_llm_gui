@@ -83,17 +83,15 @@ class ExllamaModel:
         if token_count >= 1024:
             print('--- Exllama context:', token_count, 'tokens')
         if token_count >= 2048:
-            print('Warning: Context limit reached. Trimming')
+            print('Context limit reached. Trimming')
 
             amount_to_trim = (token_count - 2048) + max_response_tokens
             # print('trimming amount', amount_to_trim)
             in_tokens = torch.cat(
                 (in_tokens[:, :0], in_tokens[:, amount_to_trim:]), axis=1)
             amount_to_trim = 0
-            trimmed = True
-        else:
-            trimmed = False
-        return in_tokens, trimmed
+        return in_tokens
+        
 
     def generate_with_streaming(self, context, params):
         # Disable gradient computation and initialize CUDA device
@@ -127,15 +125,17 @@ class ExllamaModel:
         in_tokens = generator.tokenizer.encode(context)
 
         # Trim if needed and check if trimmed
-        in_tokens, trimmed = self.check_token_count(
+        in_tokens = self.check_token_count(
             in_tokens, max_response_tokens)
-        if trimmed:
-            # print('trimmed')
-            # print('new size:', in_tokens.shape[-1])
-            context = generator.tokenizer.decode(in_tokens)
+        
+        context = generator.tokenizer.decode(in_tokens)
+        context=context[0]
 
         # Get the number of tokens in the context
         num_res_tokens = in_tokens.shape[-1]
+
+        if max_response_tokens + num_res_tokens >= 2048:
+            max_response_tokens = 2048 - num_res_tokens
 
         # Feed the tokens to the generator
         generator.gen_feed_tokens(in_tokens)
