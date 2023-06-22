@@ -16,7 +16,7 @@ Optionally create a virtual environment (recommended)
 ```
 python -m venv .magi_venv
 source ./.magi_venv/bin/activate ### For Linux
-./.magi-venv/Scripts/activate ### For Windows
+.\.magi_venv\Scripts\activate ## For Windows
 ```
 ```
 pip install -r requirements.txt
@@ -31,7 +31,7 @@ Can also use the llama.cpp server API if it's launched. See: https://github.com/
 
 **Exllama**
 
-To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Also requires CUDA Toolkit installed (installed with Linux package manager or downloaded from NVIDIA for Windows). Tested working on Linux. For Windows, good luck.
+To install Exllama, follow the install instructions at https://github.com/turboderp/exllama inside the magi_llm_gui folder. Also requires CUDA Toolkit installed (installed with Linux package manager or downloaded from NVIDIA for Windows). Tested working on Linux.
 ```
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu118
 pip install safetensors sentencepiece ninja
@@ -58,9 +58,7 @@ To launch the Magi LLM GUI, use:
 python magi_llm_app.py
 ```
 You can set the generation parameters in File > Parameters
-
-![image](https://github.com/shinomakoi/magi_llm_gui/assets/112139428/1e275b42-f780-402d-ba43-74464fb91b40)
-
+![image](https://github.com/shinomakoi/magi_llm_gui/assets/112139428/9d41420f-728a-41a4-b0c4-a47916ba6e3c)
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
 
 Uses https://github.com/UN-GCPDS/qt-material for themes
