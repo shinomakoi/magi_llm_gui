@@ -1153,11 +1153,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         exllama_params = self.get_exllama_params()
         cpp_params = self.get_llama_cpp_params()
 
-        token_count = self.get_token_count(message)
-
-        # Show a status message indicating that the generation is in progress
-        self.statusbar.showMessage(
-            f"Status: Generating... (Context: {token_count} tokens)")
+        try:
+            token_count = self.get_token_count(message)
+            # Show a status message indicating that the generation is in progress
+            self.statusbar.showMessage(
+                f"Status: Generating... (Context: {token_count} tokens)")
+        except Exception as error:
+            print('--- Error. Could not load tokenizer:',error)
+            self.statusbar.showMessage(
+                f"Status: Generating...")
 
         # Create a textgenThread object with the exllama and cpp parameters, the message, the stream enabled status, and the backend name
         self.textgenThread = TextgenThread(
