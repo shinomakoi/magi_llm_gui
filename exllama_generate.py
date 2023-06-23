@@ -112,6 +112,7 @@ class ExllamaModel:
         generator.settings.token_repetition_penalty_max = params["repetition_penalty"]
         generator.settings.beams = params["num_beams"]
         generator.settings.min_p = params["min_p"]
+        generator.settings.typical = params["typical_p"]
         generator.settings.token_repetition_penalty_sustain = params[
             "token_repetition_penalty_sustain"
         ]

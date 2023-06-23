@@ -223,12 +223,12 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
         self.setupUi(self)
 
-        print('--- Launched app')
-
         # Set the window icon
         icon = QIcon()
         icon.addFile(str(APP_ICON), QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
+
+        print('--- Launched app')
 
         # Initialize flags for whether the models are loaded or not
         self.cpp_model_loaded = False
@@ -262,6 +262,11 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 self.presencePenaltySlider.value() / 100
             )
         )
+        self.typical_pSlider.valueChanged.connect(
+            lambda: self.typical_pSpin.setValue(
+                self.typical_pSlider.value() / 100
+            )
+        )
 
         # Connect the spin boxes to the settings sliders
         self.temperatureSpin.valueChanged.connect(
@@ -291,6 +296,11 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
                 self.presencePenaltySpin.value() * 100
             )
         )
+        self.typical_pSpin.valueChanged.connect(
+            lambda: self.typical_pSlider.setValue(
+                self.typical_pSpin.value() * 100
+            )
+        )
         # Define a function to load parameters presets
 
         def load_params():
@@ -315,25 +325,25 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
             ### Define params ###
             # Params-Shared
+            context_size = config["Params-Shared"]["context_size"]
             temperature = config["Params-Shared"]["temperature"]
             top_k = config["Params-Shared"]["top_k"]
             top_p = config["Params-Shared"]["top_p"]
             max_new_tokens = config["Params-Shared"]["max_new_tokens"]
             repetition_penalty = config["Params-Shared"]["repetition_penalty"]
             seed = config["Params-Shared"]["seed"]
+            typical_p = config["Params-Shared"]["typical_p"]
 
             # Params-Exllama
             min_p = config["Params-Exllama"]["min_p"]
             token_repetition_penalty_decay = config["Params-Exllama"]["token_repetition_penalty_decay"]
             num_beams = config["Params-Exllama"]["num_beams"]
             beam_length = config["Params-Exllama"]["beam_length"]
-
             gpu_split = config["Params-Exllama"]["gpu_split"]
             gpu_split_values = config["Params-Exllama"]["gpu_split_values"]
 
             # Params-LlamaCPP
             threads = config["Params-LlamaCPP"]["threads"]
-            context_size = config["Params-LlamaCPP"]["context_size"]
             tfs_z = config["Params-LlamaCPP"]["tfs_z"]
             batch_size = config["Params-LlamaCPP"]["batch_size"]
             mirostat_mode = config["Params-LlamaCPP"]["mirostat_mode"]
@@ -353,6 +363,9 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
             ### Set params ###
             # Params-Shared
+            self.ctxsizeSpin.setValue(int(context_size))
+            self.ctxsizeSlider.setValue(int(context_size))
+
             self.temperatureSpin.setValue(float(temperature))
             self.temperatureSlider.setValue(int(float(temperature)*100))
 
@@ -368,6 +381,10 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.repetition_penaltySpin.setValue(float(repetition_penalty))
             self.repetition_penaltySlider.setValue(
                 int(float(repetition_penalty)*100))
+
+            self.typical_pSpin.setValue(float(typical_p))
+            self.typical_pSlider.setValue(
+                int(float(typical_p)*100))
 
             self.seedSpin.setValue(int(seed))
 
@@ -391,9 +408,6 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
             # Params-LlamaCPP
             self.cppThreads.setValue(int(threads))
-
-            self.CPP_ctxsize_Spin.setValue(int(context_size))
-            self.CPP_ctxsize_Slider.setValue(int(context_size))
 
             self.cpp_tfszSpin.setValue(float(tfs_z))
             self.cpp_tfszSlider.setValue(int(float(tfs_z)*100))
@@ -452,6 +466,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.repetition_penaltySlider.setValue(
                 int(param_preset_name["repetition_penalty"] * 100)
             )
+            self.typical_pSlider.setValue(
+                float(param_preset_name["typical_p"]))
 
             # Print a message indicating which preset was applied
             print("--- Applied parameter preset:", Path(preset_file).stem)
@@ -890,6 +906,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'top_p': self.settings_win.top_pSpin.value(),
             'repetition_penalty': self.settings_win.repetition_penaltySpin.value(),
             'top_k': self.settings_win.top_kSpin.value(),
+            'typical_p': self.settings_win.typical_pSpin.value(),
             'num_beams': self.settings_win.numbeamsSpin.value(),
             'beam_length': self.settings_win.beamLengthSpin.value(),
             'min_p': self.settings_win.minPSpin.value(),
@@ -958,7 +975,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'seed': self.settings_win.seedSpin.value(),
             'n_threads': self.settings_win.cppThreads.value(),
             'n_batch': self.settings_win.cppBatchSizeSpin.value(),
-            'n_ctx': self.settings_win.CPP_ctxsize_Spin.value(),
+            'n_ctx': self.settings_win.ctxsizeSpin.value(),
             'use_mmap': self.settings_win.cppMmapCheck.isChecked(),
             'use_mlock': self.settings_win.cppMlockCheck.isChecked(),
             'verbose': self.settings_win.cppVerboseCheck.isChecked(),
