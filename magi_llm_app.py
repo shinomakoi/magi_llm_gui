@@ -920,13 +920,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     def get_stop_strings(self):
         stop_strings = []
-
-        if self.instructRadioButton.isChecked():
-            chat_preset = self.get_chat_presets()
-            stop_strings.append(chat_preset["user"])
-
-        elif self.charactersRadioButton.isChecked():
-            stop_strings.append(self.yourNameLine.text()+':')
+        if self.textgen_mode == 'chat_mode' and self.sendStopStringCheck.isChecked():
+            if self.instructRadioButton.isChecked():
+                chat_preset = self.get_chat_presets()
+                stop_strings.append(chat_preset["user"])
+            elif self.charactersRadioButton.isChecked():
+                stop_strings.append(self.yourNameLine.text()+':')
 
         # print('stopstrings', stop_strings)
         return stop_strings
@@ -953,7 +952,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Get the Exllama parameters
     def get_exllama_params(self):
 
-        stop_strings = self.get_stop_strings()
+        stop_string = self.get_stop_strings()
 
         exllama_params = {
             'max_new_tokens': self.settings_win.max_new_tokensSpin.value(),
@@ -966,7 +965,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'beam_length': self.settings_win.beamLengthSpin.value(),
             'min_p': self.settings_win.minPSpin.value(),
             'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySpin.value(),
-            'stop': str(stop_strings[0]),
+            'stop': stop_string,
             'max_seq_len' : self.settings_win.ctxsizeSpin.value()
         }
         # print('--- exllama_params:', exllama_params)
@@ -1025,6 +1024,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'model_path': self.get_model_path(self.rwkvCppModelPath),
             'n_threads': self.settings_win.cppThreads.value(),
             'n_gpu_layers': self.settings_win.gpuLayersSpin.value(),
+            
         }
 
         # if self.settings_win.gpuAccelCheck.isChecked():

@@ -448,7 +448,7 @@
            <string>Preferences:</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
-           <item row="2" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_28">
              <property name="text">
               <string>llama.cpp: Model path:</string>
@@ -468,6 +468,20 @@
              </property>
             </widget>
            </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="RWKVcppModelSelect">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Exllama: Model directory:</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
             <widget class="QCheckBox" name="logChatCheck">
              <property name="toolTip">
@@ -481,14 +495,31 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Exllama: Model directory:</string>
+           <item row="3" column="0" colspan="2">
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="6" column="1">
+            <widget class="QLineEdit" name="rwkvCppModelPath">
+             <property name="toolTip">
+              <string>Path to GGML model for rwkv.cpp</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="exllamaModelSelect">
+             <property name="toolTip">
+              <string>Select Exllama model folder</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
             <widget class="QLineEdit" name="cppModelPath">
              <property name="toolTip">
               <string>Path to GGML model for llama.cpp</string>
@@ -498,7 +529,14 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>RWKV.cpp model path:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
             <widget class="QToolButton" name="cppModelSelect">
              <property name="toolTip">
               <string>Select GGML model</string>
@@ -511,35 +549,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="Line" name="line">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="RWKVcppModelSelect">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>RWKV.cpp model path:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QLineEdit" name="rwkvCppModelPath">
-             <property name="toolTip">
-              <string>Path to GGML model for rwkv.cpp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
+           <item row="5" column="1">
             <widget class="QLineEdit" name="exllamaModelPath">
              <property name="toolTip">
               <string>Path to Exllama GPTQ model folder (mode file, tokenizer.json, config.json)</string>
@@ -549,13 +559,13 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="exllamaModelSelect">
-             <property name="toolTip">
-              <string>Select Exllama model folder</string>
-             </property>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="sendStopStringCheck">
              <property name="text">
-              <string>...</string>
+              <string>Send chat stop string</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

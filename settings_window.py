@@ -42,39 +42,58 @@ class Ui_Settings_Dialog(object):
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout_2 = QGridLayout(self.groupBox_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_17 = QLabel(self.groupBox_2)
-        self.label_17.setObjectName(u"label_17")
+        self.max_new_tokensSlider = QSlider(self.groupBox_2)
+        self.max_new_tokensSlider.setObjectName(u"max_new_tokensSlider")
+        self.max_new_tokensSlider.setMinimum(32)
+        self.max_new_tokensSlider.setMaximum(1024)
+        self.max_new_tokensSlider.setPageStep(32)
+        self.max_new_tokensSlider.setValue(256)
+        self.max_new_tokensSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_2.addWidget(self.label_17, 7, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.max_new_tokensSlider, 10, 1, 1, 2)
 
-        self.label_2 = QLabel(self.groupBox_2)
-        self.label_2.setObjectName(u"label_2")
+        self.repetition_penaltySpin = QDoubleSpinBox(self.groupBox_2)
+        self.repetition_penaltySpin.setObjectName(u"repetition_penaltySpin")
+        self.repetition_penaltySpin.setMinimum(1.000000000000000)
+        self.repetition_penaltySpin.setMaximum(1.800000000000000)
+        self.repetition_penaltySpin.setSingleStep(0.010000000000000)
+        self.repetition_penaltySpin.setValue(1.150000000000000)
 
-        self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.label_5 = QLabel(self.groupBox_2)
-        self.label_5.setObjectName(u"label_5")
-
-        self.gridLayout_2.addWidget(self.label_5, 6, 0, 1, 1)
-
-        self.label = QLabel(self.groupBox_2)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_2.addWidget(self.label, 9, 0, 1, 1)
-
-        self.max_new_tokensSpin = QSpinBox(self.groupBox_2)
-        self.max_new_tokensSpin.setObjectName(u"max_new_tokensSpin")
-        self.max_new_tokensSpin.setMinimum(32)
-        self.max_new_tokensSpin.setMaximum(1024)
-        self.max_new_tokensSpin.setSingleStep(32)
-        self.max_new_tokensSpin.setValue(256)
-
-        self.gridLayout_2.addWidget(self.max_new_tokensSpin, 8, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.repetition_penaltySpin, 11, 3, 1, 1)
 
         self.label_12 = QLabel(self.groupBox_2)
         self.label_12.setObjectName(u"label_12")
 
-        self.gridLayout_2.addWidget(self.label_12, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_12, 6, 0, 1, 1)
+
+        self.top_kSpin = QSpinBox(self.groupBox_2)
+        self.top_kSpin.setObjectName(u"top_kSpin")
+        self.top_kSpin.setMaximum(200)
+        self.top_kSpin.setValue(20)
+
+        self.gridLayout_2.addWidget(self.top_kSpin, 8, 3, 1, 1)
+
+        self.temperatureSpin = QDoubleSpinBox(self.groupBox_2)
+        self.temperatureSpin.setObjectName(u"temperatureSpin")
+        self.temperatureSpin.setMaximum(5.000000000000000)
+        self.temperatureSpin.setSingleStep(0.010000000000000)
+        self.temperatureSpin.setValue(0.700000000000000)
+
+        self.gridLayout_2.addWidget(self.temperatureSpin, 7, 3, 1, 1)
+
+        self.typical_pSpin = QDoubleSpinBox(self.groupBox_2)
+        self.typical_pSpin.setObjectName(u"typical_pSpin")
+        self.typical_pSpin.setMaximum(1.000000000000000)
+        self.typical_pSpin.setSingleStep(0.010000000000000)
+        self.typical_pSpin.setValue(0.250000000000000)
+
+        self.gridLayout_2.addWidget(self.typical_pSpin, 14, 3, 1, 1)
+
+        self.paramPresets_comboBox = QComboBox(self.groupBox_2)
+        self.paramPresets_comboBox.setObjectName(u"paramPresets_comboBox")
+        self.paramPresets_comboBox.setInsertPolicy(QComboBox.InsertAlphabetically)
+
+        self.gridLayout_2.addWidget(self.paramPresets_comboBox, 0, 1, 1, 2)
 
         self.repetition_penaltySlider = QSlider(self.groupBox_2)
         self.repetition_penaltySlider.setObjectName(u"repetition_penaltySlider")
@@ -83,12 +102,7 @@ class Ui_Settings_Dialog(object):
         self.repetition_penaltySlider.setValue(150)
         self.repetition_penaltySlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_2.addWidget(self.repetition_penaltySlider, 9, 1, 1, 1)
-
-        self.label_11 = QLabel(self.groupBox_2)
-        self.label_11.setObjectName(u"label_11")
-
-        self.gridLayout_2.addWidget(self.label_11, 8, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.repetition_penaltySlider, 11, 1, 1, 1)
 
         self.top_pSpin = QDoubleSpinBox(self.groupBox_2)
         self.top_pSpin.setObjectName(u"top_pSpin")
@@ -96,7 +110,29 @@ class Ui_Settings_Dialog(object):
         self.top_pSpin.setSingleStep(0.010000000000000)
         self.top_pSpin.setValue(0.900000000000000)
 
-        self.gridLayout_2.addWidget(self.top_pSpin, 7, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.top_pSpin, 9, 3, 1, 1)
+
+        self.label_5 = QLabel(self.groupBox_2)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout_2.addWidget(self.label_5, 8, 0, 1, 1)
+
+        self.ctxsizeSpin = QSpinBox(self.groupBox_2)
+        self.ctxsizeSpin.setObjectName(u"ctxsizeSpin")
+        self.ctxsizeSpin.setMinimum(64)
+        self.ctxsizeSpin.setMaximum(8192)
+        self.ctxsizeSpin.setSingleStep(64)
+        self.ctxsizeSpin.setValue(2048)
+
+        self.gridLayout_2.addWidget(self.ctxsizeSpin, 6, 3, 1, 1)
+
+        self.temperatureSlider = QSlider(self.groupBox_2)
+        self.temperatureSlider.setObjectName(u"temperatureSlider")
+        self.temperatureSlider.setMaximum(199)
+        self.temperatureSlider.setValue(70)
+        self.temperatureSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_2.addWidget(self.temperatureSlider, 7, 1, 1, 2)
 
         self.ctxsizeSlider = QSlider(self.groupBox_2)
         self.ctxsizeSlider.setObjectName(u"ctxsizeSlider")
@@ -107,105 +143,38 @@ class Ui_Settings_Dialog(object):
         self.ctxsizeSlider.setValue(2048)
         self.ctxsizeSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_2.addWidget(self.ctxsizeSlider, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.ctxsizeSlider, 6, 1, 1, 1)
 
-        self.typical_pSlider = QSlider(self.groupBox_2)
-        self.typical_pSlider.setObjectName(u"typical_pSlider")
-        self.typical_pSlider.setMaximum(100)
-        self.typical_pSlider.setValue(25)
-        self.typical_pSlider.setOrientation(Qt.Horizontal)
+        self.label_15 = QLabel(self.groupBox_2)
+        self.label_15.setObjectName(u"label_15")
 
-        self.gridLayout_2.addWidget(self.typical_pSlider, 12, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.label_15, 7, 0, 1, 1)
 
-        self.repetition_penaltySpin = QDoubleSpinBox(self.groupBox_2)
-        self.repetition_penaltySpin.setObjectName(u"repetition_penaltySpin")
-        self.repetition_penaltySpin.setMinimum(1.000000000000000)
-        self.repetition_penaltySpin.setMaximum(1.800000000000000)
-        self.repetition_penaltySpin.setSingleStep(0.010000000000000)
-        self.repetition_penaltySpin.setValue(1.150000000000000)
+        self.max_new_tokensSpin = QSpinBox(self.groupBox_2)
+        self.max_new_tokensSpin.setObjectName(u"max_new_tokensSpin")
+        self.max_new_tokensSpin.setMinimum(32)
+        self.max_new_tokensSpin.setMaximum(1024)
+        self.max_new_tokensSpin.setSingleStep(32)
+        self.max_new_tokensSpin.setValue(256)
 
-        self.gridLayout_2.addWidget(self.repetition_penaltySpin, 9, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.max_new_tokensSpin, 10, 3, 1, 1)
 
-        self.ctxsizeSpin = QSpinBox(self.groupBox_2)
-        self.ctxsizeSpin.setObjectName(u"ctxsizeSpin")
-        self.ctxsizeSpin.setMinimum(64)
-        self.ctxsizeSpin.setMaximum(8192)
-        self.ctxsizeSpin.setSingleStep(64)
-        self.ctxsizeSpin.setValue(2048)
+        self.label = QLabel(self.groupBox_2)
+        self.label.setObjectName(u"label")
 
-        self.gridLayout_2.addWidget(self.ctxsizeSpin, 4, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.label, 11, 0, 1, 1)
 
-        self.max_new_tokensSlider = QSlider(self.groupBox_2)
-        self.max_new_tokensSlider.setObjectName(u"max_new_tokensSlider")
-        self.max_new_tokensSlider.setMinimum(32)
-        self.max_new_tokensSlider.setMaximum(1024)
-        self.max_new_tokensSlider.setPageStep(32)
-        self.max_new_tokensSlider.setValue(256)
-        self.max_new_tokensSlider.setOrientation(Qt.Horizontal)
+        self.label_17 = QLabel(self.groupBox_2)
+        self.label_17.setObjectName(u"label_17")
 
-        self.gridLayout_2.addWidget(self.max_new_tokensSlider, 8, 1, 1, 2)
-
-        self.temperatureSpin = QDoubleSpinBox(self.groupBox_2)
-        self.temperatureSpin.setObjectName(u"temperatureSpin")
-        self.temperatureSpin.setMaximum(5.000000000000000)
-        self.temperatureSpin.setSingleStep(0.010000000000000)
-        self.temperatureSpin.setValue(0.700000000000000)
-
-        self.gridLayout_2.addWidget(self.temperatureSpin, 5, 3, 1, 1)
-
-        self.paramPresets_comboBox = QComboBox(self.groupBox_2)
-        self.paramPresets_comboBox.setObjectName(u"paramPresets_comboBox")
-        self.paramPresets_comboBox.setInsertPolicy(QComboBox.InsertAlphabetically)
-
-        self.gridLayout_2.addWidget(self.paramPresets_comboBox, 0, 1, 1, 2)
-
-        self.top_kSpin = QSpinBox(self.groupBox_2)
-        self.top_kSpin.setObjectName(u"top_kSpin")
-        self.top_kSpin.setMaximum(200)
-        self.top_kSpin.setValue(20)
-
-        self.gridLayout_2.addWidget(self.top_kSpin, 6, 3, 1, 1)
-
-        self.temperatureSlider = QSlider(self.groupBox_2)
-        self.temperatureSlider.setObjectName(u"temperatureSlider")
-        self.temperatureSlider.setMaximum(199)
-        self.temperatureSlider.setValue(70)
-        self.temperatureSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout_2.addWidget(self.temperatureSlider, 5, 1, 1, 2)
+        self.gridLayout_2.addWidget(self.label_17, 9, 0, 1, 1)
 
         self.line_2 = QFrame(self.groupBox_2)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setFrameShape(QFrame.HLine)
         self.line_2.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_2.addWidget(self.line_2, 1, 1, 1, 2)
-
-        self.top_pSlider = QSlider(self.groupBox_2)
-        self.top_pSlider.setObjectName(u"top_pSlider")
-        self.top_pSlider.setMaximum(100)
-        self.top_pSlider.setValue(90)
-        self.top_pSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout_2.addWidget(self.top_pSlider, 7, 1, 1, 2)
-
-        self.label_15 = QLabel(self.groupBox_2)
-        self.label_15.setObjectName(u"label_15")
-
-        self.gridLayout_2.addWidget(self.label_15, 5, 0, 1, 1)
-
-        self.typical_pSpin = QDoubleSpinBox(self.groupBox_2)
-        self.typical_pSpin.setObjectName(u"typical_pSpin")
-        self.typical_pSpin.setMaximum(1.000000000000000)
-        self.typical_pSpin.setSingleStep(0.010000000000000)
-        self.typical_pSpin.setValue(0.250000000000000)
-
-        self.gridLayout_2.addWidget(self.typical_pSpin, 12, 3, 1, 1)
-
-        self.label_8 = QLabel(self.groupBox_2)
-        self.label_8.setObjectName(u"label_8")
-
-        self.gridLayout_2.addWidget(self.label_8, 12, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.line_2, 2, 1, 1, 2)
 
         self.top_kSlider = QSlider(self.groupBox_2)
         self.top_kSlider.setObjectName(u"top_kSlider")
@@ -213,12 +182,38 @@ class Ui_Settings_Dialog(object):
         self.top_kSlider.setValue(20)
         self.top_kSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_2.addWidget(self.top_kSlider, 6, 1, 1, 2)
+        self.gridLayout_2.addWidget(self.top_kSlider, 8, 1, 1, 2)
+
+        self.top_pSlider = QSlider(self.groupBox_2)
+        self.top_pSlider.setObjectName(u"top_pSlider")
+        self.top_pSlider.setMaximum(100)
+        self.top_pSlider.setValue(90)
+        self.top_pSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_2.addWidget(self.top_pSlider, 9, 1, 1, 2)
 
         self.label_29 = QLabel(self.groupBox_2)
         self.label_29.setObjectName(u"label_29")
 
-        self.gridLayout_2.addWidget(self.label_29, 13, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_29, 15, 0, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.label_11 = QLabel(self.groupBox_2)
+        self.label_11.setObjectName(u"label_11")
+
+        self.gridLayout_2.addWidget(self.label_11, 10, 0, 1, 1)
+
+        self.typical_pSlider = QSlider(self.groupBox_2)
+        self.typical_pSlider.setObjectName(u"typical_pSlider")
+        self.typical_pSlider.setMaximum(100)
+        self.typical_pSlider.setValue(25)
+        self.typical_pSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_2.addWidget(self.typical_pSlider, 14, 1, 1, 1)
 
         self.seedSpin = QSpinBox(self.groupBox_2)
         self.seedSpin.setObjectName(u"seedSpin")
@@ -226,10 +221,15 @@ class Ui_Settings_Dialog(object):
         self.seedSpin.setMaximum(10000000)
         self.seedSpin.setValue(-1)
 
-        self.gridLayout_2.addWidget(self.seedSpin, 13, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.seedSpin, 15, 3, 1, 1)
+
+        self.label_8 = QLabel(self.groupBox_2)
+        self.label_8.setObjectName(u"label_8")
+
+        self.gridLayout_2.addWidget(self.label_8, 14, 0, 1, 1)
 
 
-        self.gridLayout_3.addWidget(self.groupBox_2, 2, 0, 1, 3)
+        self.gridLayout_3.addWidget(self.groupBox_2, 3, 1, 1, 1)
 
         self.parametersTab.addTab(self.sharedParamTab, "")
         self.exllamaParamTab = QWidget()
@@ -597,58 +597,58 @@ class Ui_Settings_Dialog(object):
         self.parametersTab.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.groupBox_2.setTitle(QCoreApplication.translate("Settings_Dialog", u"Shared", None))
-        self.label_17.setText(QCoreApplication.translate("Settings_Dialog", u"Top P:", None))
-        self.label_2.setText(QCoreApplication.translate("Settings_Dialog", u"Preset:", None))
-        self.label_5.setText(QCoreApplication.translate("Settings_Dialog", u"Top K:", None))
-        self.label.setText(QCoreApplication.translate("Settings_Dialog", u"Repetition penalty:", None))
-#if QT_CONFIG(tooltip)
-        self.max_new_tokensSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum number of tokens the model will output after outputting the prompt - number of tokens to predict", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_12.setText(QCoreApplication.translate("Settings_Dialog", u"Context size:", None))
-        self.label_11.setText(QCoreApplication.translate("Settings_Dialog", u"Max new tokens:", None))
-#if QT_CONFIG(tooltip)
-        self.top_pSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only the top tokens whose likelihood together adds up to this number (0-1.0) - ignore all others", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.ctxsizeSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.typical_pSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Locally typical sampling, parameter p (1.0 = disabled)", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.ctxsizeSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
-#endif // QT_CONFIG(tooltip)
-        self.ctxsizeSpin.setSuffix("")
 #if QT_CONFIG(tooltip)
         self.max_new_tokensSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum number of tokens the model will output after outputting the prompt - number of tokens to predict", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_12.setText(QCoreApplication.translate("Settings_Dialog", u"Context size:", None))
+#if QT_CONFIG(tooltip)
+        self.top_kSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only this many most likely tokens - ignore all others", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.temperatureSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Degree of randomness or wildness - how much AI is allowed to sway from the most probable prediction", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
+        self.typical_pSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Locally typical sampling, parameter p (1.0 = disabled)", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
         self.paramPresets_comboBox.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Parameter preset", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.top_kSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only this many most likely tokens - ignore all others", None))
+        self.top_pSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only the top tokens whose likelihood together adds up to this number (0-1.0) - ignore all others", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_5.setText(QCoreApplication.translate("Settings_Dialog", u"Top K:", None))
+#if QT_CONFIG(tooltip)
+        self.ctxsizeSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
+#endif // QT_CONFIG(tooltip)
+        self.ctxsizeSpin.setSuffix("")
 #if QT_CONFIG(tooltip)
         self.temperatureSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Degree of randomness or wildness - how much AI is allowed to sway from the most probable prediction", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.top_pSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only the top tokens whose likelihood together adds up to this number (0-1.0) - ignore all others", None))
+        self.ctxsizeSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
 #endif // QT_CONFIG(tooltip)
         self.label_15.setText(QCoreApplication.translate("Settings_Dialog", u"Temperature:", None))
 #if QT_CONFIG(tooltip)
-        self.typical_pSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Locally typical sampling, parameter p (1.0 = disabled)", None))
+        self.max_new_tokensSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum number of tokens the model will output after outputting the prompt - number of tokens to predict", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_8.setText(QCoreApplication.translate("Settings_Dialog", u"Typical P:", None))
+        self.label.setText(QCoreApplication.translate("Settings_Dialog", u"Repetition penalty:", None))
+        self.label_17.setText(QCoreApplication.translate("Settings_Dialog", u"Top P:", None))
 #if QT_CONFIG(tooltip)
         self.top_kSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only this many most likely tokens - ignore all others", None))
 #endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.top_pSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Consider only the top tokens whose likelihood together adds up to this number (0-1.0) - ignore all others", None))
+#endif // QT_CONFIG(tooltip)
         self.label_29.setText(QCoreApplication.translate("Settings_Dialog", u"Seed:", None))
+        self.label_2.setText(QCoreApplication.translate("Settings_Dialog", u"Preset:", None))
+        self.label_11.setText(QCoreApplication.translate("Settings_Dialog", u"Max new tokens:", None))
+#if QT_CONFIG(tooltip)
+        self.typical_pSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Locally typical sampling, parameter p (1.0 = disabled)", None))
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.seedSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Seed to use (-1 for random)", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_8.setText(QCoreApplication.translate("Settings_Dialog", u"Typical P:", None))
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.sharedParamTab), QCoreApplication.translate("Settings_Dialog", u"Shared", None))
         self.groupBox.setTitle(QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
 #if QT_CONFIG(tooltip)

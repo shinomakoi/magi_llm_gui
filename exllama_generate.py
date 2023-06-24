@@ -185,10 +185,12 @@ class ExllamaModel:
             # Yield the new text to the caller
             yield new_text
 
-            if res_line.endswith(stop_string):
-                plen = generator.tokenizer.encode(stop_string).shape[-1]
-                generator.gen_rewind(plen)
-                break
+            if stop_string:
+                stop_string=stop_string[0]
+                if res_line.endswith(stop_string):
+                    plen = generator.tokenizer.encode(stop_string).shape[-1]
+                    generator.gen_rewind(plen)
+                    break
 
         # End the beam search
         generator.end_beam_search()

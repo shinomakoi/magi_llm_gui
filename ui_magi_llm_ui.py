@@ -266,7 +266,7 @@ class Ui_magi_llm_window(object):
         self.label_28 = QLabel(self.groupBox_2)
         self.label_28.setObjectName(u"label_28")
 
-        self.gridLayout_5.addWidget(self.label_28, 2, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.label_28, 4, 0, 1, 1)
 
         self.streamEnabledCheck = QCheckBox(self.groupBox_2)
         self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
@@ -274,59 +274,65 @@ class Ui_magi_llm_window(object):
 
         self.gridLayout_5.addWidget(self.streamEnabledCheck, 0, 0, 1, 1)
 
+        self.RWKVcppModelSelect = QToolButton(self.groupBox_2)
+        self.RWKVcppModelSelect.setObjectName(u"RWKVcppModelSelect")
+
+        self.gridLayout_5.addWidget(self.RWKVcppModelSelect, 6, 2, 1, 1)
+
+        self.label_3 = QLabel(self.groupBox_2)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_5.addWidget(self.label_3, 5, 0, 1, 1)
+
         self.logChatCheck = QCheckBox(self.groupBox_2)
         self.logChatCheck.setObjectName(u"logChatCheck")
         self.logChatCheck.setChecked(False)
 
         self.gridLayout_5.addWidget(self.logChatCheck, 0, 1, 1, 1)
 
-        self.label_3 = QLabel(self.groupBox_2)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_5.addWidget(self.label_3, 3, 0, 1, 1)
-
-        self.cppModelPath = QLineEdit(self.groupBox_2)
-        self.cppModelPath.setObjectName(u"cppModelPath")
-
-        self.gridLayout_5.addWidget(self.cppModelPath, 2, 1, 1, 1)
-
-        self.cppModelSelect = QToolButton(self.groupBox_2)
-        self.cppModelSelect.setObjectName(u"cppModelSelect")
-        self.cppModelSelect.setArrowType(Qt.NoArrow)
-
-        self.gridLayout_5.addWidget(self.cppModelSelect, 2, 2, 1, 1)
-
         self.line = QFrame(self.groupBox_2)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_5.addWidget(self.line, 1, 0, 1, 2)
-
-        self.RWKVcppModelSelect = QToolButton(self.groupBox_2)
-        self.RWKVcppModelSelect.setObjectName(u"RWKVcppModelSelect")
-
-        self.gridLayout_5.addWidget(self.RWKVcppModelSelect, 4, 2, 1, 1)
-
-        self.label_2 = QLabel(self.groupBox_2)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_5.addWidget(self.label_2, 4, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.line, 3, 0, 1, 2)
 
         self.rwkvCppModelPath = QLineEdit(self.groupBox_2)
         self.rwkvCppModelPath.setObjectName(u"rwkvCppModelPath")
 
-        self.gridLayout_5.addWidget(self.rwkvCppModelPath, 4, 1, 1, 1)
-
-        self.exllamaModelPath = QLineEdit(self.groupBox_2)
-        self.exllamaModelPath.setObjectName(u"exllamaModelPath")
-
-        self.gridLayout_5.addWidget(self.exllamaModelPath, 3, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.rwkvCppModelPath, 6, 1, 1, 1)
 
         self.exllamaModelSelect = QToolButton(self.groupBox_2)
         self.exllamaModelSelect.setObjectName(u"exllamaModelSelect")
 
-        self.gridLayout_5.addWidget(self.exllamaModelSelect, 3, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.exllamaModelSelect, 5, 2, 1, 1)
+
+        self.cppModelPath = QLineEdit(self.groupBox_2)
+        self.cppModelPath.setObjectName(u"cppModelPath")
+
+        self.gridLayout_5.addWidget(self.cppModelPath, 4, 1, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_5.addWidget(self.label_2, 6, 0, 1, 1)
+
+        self.cppModelSelect = QToolButton(self.groupBox_2)
+        self.cppModelSelect.setObjectName(u"cppModelSelect")
+        self.cppModelSelect.setArrowType(Qt.NoArrow)
+
+        self.gridLayout_5.addWidget(self.cppModelSelect, 4, 2, 1, 1)
+
+        self.exllamaModelPath = QLineEdit(self.groupBox_2)
+        self.exllamaModelPath.setObjectName(u"exllamaModelPath")
+
+        self.gridLayout_5.addWidget(self.exllamaModelPath, 5, 1, 1, 1)
+
+        self.sendStopStringCheck = QCheckBox(self.groupBox_2)
+        self.sendStopStringCheck.setObjectName(u"sendStopStringCheck")
+        self.sendStopStringCheck.setChecked(True)
+
+        self.gridLayout_5.addWidget(self.sendStopStringCheck, 1, 0, 1, 1)
 
 
         self.gridLayout_4.addWidget(self.groupBox_2, 2, 0, 1, 2)
@@ -586,32 +592,33 @@ class Ui_magi_llm_window(object):
         self.streamEnabledCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Stream responses", None))
 #endif // QT_CONFIG(tooltip)
         self.streamEnabledCheck.setText(QCoreApplication.translate("magi_llm_window", u"Stream responses", None))
+        self.RWKVcppModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
+        self.label_3.setText(QCoreApplication.translate("magi_llm_window", u"Exllama: Model directory:", None))
 #if QT_CONFIG(tooltip)
         self.logChatCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Write chat logs to file", None))
 #endif // QT_CONFIG(tooltip)
         self.logChatCheck.setText(QCoreApplication.translate("magi_llm_window", u"Log chats", None))
-        self.label_3.setText(QCoreApplication.translate("magi_llm_window", u"Exllama: Model directory:", None))
-#if QT_CONFIG(tooltip)
-        self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppModelPath.setText("")
-#if QT_CONFIG(tooltip)
-        self.cppModelSelect.setToolTip(QCoreApplication.translate("magi_llm_window", u"Select GGML model", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
-        self.RWKVcppModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
-        self.label_2.setText(QCoreApplication.translate("magi_llm_window", u"RWKV.cpp model path:", None))
 #if QT_CONFIG(tooltip)
         self.rwkvCppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for rwkv.cpp", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.exllamaModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to Exllama GPTQ model folder (mode file, tokenizer.json, config.json)", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaModelPath.setText("")
-#if QT_CONFIG(tooltip)
         self.exllamaModelSelect.setToolTip(QCoreApplication.translate("magi_llm_window", u"Select Exllama model folder", None))
 #endif // QT_CONFIG(tooltip)
         self.exllamaModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
+#if QT_CONFIG(tooltip)
+        self.cppModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to GGML model for llama.cpp", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppModelPath.setText("")
+        self.label_2.setText(QCoreApplication.translate("magi_llm_window", u"RWKV.cpp model path:", None))
+#if QT_CONFIG(tooltip)
+        self.cppModelSelect.setToolTip(QCoreApplication.translate("magi_llm_window", u"Select GGML model", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppModelSelect.setText(QCoreApplication.translate("magi_llm_window", u"...", None))
+#if QT_CONFIG(tooltip)
+        self.exllamaModelPath.setToolTip(QCoreApplication.translate("magi_llm_window", u"Path to Exllama GPTQ model folder (mode file, tokenizer.json, config.json)", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaModelPath.setText("")
+        self.sendStopStringCheck.setText(QCoreApplication.translate("magi_llm_window", u"Send chat stop string", None))
 #if QT_CONFIG(tooltip)
         self.settingsPathSaveButton.setToolTip(QCoreApplication.translate("magi_llm_window", u"Save settings", None))
 #endif // QT_CONFIG(tooltip)
