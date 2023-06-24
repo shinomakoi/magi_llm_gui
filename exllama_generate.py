@@ -21,6 +21,8 @@ class ExllamaModel:
         self.cache = None
         self.tokenizer = None
 
+        # add load max_seq_len here instead of generate_with_streaming etc
+
     @classmethod
     def from_pretrained(cls, params):
 
@@ -50,7 +52,7 @@ class ExllamaModel:
 
         # Set the model path and max sequence length in the config
         config.model_path = str(model_path)
-        config.max_seq_len = 2048
+        config.max_seq_len = params["max_seq_len"]
 
         # Multi-gpu mode
         if params["gpu_split"]:
@@ -76,22 +78,21 @@ class ExllamaModel:
         return result
 
     # Check if exceeded context limit and if so prune it from the start
-    def check_token_count(self, in_tokens, max_response_tokens):
+    def check_token_count(self, in_tokens, max_response_tokens, max_seq_len):
 
         token_count = in_tokens.shape[-1]
-        
-        if token_count >= 1024:
+
+        if token_count >= (max_seq_len / 2):
             print('--- Context size:', token_count)
-        if token_count >= 2048:
+        if token_count >= max_seq_len:
             print('Context limit reached. Trimming')
 
-            amount_to_trim = (token_count - 2048) + max_response_tokens
+            amount_to_trim = (token_count - max_seq_len) + max_response_tokens
             # print('trimming amount', amount_to_trim)
             in_tokens = torch.cat(
                 (in_tokens[:, :0], in_tokens[:, amount_to_trim:]), axis=1)
             amount_to_trim = 0
         return in_tokens
-        
 
     def generate_with_streaming(self, context, params):
         # Disable gradient computation and initialize CUDA device
@@ -127,10 +128,10 @@ class ExllamaModel:
 
         # Trim if needed and check if trimmed
         in_tokens = self.check_token_count(
-            in_tokens, max_response_tokens)
-        
+            in_tokens, max_response_tokens, params['max_seq_len'])
+
         context = generator.tokenizer.decode(in_tokens)
-        context=context[0]
+        context = context[0]
 
         # Get the number of tokens in the context
         num_res_tokens = in_tokens.shape[-1]
@@ -191,6 +192,7 @@ class ExllamaModel:
 
         # End the beam search
         generator.end_beam_search()
+
 
 def exllama_free_memory():
     torch.cuda.empty_cache()

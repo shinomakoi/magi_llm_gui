@@ -5,6 +5,9 @@ class LlamaCppModel:
     def __init__(self, use_cache, **params):
         # Initialize the model with the given parameters
         self.model: Llama = Llama(**params)
+        
+        self.max_context = params["n_ctx"]
+
         if use_cache:
             print('--- LLama.cpp cache:', use_cache)
             cache = LlamaCache()
@@ -21,12 +24,12 @@ class LlamaCppModel:
         encoded_string = context.encode()
         token_count = len(self.model.tokenize(encoded_string))
 
-        if token_count >= 1024:
+        if token_count >= (self.max_context / 2):
             print('--- Context size:', token_count)
-        if token_count >= 2048:
+        if token_count >= self.max_context:
             print('Context limit reached. Trimming')
 
-            amount_to_trim = (token_count - 2048) + max_tokens
+            amount_to_trim = (token_count - self.max_context) + max_tokens
             trimmed = self.model.tokenize(encoded_string)[amount_to_trim:]
             trimmed_context = self.model.detokenize(trimmed).decode()
 

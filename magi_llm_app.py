@@ -46,12 +46,14 @@ class LoadModelThread(QThread):
         cpp_model_params: dict,
         exllama_model_params: dict,
         rwkv_cpp_model_params: dict,
+        llama_cpp_cache: bool,
     ):
         super().__init__()
         self.cpp_model_params = cpp_model_params
         self.exllama_model_params = exllama_model_params
         self.backend = backend
         self.rwkv_cpp_model_params = rwkv_cpp_model_params
+        self.llama_cpp_cache = llama_cpp_cache
 
     def run(self):
         load_backend_methods = {
@@ -73,14 +75,14 @@ class LoadModelThread(QThread):
             raise ValueError(f"Invalid load_backend: {self.backend}")
 
     def load_cpp(self):
-        use_cache = bool(False)
         from llamacpp_generate import LlamaCppModel
         global cpp_model
         cpp_model = LlamaCppModel.from_pretrained(
-            use_cache, self.cpp_model_params)
+            self.llama_cpp_cache, self.cpp_model_params)
 
     def load_exllama(self):
         from exllama_generate import ExllamaModel
+        
         global exllama_model
         exllama_model = ExllamaModel.from_pretrained(
             self.exllama_model_params)
@@ -965,6 +967,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'min_p': self.settings_win.minPSpin.value(),
             'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySpin.value(),
             'stop': str(stop_strings[0]),
+            'max_seq_len' : self.settings_win.ctxsizeSpin.value()
         }
         # print('--- exllama_params:', exllama_params)
         return exllama_params
@@ -997,30 +1000,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         model_path = line_edit.text().strip()
         return model_path
 
-    def get_rwkv_cpp_model_params(self):
-        # Get the Exllama model parameters from the settings window
-        rwkv_cpp_model_params = {
-            'model_path': self.get_model_path(self.rwkvCppModelPath),
-            'n_threads': self.settings_win.cppThreads.value(),
-            'n_gpu_layers': self.settings_win.gpuLayersSpin.value(),
-        }
-
-        # if self.settings_win.gpuAccelCheck.isChecked():
-        #     rwkv_cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value()
-
-        return rwkv_cpp_model_params
-
-    def get_exllama_model_params(self):
-        # Get the Exllama model parameters from the settings window
-        exllama_model_params = {
-            'model_path': self.get_model_path(self.exllamaModelPath),
-            'gpu_split': self.settings_win.exllamaGpuSplitCheck.isChecked()
-        }
-        if self.settings_win.exllamaGpuSplitCheck.isChecked():
-            exllama_model_params["gpu_split_values"] = self.settings_win.exllamaGpuSplitLine.text(
-            )
-        return exllama_model_params
-
     @Slot(bool)
     def loadModel_handleResult(self, response):
         if response:
@@ -1039,6 +1018,31 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             print('---Error: Model load failure...')
             self.statusbar.showMessage('Error: Model load failure')
             self.toggle_backend_visibility(True)
+
+    def get_rwkv_cpp_model_params(self):
+        # Get the Exllama model parameters from the settings window
+        rwkv_cpp_model_params = {
+            'model_path': self.get_model_path(self.rwkvCppModelPath),
+            'n_threads': self.settings_win.cppThreads.value(),
+            'n_gpu_layers': self.settings_win.gpuLayersSpin.value(),
+        }
+
+        # if self.settings_win.gpuAccelCheck.isChecked():
+        #     rwkv_cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value()
+
+        return rwkv_cpp_model_params
+
+    def get_exllama_model_params(self):
+        # Get the Exllama model parameters from the settings window
+        exllama_model_params = {
+            'model_path': self.get_model_path(self.exllamaModelPath),
+            'gpu_split': self.settings_win.exllamaGpuSplitCheck.isChecked(),
+            'max_seq_len': self.settings_win.ctxsizeSpin.value()
+        }
+        if self.settings_win.exllamaGpuSplitCheck.isChecked():
+            exllama_model_params["gpu_split_values"] = self.settings_win.exllamaGpuSplitLine.text(
+            )
+        return exllama_model_params
 
     def get_cpp_model_params(self):
 
@@ -1095,9 +1099,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         print(f'--- Loading {backend} model...')
         self.statusbar.showMessage(f'Status: Loading {backend} model...')
+        
+        llama_cpp_cache = self.settings_win.cppCacheCheck.isChecked()
 
         self.load_modelThread = LoadModelThread(
-            backend, cpp_model_params, exllama_model_params, rwkv_cpp_model_params)
+            backend, cpp_model_params, exllama_model_params, rwkv_cpp_model_params, llama_cpp_cache)
         self.load_modelThread.final_resultReady.connect(
             self.loadModel_handleResult)
         self.load_modelThread.finished.connect(
