@@ -191,3 +191,6 @@ class ExllamaModel:
 
         # End the beam search
         generator.end_beam_search()
+
+def exllama_free_memory():
+    torch.cuda.empty_cache()

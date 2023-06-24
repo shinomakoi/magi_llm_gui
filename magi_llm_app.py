@@ -33,6 +33,64 @@ LLAMA_CPP_SERVER = "llama.cpp_server"
 TS_SERVER = "ts-server"
 RWKV_CPP = "rwkv.cpp"
 
+# A class to load models in a separate thread
+
+
+class LoadModelThread(QThread):
+
+    final_resultReady = Signal(bool)
+
+    def __init__(
+        self,
+        backend: str,
+        cpp_model_params: dict,
+        exllama_model_params: dict,
+        rwkv_cpp_model_params: dict,
+    ):
+        super().__init__()
+        self.cpp_model_params = cpp_model_params
+        self.exllama_model_params = exllama_model_params
+        self.backend = backend
+        self.rwkv_cpp_model_params = rwkv_cpp_model_params
+
+    def run(self):
+        load_backend_methods = {
+            EXLLAMA: self.load_exllama,
+            LLAMA_CPP: self.load_cpp,
+            RWKV_CPP: self.load_rwkv_cpp,
+        }
+        # Call the appropriate method based on the load_backend attribute
+        backend_method = load_backend_methods.get(self.backend)
+        if backend_method:
+            try:
+                backend_method()
+                self.final_resultReady.emit(True)
+            except Exception as error:
+                self.final_resultReady.emit(False)
+                print('--- Error loading backend:\n', error)
+                return
+        else:
+            raise ValueError(f"Invalid load_backend: {self.backend}")
+
+    def load_cpp(self):
+        use_cache = bool(False)
+        from llamacpp_generate import LlamaCppModel
+        global cpp_model
+        cpp_model = LlamaCppModel.from_pretrained(
+            use_cache, self.cpp_model_params)
+
+    def load_exllama(self):
+        from exllama_generate import ExllamaModel
+        global exllama_model
+        exllama_model = ExllamaModel.from_pretrained(
+            self.exllama_model_params)
+
+    def load_rwkv_cpp(self):
+        import rwkvcpp_generate
+        global rwkv_cpp_model
+        rwkv_cpp_model = rwkvcpp_generate.load_model(
+            self.rwkv_cpp_model_params)
+
 
 # A class to run text generation in a separate thread.
 class TextgenThread(QThread):
@@ -530,11 +588,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.chatContinueButton.clicked.connect(
             partial(self.continue_textgen, 'chat_modeContinue'))
 
+        self.loadModelButton.clicked.connect(self.load_model)
+        self.unloadModelButton.clicked.connect(self.unload_model)
+
         self.defaultStopButton.clicked.connect(self.stop_textgen)
         self.notebookStopButton.clicked.connect(self.stop_textgen)
         self.chatStopButton.clicked.connect(self.stop_textgen)
 
-        self.paramWinShowButton.clicked.connect(self.settings_win.show)
+        # self.paramWinShowButton.clicked.connect(self.settings_win.show)
 
         self.settingsPathSaveButton.clicked.connect(self.save_settings)
 
@@ -777,26 +838,18 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Continue button logic
     def continue_textgen(self, text_tab):
 
-        # Get the history text from the corresponding tab
-        history_text = getattr(self, text_tab.replace(
-            'Continue', 'TextHistory')).toPlainText()
-        if history_text:
-            self.continue_textgen_mode = True
+        if self.unloadModelButton.isEnabled():
 
-            if self.cppCheck.isChecked():
-                if not self.cppServerCheck.isChecked():
-                    run_backend = 'llama.cpp'
-                else:
-                    run_backend = 'llama.cpp_server'
+            # Get the history text from the corresponding tab
+            history_text = getattr(self, text_tab.replace(
+                'Continue', 'TextHistory')).toPlainText()
+            if history_text:
+                self.continue_textgen_mode = True
 
-            elif self.exllamaCheck.isChecked():
-                run_backend = 'exllama'
-            elif self.tsServerCheck.isChecked():
-                run_backend = 'ts-server'
-            elif self.rwkvCppCheck.isChecked():
-                run_backend = 'rwkv.cpp'
-            # Launch the backend with the history text and the run backend
-            self.launch_backend(history_text, run_backend)
+                backend = self.get_current_backend()
+
+                # Launch the backend with the history text and the run backend
+                self.launch_backend(history_text, backend)
 
     # Define a helper function to insert text and scroll to the end of a text widget
     def insert_text_and_scroll(self, text_widget, text):
@@ -968,7 +1021,27 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             )
         return exllama_model_params
 
+    @Slot(bool)
+    def loadModel_handleResult(self, response):
+        if response:
+            print('--- Loaded model')
+            self.statusbar.showMessage('Status: Loaded model')
+
+            self.chatGenerateButton.setEnabled(True)
+            self.defaultGenerateButton.setEnabled(True)
+            self.notebookGenerateButton.setEnabled(True)
+
+            self.unloadModelButton.setEnabled(True)
+            self.toggle_backend_visibility(False)
+            self.textgenTab.setCurrentIndex(0)
+
+        else:
+            print('---Error: Model load failure...')
+            self.statusbar.showMessage('Error: Model load failure')
+            self.toggle_backend_visibility(True)
+
     def get_cpp_model_params(self):
+
         # Get the cpp model parameters from the settings window
         cpp_model_params = {
             'model_path': self.get_model_path(self.cppModelPath),
@@ -989,37 +1062,82 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.settings_win.cppLoraLineEdit)
         return cpp_model_params
 
-    def load_model(self, model_name):
-        # Load a model based on its name
-        print(f'--- Loading {model_name} model...')
-        self.statusbar.showMessage(f'Status: Loading {model_name} model...')
+    def toggle_backend_visibility(self, mode: bool):
 
-        if model_name == 'Exllama':
-            from exllama_generate import ExllamaModel
-            global exllama_model
-            exllama_model = ExllamaModel.from_pretrained(
-                self.get_exllama_model_params())
-            print('--- Exllama model load parameters:',
-                  self.get_exllama_model_params())
+        self.cppCheck.setEnabled(mode)
+        self.exllamaCheck.setEnabled(mode)
+        self.tsServerCheck.setEnabled(mode)
+        self.cppServerCheck.setEnabled(mode)
+        self.rwkvCppCheck.setEnabled(mode)
+        self.loadModelButton.setEnabled(mode)
 
-        elif model_name == 'llama.cpp':
-            use_cache = bool(self.settings_win.cppCacheCheck.isChecked())
-            from llamacpp_generate import LlamaCppModel
+    # Load a model based on its name
+    def load_model(self):
+        backend = self.get_current_backend()
+
+        cpp_model_params = self.get_cpp_model_params()
+        exllama_model_params = self.get_exllama_model_params()
+        rwkv_cpp_model_params = self.get_rwkv_cpp_model_params()
+
+        if backend == 'llama.cpp':
+            print('--- llama.cpp model load parameters:', cpp_model_params)
+        elif backend == 'exllama':
+            print('--- Exllama model load parameters:', exllama_model_params)
+        elif backend == 'rwkv.cpp':
+            print('--- rwkv.cpp model load parameters:', rwkv_cpp_model_params)
+        else:
+            print(f'--- Notice: This backend ({backend}) has no model to load')
+            self.statusbar.showMessage(
+                f'Notice: This backend ({backend}) has no model to load')
+            self.loadModel_handleResult(True)
+
+            return
+
+        print(f'--- Loading {backend} model...')
+        self.statusbar.showMessage(f'Status: Loading {backend} model...')
+
+        self.load_modelThread = LoadModelThread(
+            backend, cpp_model_params, exllama_model_params, rwkv_cpp_model_params)
+        self.load_modelThread.final_resultReady.connect(
+            self.loadModel_handleResult)
+        self.load_modelThread.finished.connect(
+            self.load_modelThread.deleteLater)
+        self.load_modelThread.start()
+
+        self.toggle_backend_visibility(False)
+
+        self.model_load = True
+
+    def unload_model(self):
+        backend = self.get_current_backend()
+
+        if backend == 'llama.cpp':
             global cpp_model
-            cpp_model = LlamaCppModel.from_pretrained(use_cache,
-                                                      self.get_cpp_model_params())
-            print('--- llama.cpp model load parameters:',
-                  self.get_cpp_model_params())
-
-        elif model_name == 'rwkv.cpp':
-            import rwkvcpp_generate
+            del cpp_model
+        elif backend == 'exllama':
+            global exllama_model
+            del exllama_model
+            from exllama_generate import exllama_free_memory
+            exllama_free_memory()
+        elif backend == 'rwkv.cpp':
             global rwkv_cpp_model
-            rwkv_cpp_model = rwkvcpp_generate.load_model(
-                self.get_rwkv_cpp_model_params())
-            print('--- rwkv.cpp model load parameters:')
+            rwkv_cpp_model.free()
+            del rwkv_cpp_model
+
+        print(f"--- Unloaded {backend} model")
+        self.statusbar.showMessage(f'Status: Unloaded {backend} model')
+
+        self.model_load = False
+
+        self.toggle_backend_visibility(True)
+
+        self.unloadModelButton.setEnabled(False)
+
+        self.chatGenerateButton.setEnabled(False)
+        self.defaultGenerateButton.setEnabled(False)
+        self.notebookGenerateButton.setEnabled(False)
 
     # Enable the stop buttons for each mode
-
     def set_textgen_things(self):
         self.defaultStopButton.setEnabled(True)
         self.notebookStopButton.setEnabled(True)
@@ -1046,71 +1164,25 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         return chat_text
 
+    def get_current_backend(self):
+        if self.cppCheck.isChecked():
+            backend = 'llama.cpp'
+        elif self.cppServerCheck.isChecked():
+            backend = 'llama.cpp_server'
+        elif self.exllamaCheck.isChecked():
+            backend = 'exllama'
+        elif self.tsServerCheck.isChecked():
+            backend = 'ts-server'
+        elif self.rwkvCppCheck.isChecked():
+            backend = 'rwkv.cpp'
+
+        return backend
+
     # Main launcher logic
     def textgen_switcher(self, textgen_mode):
         self.textgen_mode = textgen_mode
 
-        # Check if the model has been loaded
-        if not self.model_load:
-            # Load the model based on the user's choice of cpp or exllama
-            if self.cppCheck.isChecked() and not self.cppServerCheck.isChecked():
-                try:
-                    self.load_model('llama.cpp')
-                except Exception as error:
-                    print('--- Error: Could not load llama.cpp model')
-                    print(error)
-                    self.statusbar.showMessage(
-                        'Status: Error! Could not load llama.cpp model')
-                    return
-                else:
-                    self.model_load = True
-
-            elif self.exllamaCheck.isChecked():
-                try:
-                    self.load_model('Exllama')
-                except Exception as error:
-                    print('--- Error: Could not load Exllama model')
-                    print(error)
-                    self.statusbar.showMessage(
-                        'Status: Error! Could not load Exllama model')
-                    return
-                else:
-                    self.model_load = True
-            elif self.tsServerCheck.isChecked():
-                # TS Server
-                pass
-
-            elif self.rwkvCppCheck.isChecked():
-                try:
-                    self.load_model('rwkv.cpp')
-                except Exception as error:
-                    print('--- Error: Could not load rwkv.cpp model')
-                    print(error)
-                    self.statusbar.showMessage(
-                        'Status: Error! Could not load rwkv.cpp model')
-                    return
-                else:
-                    self.model_load = True
-
-            # Disable the cpp and exllama checkboxes
-            self.cppCheck.setEnabled(False)
-            self.exllamaCheck.setEnabled(False)
-            self.tsServerCheck.setEnabled(False)
-            self.cppServerCheck.setEnabled(False)
-            self.rwkvCppCheck.setEnabled(False)
-
-        if not self.cppCheck.isEnabled():
-            if self.cppCheck.isChecked():
-                if not self.cppServerCheck.isChecked():
-                    backend = 'llama.cpp'
-                else:
-                    backend = 'llama.cpp_server'
-            elif self.exllamaCheck.isChecked():
-                backend = 'exllama'
-            elif self.tsServerCheck.isChecked():
-                backend = 'ts-server'
-            elif self.rwkvCppCheck.isChecked():
-                backend = 'rwkv.cpp'
+        backend = self.get_current_backend()
 
         # If the pre-textgen mode is default mode
         if self.textgen_mode == 'default_mode':
@@ -1131,30 +1203,31 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 self.launch_backend(input_message, backend)
 
         # If the pre-textgen mode is chat mode
-        if self.textgen_mode == 'chat_mode':
+        if self.model_load or backend == 'llama.cpp_server' or backend == 'ts-server':
+            if self.textgen_mode == 'chat_mode':
 
-            # Get the input message from the chat mode text input widget
-            input_message = self.chat_modeTextInput.toPlainText()
+                # Get the input message from the chat mode text input widget
+                input_message = self.chat_modeTextInput.toPlainText()
 
-            # If the input message is not empty
-            if input_message:
+                # If the input message is not empty
+                if input_message:
 
-                # Generate a final prompt by calling the prompt_generation method with the pre-textgen mode argument
-                final_prompt = self.prompt_generation()
+                    # Generate a final prompt by calling the prompt_generation method with the pre-textgen mode argument
+                    final_prompt = self.prompt_generation()
 
-                # Get formatted chat text
-                input_message = input_message.strip().replace("\n", "<br>")
-                chat_text = self.chat_formatting(input_message)
+                    # Get formatted chat text
+                    input_message = input_message.strip().replace("\n", "<br>")
+                    chat_text = self.chat_formatting(input_message)
 
-                # Append the text to the chat mode text history widget
-                self.chat_modeTextHistory.append(chat_text)
+                    # Append the text to the chat mode text history widget
+                    self.chat_modeTextHistory.append(chat_text)
 
-                # Launch the backend with the final prompt and the backend name
-                self.launch_backend(final_prompt, backend)
+                    # Launch the backend with the final prompt and the backend name
+                    self.launch_backend(final_prompt, backend)
 
-                # Clear the chat mode text input widget
-                self.chat_input_history_add(input_message)
-                self.chat_modeTextInput.clear()
+                    # Clear the chat mode text input widget
+                    self.chat_input_history_add(input_message)
+                    self.chat_modeTextInput.clear()
 
     # Launch QThread to textgen
     def launch_backend(self, message, run_backend):

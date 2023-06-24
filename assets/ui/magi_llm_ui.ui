@@ -39,19 +39,6 @@
         <string>Chat</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="4" column="0" colspan="2">
-         <widget class="QComboBox" name="chatInputSessionCombo">
-          <property name="toolTip">
-           <string>Saved chat inputs from session</string>
-          </property>
-          <property name="maxCount">
-           <number>128</number>
-          </property>
-          <property name="placeholderText">
-           <string>User input history</string>
-          </property>
-         </widget>
-        </item>
         <item row="6" column="0" colspan="2">
          <widget class="QPlainTextEdit" name="chat_modeTextInput">
           <property name="maximumSize">
@@ -73,6 +60,116 @@
           </property>
           <property name="placeholderText">
            <string>Type something here</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1">
+         <widget class="QFrame" name="chatButtonGroup">
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="2">
+            <widget class="QPushButton" name="chatClearButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>Clear the output history</string>
+             </property>
+             <property name="text">
+              <string>Clear</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="chatContinueButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>Continue the last generation</string>
+             </property>
+             <property name="text">
+              <string>Continue</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QPushButton" name="chatStopButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>Stop generation</string>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="chatRewindButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>Rewinds the chat 1 turn</string>
+             </property>
+             <property name="text">
+              <string>Rewind</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="2">
+         <widget class="QComboBox" name="chatInputSessionCombo">
+          <property name="toolTip">
+           <string>Saved chat inputs from session</string>
+          </property>
+          <property name="maxCount">
+           <number>128</number>
+          </property>
+          <property name="placeholderText">
+           <string>User input history</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QTextEdit" name="chat_modeTextHistory">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="placeholderText">
+           <string>Output goes here</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QPushButton" name="chatGenerateButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+            <underline>false</underline>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Send (CTRL+Enter)</string>
+          </property>
+          <property name="text">
+           <string>Generate</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Return</string>
           </property>
          </widget>
         </item>
@@ -139,100 +236,6 @@
           </layout>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QTextEdit" name="chat_modeTextHistory">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="placeholderText">
-           <string>Output goes here</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QPushButton" name="chatGenerateButton">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
-            <underline>false</underline>
-           </font>
-          </property>
-          <property name="toolTip">
-           <string>Send (CTRL+Enter)</string>
-          </property>
-          <property name="text">
-           <string>Generate</string>
-          </property>
-          <property name="shortcut">
-           <string>Ctrl+Return</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="1">
-         <widget class="QFrame" name="frame_6">
-          <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="2">
-            <widget class="QPushButton" name="chatClearButton">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="toolTip">
-              <string>Clear the output history</string>
-             </property>
-             <property name="text">
-              <string>Clear</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="chatContinueButton">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="toolTip">
-              <string>Continue the last generation</string>
-             </property>
-             <property name="text">
-              <string>Continue</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QPushButton" name="chatStopButton">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="toolTip">
-              <string>Stop generation</string>
-             </property>
-             <property name="text">
-              <string>Stop</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="chatRewindButton">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="toolTip">
-              <string>Rewinds the chat 1 turn</string>
-             </property>
-             <property name="text">
-              <string>Rewind</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="standard_textgenTab">
@@ -257,6 +260,9 @@
         </item>
         <item row="2" column="0">
          <widget class="QPushButton" name="defaultGenerateButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
@@ -275,7 +281,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QFrame" name="frame_7">
+         <widget class="QFrame" name="standardButtonGroup">
           <layout class="QGridLayout" name="gridLayout_12">
            <item row="0" column="0">
             <widget class="QPushButton" name="defaultContinueButton">
@@ -346,6 +352,9 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="0">
          <widget class="QPushButton" name="notebookGenerateButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
@@ -364,7 +373,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QFrame" name="frame_4">
+         <widget class="QFrame" name="notebookButtonGroup">
           <layout class="QGridLayout" name="gridLayout_9">
            <item row="0" column="1">
             <widget class="QPushButton" name="notebookClearButton">
@@ -563,6 +572,136 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Themes</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QRadioButton" name="themeDarkCheck">
+             <property name="toolTip">
+              <string>Use a dark theme</string>
+             </property>
+             <property name="text">
+              <string>Dark</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="themeLightCheck">
+             <property name="toolTip">
+              <string>Use a light theme</string>
+             </property>
+             <property name="text">
+              <string>Light</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="themeNativeCheck">
+             <property name="toolTip">
+              <string>Use OS native theme</string>
+             </property>
+             <property name="text">
+              <string>Native</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="backendGroup">
+          <property name="title">
+           <string>Backend:</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="9" column="0">
+            <widget class="QPushButton" name="loadModelButton">
+             <property name="text">
+              <string>Load backend</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="cppCheck">
+             <property name="toolTip">
+              <string>Use llama.cpp backend</string>
+             </property>
+             <property name="text">
+              <string>llama.cpp</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QRadioButton" name="rwkvCppCheck">
+             <property name="toolTip">
+              <string>Use rwkv.cpp backend</string>
+             </property>
+             <property name="text">
+              <string>rwkv.cpp</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1">
+            <widget class="QPushButton" name="unloadModelButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Unload backend</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QRadioButton" name="tsServerCheck">
+             <property name="toolTip">
+              <string>Use TextSynth server backend</string>
+             </property>
+             <property name="text">
+              <string>TextSynth</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="exllamaCheck">
+             <property name="toolTip">
+              <string>Use Exllama backend</string>
+             </property>
+             <property name="text">
+              <string>Exllama</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="cppServerCheck">
+             <property name="toolTip">
+              <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
+             </property>
+             <property name="text">
+              <string>llama.cpp server</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item row="3" column="0" colspan="2">
          <widget class="QGroupBox" name="groupBox">
           <property name="title">
@@ -632,129 +771,6 @@
           </layout>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>Themes</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="QRadioButton" name="themeDarkCheck">
-             <property name="toolTip">
-              <string>Use a dark theme</string>
-             </property>
-             <property name="text">
-              <string>Dark</string>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="themeLightCheck">
-             <property name="toolTip">
-              <string>Use a light theme</string>
-             </property>
-             <property name="text">
-              <string>Light</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="themeNativeCheck">
-             <property name="toolTip">
-              <string>Use OS native theme</string>
-             </property>
-             <property name="text">
-              <string>Native</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_5">
-          <property name="title">
-           <string>Backend:</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_10">
-           <item row="4" column="0">
-            <widget class="QPushButton" name="paramWinShowButton">
-             <property name="toolTip">
-              <string>Open parameter window</string>
-             </property>
-             <property name="text">
-              <string>Parameters</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QRadioButton" name="exllamaCheck">
-             <property name="toolTip">
-              <string>Use Exllama backend</string>
-             </property>
-             <property name="text">
-              <string>Exllama</string>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="cppCheck">
-             <property name="toolTip">
-              <string>Use llama.cpp backend</string>
-             </property>
-             <property name="text">
-              <string>llama.cpp</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="cppServerCheck">
-             <property name="toolTip">
-              <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
-             </property>
-             <property name="text">
-              <string>Server</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QRadioButton" name="tsServerCheck">
-             <property name="toolTip">
-              <string>Use TextSynth server backend</string>
-             </property>
-             <property name="text">
-              <string>TextSynth</string>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QRadioButton" name="rwkvCppCheck">
-             <property name="toolTip">
-              <string>Use rwkv.cpp backend</string>
-             </property>
-             <property name="text">
-              <string>rwkv.cpp</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
        </layout>
       </widget>
      </widget>
@@ -777,14 +793,7 @@
     <addaction name="actionSettings"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionAbout"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSettings">
@@ -817,12 +826,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>638</x>
-     <y>975</y>
+     <x>680</x>
+     <y>977</y>
     </hint>
     <hint type="destinationlabel">
-     <x>417</x>
-     <y>356</y>
+     <x>112</x>
+     <y>146</y>
     </hint>
    </hints>
   </connection>
@@ -833,12 +842,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>638</x>
-     <y>975</y>
+     <x>680</x>
+     <y>977</y>
     </hint>
     <hint type="destinationlabel">
-     <x>378</x>
-     <y>387</y>
+     <x>101</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
