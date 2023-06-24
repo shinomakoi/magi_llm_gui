@@ -634,7 +634,7 @@ class Ui_magi_llm_window(object):
 #if QT_CONFIG(tooltip)
         self.cppCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use llama.cpp backend", None))
 #endif // QT_CONFIG(tooltip)
-        self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama.cpp", None))
+        self.cppCheck.setText(QCoreApplication.translate("magi_llm_window", u"llama-cpp-python", None))
 #if QT_CONFIG(tooltip)
         self.rwkvCppCheck.setToolTip(QCoreApplication.translate("magi_llm_window", u"Use rwkv.cpp backend", None))
 #endif // QT_CONFIG(tooltip)

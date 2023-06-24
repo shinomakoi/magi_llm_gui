@@ -547,6 +547,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         icon.addFile(str(APP_ICON), QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
+        self.textgenTab.setCurrentIndex(3)
+
         self.model_load = False
         self.continue_textgen_mode = False
         self.textgen_mode = 'chat_mode'

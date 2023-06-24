@@ -636,7 +636,7 @@
               <string>Use llama.cpp backend</string>
              </property>
              <property name="text">
-              <string>llama.cpp</string>
+              <string>llama-cpp-python</string>
              </property>
              <property name="checked">
               <bool>true</bool>
