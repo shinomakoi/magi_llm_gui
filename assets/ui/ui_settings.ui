@@ -19,7 +19,7 @@
    <string>Parameters</string>
   </property>
   <property name="toolTip">
-   <string>Seed to use (-1 for random)</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

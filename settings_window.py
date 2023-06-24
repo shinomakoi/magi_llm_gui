@@ -591,7 +591,7 @@ class Ui_Settings_Dialog(object):
     def retranslateUi(self, Settings_Dialog):
         Settings_Dialog.setWindowTitle(QCoreApplication.translate("Settings_Dialog", u"Parameters", None))
 #if QT_CONFIG(tooltip)
-        Settings_Dialog.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Seed to use (-1 for random)", None))
+        Settings_Dialog.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.parametersTab.setToolTip("")
