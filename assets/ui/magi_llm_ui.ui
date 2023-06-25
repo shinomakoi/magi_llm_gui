@@ -561,6 +561,9 @@
            </item>
            <item row="1" column="0">
             <widget class="QCheckBox" name="sendStopStringCheck">
+             <property name="toolTip">
+              <string>Send chat user stop string when generating</string>
+             </property>
              <property name="text">
               <string>Send chat stop string</string>
              </property>
@@ -635,6 +638,9 @@
           <layout class="QGridLayout" name="gridLayout_10">
            <item row="9" column="0">
             <widget class="QPushButton" name="loadModelButton">
+             <property name="toolTip">
+              <string>Load the selected backend and model</string>
+             </property>
              <property name="text">
               <string>Load backend</string>
              </property>
@@ -667,6 +673,9 @@
             <widget class="QPushButton" name="unloadModelButton">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>Unload the selected backend and model</string>
              </property>
              <property name="text">
               <string>Unload backend</string>

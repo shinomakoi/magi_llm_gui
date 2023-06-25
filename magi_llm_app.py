@@ -82,7 +82,7 @@ class LoadModelThread(QThread):
 
     def load_exllama(self):
         from exllama_generate import ExllamaModel
-        
+
         global exllama_model
         exllama_model = ExllamaModel.from_pretrained(
             self.exllama_model_params)
@@ -294,6 +294,29 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
         self.cpp_model_loaded = False
         self.exllama_model_loaded = False
 
+        def exllama_lora_select():
+            exllama_lora = get_directory_path('Select LoRA directory')
+            if exllama_lora:
+                self.exllamaLora.setText(exllama_lora)
+
+        def cpp_lora_select():
+            cpp_lora = get_file_path('Open file', "GGML LoRA model (*bin)")
+            if cpp_lora:
+                self.cppLoraLineEdit.setText(cpp_lora)
+
+        def get_file_path(title, filter):
+            file_path = (QFileDialog.getOpenFileName(
+                self, title, '', filter)[0])
+            return file_path
+
+        def get_directory_path(title):
+            directory_path = str(QFileDialog.getExistingDirectory(
+                self, title))
+            return directory_path
+
+        self.exllamaLoraSelect.clicked.connect(exllama_lora_select)
+        self.cppLoraSelect.clicked.connect(cpp_lora_select)
+
         # Connect the settings sliders to the spin boxes
         self.temperatureSlider.valueChanged.connect(
             lambda: self.temperatureSpin.setValue(
@@ -401,6 +424,10 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             beam_length = config["Params-Exllama"]["beam_length"]
             gpu_split = config["Params-Exllama"]["gpu_split"]
             gpu_split_values = config["Params-Exllama"]["gpu_split_values"]
+            exllama_lora_path = config["Params-Exllama"]["exllama_lora_path"]
+            exllama_lora_check = config["Params-Exllama"]["exllama_lora_check"]
+            compress_pos_embed_check = config["Params-Exllama"]["compress_pos_embed_check"]
+            compress_pos_embed_value = config["Params-Exllama"]["compress_pos_embed_value"]
 
             # Params-LlamaCPP
             threads = config["Params-LlamaCPP"]["threads"]
@@ -465,6 +492,12 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
             self.exllamaGpuSplitCheck.setChecked(eval(gpu_split))
             self.exllamaGpuSplitLine.setText((gpu_split_values))
+
+            self.exllamaLora.setText(exllama_lora_path)
+            self.exllamaLoraCheck.setChecked(eval(exllama_lora_check))
+            self.compressPosEmbedCheck.setChecked(
+                eval(compress_pos_embed_check))
+            self.compressPosEmbedSpin.setValue(int(compress_pos_embed_value))
 
             # Params-LlamaCPP
             self.cppThreads.setValue(int(threads))
@@ -920,7 +953,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     def get_stop_strings(self):
         stop_strings = []
-        if self.textgen_mode == 'chat_mode' and self.sendStopStringCheck.isChecked():
+        if self.sendStopStringCheck.isChecked():
             if self.instructRadioButton.isChecked():
                 chat_preset = self.get_chat_presets()
                 stop_strings.append(chat_preset["user"])
@@ -966,8 +999,14 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'min_p': self.settings_win.minPSpin.value(),
             'token_repetition_penalty_sustain': self.settings_win.token_repetition_penalty_decaySpin.value(),
             'stop': stop_string,
-            'max_seq_len' : self.settings_win.ctxsizeSpin.value()
+            'max_seq_len': self.settings_win.ctxsizeSpin.value(),
+            'exllama_lora_check': self.settings_win.exllamaLoraCheck.isChecked()
         }
+
+        if self.settings_win.exllamaLoraCheck.isChecked():
+            exllama_params["exllama_lora_directory"] = self.get_model_path(
+                self.settings_win.exllamaLora)
+
         # print('--- exllama_params:', exllama_params)
         return exllama_params
 
@@ -1024,7 +1063,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             'model_path': self.get_model_path(self.rwkvCppModelPath),
             'n_threads': self.settings_win.cppThreads.value(),
             'n_gpu_layers': self.settings_win.gpuLayersSpin.value(),
-            
         }
 
         # if self.settings_win.gpuAccelCheck.isChecked():
@@ -1037,11 +1075,17 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         exllama_model_params = {
             'model_path': self.get_model_path(self.exllamaModelPath),
             'gpu_split': self.settings_win.exllamaGpuSplitCheck.isChecked(),
-            'max_seq_len': self.settings_win.ctxsizeSpin.value()
+            'max_seq_len': self.settings_win.ctxsizeSpin.value(),
+            'compress_pos_emb_check': self.settings_win.compressPosEmbedCheck.isChecked()
         }
+
         if self.settings_win.exllamaGpuSplitCheck.isChecked():
             exllama_model_params["gpu_split_values"] = self.settings_win.exllamaGpuSplitLine.text(
             )
+        if self.settings_win.compressPosEmbedCheck.isChecked():
+            exllama_model_params["compress_pos_emb"] = self.settings_win.compressPosEmbedSpin.value(
+            )
+
         return exllama_model_params
 
     def get_cpp_model_params(self):
@@ -1099,7 +1143,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         print(f'--- Loading {backend} model...')
         self.statusbar.showMessage(f'Status: Loading {backend} model...')
-        
+
         llama_cpp_cache = self.settings_win.cppCacheCheck.isChecked()
 
         self.load_modelThread = LoadModelThread(

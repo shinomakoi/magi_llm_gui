@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -5,9 +6,10 @@ import torch
 
 sys.path.insert(0, str(Path("exllama")))
 
-from exllama.tokenizer import ExLlamaTokenizer
-from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
-from exllama.generator import ExLlamaGenerator
+from tokenizer import ExLlamaTokenizer
+from model import ExLlama, ExLlamaCache, ExLlamaConfig
+from lora import ExLlamaLora
+from generator import ExLlamaGenerator
 
 # Simple interactive chatbot script
 MODEL_EXTENSIONS = [".safetensors", ".pt", ".bin"]
@@ -21,8 +23,7 @@ class ExllamaModel:
         self.cache = None
         self.tokenizer = None
 
-        # add load max_seq_len here instead of generate_with_streaming etc
-
+    # Create an instance of the class from a pretrained model
     @classmethod
     def from_pretrained(cls, params):
 
@@ -30,8 +31,6 @@ class ExllamaModel:
         # Get the paths for the tokenizer model and the model config
         TOKENIZER_MODEL_PATH = MODEL_PATH / "tokenizer.model"
         MODEL_CONFIG_PATH = MODEL_PATH / "config.json"
-
-        # Create an instance of the class from a pretrained model
 
         # Load the model config from a json file
         config = ExLlamaConfig(str(MODEL_CONFIG_PATH))
@@ -52,7 +51,12 @@ class ExllamaModel:
 
         # Set the model path and max sequence length in the config
         config.model_path = str(model_path)
+
         config.max_seq_len = params["max_seq_len"]
+        print('--- Exllama: Max context size:', config.max_seq_len)
+
+        if params["compress_pos_emb_check"]:
+            config.compress_pos_emb = float(params["compress_pos_emb"])
 
         # Multi-gpu mode
         if params["gpu_split"]:
@@ -106,6 +110,23 @@ class ExllamaModel:
         # Create an instance of ExLlamaGenerator with the model, tokenizer and cache
         generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)
 
+        # LoRA
+        if params["exllama_lora_check"]:
+            print('--- Using Exllama LoRA')
+
+            exllama_lora_directory = params["exllama_lora_directory"]
+            lora_config_path = os.path.join(
+                exllama_lora_directory, "adapter_config.json")
+            lora_path = os.path.join(
+                exllama_lora_directory, "adapter_model.bin")
+
+            lora = ExLlamaLora(
+                self.model, lora_config_path, lora_path)
+
+            generator.lora = lora
+        else:
+            generator.lora = None
+
         # Set some settings for the generator based on params
         generator.settings.temperature = params["temperature"]
         generator.settings.top_p = params["top_p"]
@@ -148,6 +169,9 @@ class ExllamaModel:
         # Initialize an empty response line
         res_line = ''
 
+        if stop_string:
+            stop_string = stop_string[0]
+
         # Loop for up to max response tokens
         for i in range(max_response_tokens):
 
@@ -185,12 +209,11 @@ class ExllamaModel:
             # Yield the new text to the caller
             yield new_text
 
-            if stop_string:
-                stop_string=stop_string[0]
-                if res_line.endswith(stop_string):
-                    plen = generator.tokenizer.encode(stop_string).shape[-1]
-                    generator.gen_rewind(plen)
-                    break
+            # Stop string
+            if res_line.endswith(stop_string):
+                plen = generator.tokenizer.encode(stop_string).shape[-1]
+                generator.gen_rewind(plen)
+                break
 
         # End the beam search
         generator.end_beam_search()
