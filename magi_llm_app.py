@@ -559,8 +559,6 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.repetition_penaltySlider.setValue(
                 int(param_preset_name["repetition_penalty"] * 100)
             )
-            self.typical_pSlider.setValue(
-                float(param_preset_name["typical_p"]))
 
             # Print a message indicating which preset was applied
             print("--- Applied parameter preset:", Path(preset_file).stem)
