@@ -33,21 +33,13 @@ LLAMA_CPP_SERVER = "llama.cpp_server"
 TS_SERVER = "ts-server"
 RWKV_CPP = "rwkv.cpp"
 
+
 # A class to load models in a separate thread
-
-
 class LoadModelThread(QThread):
-
     final_resultReady = Signal(bool)
 
-    def __init__(
-        self,
-        backend: str,
-        cpp_model_params: dict,
-        exllama_model_params: dict,
-        rwkv_cpp_model_params: dict,
-        llama_cpp_cache: bool,
-    ):
+    def __init__(self, backend: str, cpp_model_params: dict, exllama_model_params: dict,
+                 rwkv_cpp_model_params: dict, llama_cpp_cache: bool):
         super().__init__()
         self.cpp_model_params = cpp_model_params
         self.exllama_model_params = exllama_model_params
@@ -61,7 +53,6 @@ class LoadModelThread(QThread):
             LLAMA_CPP: self.load_cpp,
             RWKV_CPP: self.load_rwkv_cpp,
         }
-        # Call the appropriate method based on the load_backend attribute
         backend_method = load_backend_methods.get(self.backend)
         if backend_method:
             try:
@@ -82,10 +73,8 @@ class LoadModelThread(QThread):
 
     def load_exllama(self):
         from exllama_generate import ExllamaModel
-
         global exllama_model
-        exllama_model = ExllamaModel.from_pretrained(
-            self.exllama_model_params)
+        exllama_model = ExllamaModel.from_pretrained(self.exllama_model_params)
 
     def load_rwkv_cpp(self):
         import rwkvcpp_generate
@@ -94,21 +83,12 @@ class LoadModelThread(QThread):
             self.rwkv_cpp_model_params)
 
 
-# A class to run text generation in a separate thread.
 class TextgenThread(QThread):
-
     resultReady = Signal(str)
     final_resultReady = Signal(str)
 
-    def __init__(
-        self,
-        exllama_params: dict,
-        message: str,
-        stream_enabled: bool,
-        run_backend: str,
-        cpp_params: dict,
-        ts_model: str,
-    ):
+    def __init__(self, exllama_params: dict, message: str, stream_enabled: bool,
+                 run_backend: str, cpp_params: dict, ts_model: str):
         super().__init__()
         self.exllama_params = exllama_params
         self.message = message
@@ -116,11 +96,10 @@ class TextgenThread(QThread):
         self.run_backend = run_backend
         self.cpp_params = cpp_params
         self.ts_model = ts_model
-
         self.stop_flag = False
 
     def run(self):
-        # Use a dictionary to dispatch the backend methods
+        """Run the appropriate backend method based on the run_backend attribute."""
         backend_methods = {
             EXLLAMA: self.run_exllama,
             LLAMA_CPP: self.run_llama_cpp,
@@ -128,8 +107,6 @@ class TextgenThread(QThread):
             TS_SERVER: self.run_ts_server,
             RWKV_CPP: self.run_rwkv_cpp,
         }
-
-        # Call the appropriate method based on the run_backend attribute
         backend_method = backend_methods.get(self.run_backend)
         if backend_method:
             try:
@@ -138,33 +115,26 @@ class TextgenThread(QThread):
                 self.final_resultReady.emit('')
                 print('--- Error running backend:\n', error)
                 return
-
         else:
             raise ValueError(f"Invalid run_backend: {self.run_backend}")
 
     def run_exllama(self):
-        # Use a generator expression to iterate over the responses
+        """Run the Exllama model and generate a response."""
         responses = exllama_model.generate_with_streaming(
             self.message, self.exllama_params)
-
-        # Use a variable to store the previous response
         final_response = ''
         for response in responses:
             final_response += response
             if self.stop_flag:
                 break
-
-            # Emit the stripped response as resultReady signal
             if self.stream_enabled:
                 self.resultReady.emit(response)
         if not self.stream_enabled:
             self.resultReady.emit(final_response)
-
-        # Emit the final response as final_resultReady signal
         self.final_resultReady.emit(final_response)
 
     def run_llama_cpp(self):
-        # Use keyword arguments to pass the cpp_params to the model methods
+        """Run the llama.cpp model and generate a response."""
         kwargs = {
             "max_tokens": self.cpp_params["max_new_tokens"],
             "temperature": self.cpp_params["temperature"],
@@ -177,51 +147,31 @@ class TextgenThread(QThread):
             "frequency_penalty": self.cpp_params["frequency_penalty"],
             "presence_penalty": self.cpp_params["presence_penalty"],
         }
-
-        # Use a generator expression to iterate over the responses
         responses = cpp_model.generate_with_streaming(
-            self.message, **kwargs
-        ) if self.stream_enabled else [cpp_model.generate(self.message, **kwargs)]
-
-        # Use a list to store the responses and join them at the end
+            self.message, **kwargs) if self.stream_enabled else [cpp_model.generate(self.message, **kwargs)]
         response_list = []
         for response in responses:
             if self.stop_flag:
                 break
-            # Emit the response as resultReady signal
             self.resultReady.emit(response)
-            # Append the response to the list
             response_list.append(response)
-
-        # Join the message and the responses and emit as final_resultReady signal
         final_text = f"{''.join(response_list)}"
         self.final_resultReady.emit(final_text)
 
-    """Run the llama.cpp server and generate a response.
-    Emits signals with the results.
-    """
-
     def run_llama_cpp_server(self):
+        """Run the llama.cpp server and generate a response."""
         import llamacpp_server_generate
-
         final_text = ""
         if self.stream_enabled:
-            # Generate a response with streaming
-            for response in llamacpp_server_generate.generate_with_streaming(
-                self.message, self.cpp_params
-            ):
+            for response in llamacpp_server_generate.generate_with_streaming(self.message, self.cpp_params):
                 if self.stop_flag:
                     break
                 final_text += response
                 self.resultReady.emit(response)
         else:
-            # Generate a response without streaming
             final_text = llamacpp_server_generate.generate_nostream(
-                self.message, self.cpp_params
-            )
+                self.message, self.cpp_params)
             self.resultReady.emit(final_text)
-
-        # Emit the final result
         self.final_resultReady.emit(final_text)
 
     def run_ts_server(self):
@@ -602,7 +552,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Quit from menu
         self.actionSettings.triggered.connect(self.settings_win.show)
         self.actionExit.triggered.connect(app.exit)
-
         # Status bar
         self.statusbar.showMessage("Status: Ready")
 
@@ -884,9 +833,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # Launch the backend with the history text and the run backend
                 self.launch_backend(history_text, backend)
 
-    # Define a helper function to insert text and scroll to the end of a text widget
     def insert_text_and_scroll(self, text_widget, text):
-
+        # Define a helper function to insert text and scroll to the end of a text widget
         cursor = text_widget.textCursor()
         cursor.movePosition(QTextCursor.End)  # Move it to the end
         cursor.insertText(text)
@@ -904,51 +852,55 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     # Handle the final response from textgen
     @Slot(str)
     def final_handleResult(self, final_text):
-        # Write chat log
-
-        if final_text.endswith('USER:'):
-            final_text = final_text.rstrip("USER:")
+        # Remove the trailing "USER:" if present
+        final_text = final_text.rstrip("USER:")
 
         if self.textgen_mode == 'chat_mode':
             if self.continue_textgen_mode:
+                # Append the final text to the last message in the history
                 updated = str(
-                    (self.message_history[-1].rstrip())+final_text.rstrip()+'\n\n')
+                    (self.message_history[-1].rstrip()) + final_text.rstrip() + '\n\n')
                 self.message_history[-1] = updated
                 self.chat_output_list.pop(-1)
                 self.continue_textgen_mode = False
             else:
-                if self.customResponsePrefixCheck.isChecked():
-                    self.message_history.append(
-                        self.customResponsePrefix.text()+final_text.rstrip()+'\n\n')
-                else:
-                    self.message_history.append(final_text.rstrip()+'\n\n')
+                # Add a new message to the history with an optional prefix
+                prefix = self.customResponsePrefix.text(
+                ) if self.customResponsePrefixCheck.isChecked() else ""
+                self.message_history.append(
+                    prefix + final_text.rstrip() + '\n\n')
 
-        # Write chatlog with write_chatlog, no new session
-        if self.textgen_mode == 'chat_mode' and self.logChatCheck.isChecked():
-            self.write_chatlog(False)
+            # Write chatlog with write_chatlog, no new session
+            if self.logChatCheck.isChecked():
+                self.write_chatlog(False)
+
+            self.chat_output_list.append(self.chat_modeTextHistory.toHtml())
 
         self.statusbar.showMessage(f"Status: Generation complete")
         self.history_readonly_logic(False)
-
-        self.chat_output_list.append(self.chat_modeTextHistory.toHtml())
 
         # Stop the textgen thread
         self.stop_textgen()
 
     def write_chatlog(self, new_session):
+        # Write chat log
         current_date = self.get_chat_date()
         log_text = ''
 
         if not new_session:
-            log_text = self.name_history[-2]+self.message_history[-2] + \
-                self.name_history[-1]+self.message_history[-1]
+            # Get the last two messages from the history
+            log_text = self.name_history[-2] + self.message_history[-2] + \
+                self.name_history[-1] + self.message_history[-1]
         else:
+            # Start a new session with a separator
             log_text = '\n############ New session ############\n'
 
+        # Append the log text to the file with the current date
         with open(f"logs/chat_{current_date}.txt", "a", encoding='utf-8') as f:
-            f.write('\n'+log_text)
+            f.write('\n' + log_text)
         print('--- Wrote chat log')
 
+    # Get and set the chat stop strings
     def get_stop_strings(self):
         stop_strings = []
         if self.sendStopStringCheck.isChecked():
@@ -956,7 +908,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 chat_preset = self.get_chat_presets()
                 stop_strings.append(chat_preset["user"])
             elif self.charactersRadioButton.isChecked():
-                stop_strings.append(self.yourNameLine.text()+':')
+                stop_strings.append(self.yourNameLine.text() + ':')
 
         # print('stopstrings', stop_strings)
         return stop_strings
@@ -1087,7 +1039,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         return exllama_model_params
 
     def get_cpp_model_params(self):
-
         # Get the cpp model parameters from the settings window
         cpp_model_params = {
             'model_path': self.get_model_path(self.cppModelPath),
@@ -1109,7 +1060,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         return cpp_model_params
 
     def toggle_backend_visibility(self, mode: bool):
-
+        # Enable or disable the backend widgets based on the mode
         self.cppCheck.setEnabled(mode)
         self.exllamaCheck.setEnabled(mode)
         self.tsServerCheck.setEnabled(mode)
@@ -1117,57 +1068,60 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.rwkvCppCheck.setEnabled(mode)
         self.loadModelButton.setEnabled(mode)
 
-    # Load a model based on its name
     def load_model(self):
+        # Load a model based on its name
         backend = self.get_current_backend()
 
+        # Get the model parameters for each backend
         cpp_model_params = self.get_cpp_model_params()
         exllama_model_params = self.get_exllama_model_params()
         rwkv_cpp_model_params = self.get_rwkv_cpp_model_params()
 
-        if backend == 'llama.cpp':
-            print('--- llama.cpp model load parameters:', cpp_model_params)
-        elif backend == 'exllama':
-            print('--- Exllama model load parameters:', exllama_model_params)
-        elif backend == 'rwkv.cpp':
-            print('--- rwkv.cpp model load parameters:', rwkv_cpp_model_params)
+        # Print the model parameters for debugging
+        print(f"--- {backend} model load parameters:",
+              locals().get(f"{backend}_model_params"))
+
+        # Check if the backend has a model to load
+        if backend in (LLAMA_CPP, EXLLAMA, RWKV_CPP):
+            print(f'--- Loading {backend} model...')
+            self.statusbar.showMessage(f'Status: Loading {backend} model...')
+
+            llama_cpp_cache = self.settings_win.cppCacheCheck.isChecked()
+
+            # Start a thread to load the model asynchronously
+            self.load_modelThread = LoadModelThread(
+                backend, cpp_model_params, exllama_model_params, rwkv_cpp_model_params, llama_cpp_cache)
+            self.load_modelThread.final_resultReady.connect(
+                self.loadModel_handleResult)
+            self.load_modelThread.finished.connect(
+                self.load_modelThread.deleteLater)
+            self.load_modelThread.start()
+
+            # Disable the backend widgets while loading
+            self.toggle_backend_visibility(False)
+
+            # Set the model load flag to True
+            self.model_load = True
+
         else:
             print(f'--- Notice: This backend ({backend}) has no model to load')
             self.statusbar.showMessage(
                 f'Notice: This backend ({backend}) has no model to load')
             self.loadModel_handleResult(True)
 
-            return
-
-        print(f'--- Loading {backend} model...')
-        self.statusbar.showMessage(f'Status: Loading {backend} model...')
-
-        llama_cpp_cache = self.settings_win.cppCacheCheck.isChecked()
-
-        self.load_modelThread = LoadModelThread(
-            backend, cpp_model_params, exllama_model_params, rwkv_cpp_model_params, llama_cpp_cache)
-        self.load_modelThread.final_resultReady.connect(
-            self.loadModel_handleResult)
-        self.load_modelThread.finished.connect(
-            self.load_modelThread.deleteLater)
-        self.load_modelThread.start()
-
-        self.toggle_backend_visibility(False)
-
-        self.model_load = True
-
     def unload_model(self):
+        # Delete the global model variable and free any memory if needed
         backend = self.get_current_backend()
 
-        if backend == 'llama.cpp':
+        if backend == LLAMA_CPP:
             global cpp_model
             del cpp_model
-        elif backend == 'exllama':
+        elif backend == EXLLAMA:
             global exllama_model
             del exllama_model
             from exllama_generate import exllama_free_memory
             exllama_free_memory()
-        elif backend == 'rwkv.cpp':
+        elif backend == RWKV_CPP:
             global rwkv_cpp_model
             rwkv_cpp_model.free()
             del rwkv_cpp_model
@@ -1175,18 +1129,21 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         print(f"--- Unloaded {backend} model")
         self.statusbar.showMessage(f'Status: Unloaded {backend} model')
 
+        # Set the model load flag to False
         self.model_load = False
 
+        # Enable the backend widgets after unloading
         self.toggle_backend_visibility(True)
 
+        # Disable the unload and generate buttons
         self.unloadModelButton.setEnabled(False)
 
         self.chatGenerateButton.setEnabled(False)
         self.defaultGenerateButton.setEnabled(False)
         self.notebookGenerateButton.setEnabled(False)
 
-    # Enable the stop buttons for each mode
     def set_textgen_things(self):
+        # Enable the stop buttons for each mode
         self.defaultStopButton.setEnabled(True)
         self.notebookStopButton.setEnabled(True)
         self.chatStopButton.setEnabled(True)
@@ -1201,30 +1158,29 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         paragraphs.append(
             f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}<br>")
         # Add a paragraph with the bot name and custom response prefix if checked
-        if self.customResponsePrefixCheck.isChecked():
-            paragraphs.append(
-                f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>{self.customResponsePrefix.text()}")
-        else:
-            paragraphs.append(
-                f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>")
+        prefix = self.customResponsePrefix.text(
+        ) if self.customResponsePrefixCheck.isChecked() else ""
+        paragraphs.append(
+            f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>{prefix}")
         # Join the paragraphs with line breaks and wrap them in <p> tags
         chat_text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
 
         return chat_text
 
     def get_current_backend(self):
-        if self.cppCheck.isChecked():
-            backend = 'llama.cpp'
-        elif self.cppServerCheck.isChecked():
-            backend = 'llama.cpp_server'
-        elif self.exllamaCheck.isChecked():
-            backend = 'exllama'
-        elif self.tsServerCheck.isChecked():
-            backend = 'ts-server'
-        elif self.rwkvCppCheck.isChecked():
-            backend = 'rwkv.cpp'
+        # Use a dictionary to map the check boxes to the backend names
+        check_boxes = {
+            self.cppCheck: LLAMA_CPP,
+            self.cppServerCheck: LLAMA_CPP_SERVER,
+            self.exllamaCheck: EXLLAMA,
+            self.tsServerCheck: TS_SERVER,
+            self.rwkvCppCheck: RWKV_CPP,
+        }
 
-        return backend
+        # Return the first checked check box's corresponding backend name
+        for check_box, backend in check_boxes.items():
+            if check_box.isChecked():
+                return backend
 
     # Main launcher logic
     def textgen_switcher(self, textgen_mode):
@@ -1232,64 +1188,58 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         backend = self.get_current_backend()
 
-        # If the pre-textgen mode is default mode
-        if self.textgen_mode == 'default_mode':
-            input_message = self.defaultTextInput.toPlainText()
-            # If the input message is not empty
-            if input_message:
+        # Use a dictionary to map the textgen modes to the input widgets
+        input_widgets = {
+            "default_mode": self.defaultTextInput,
+            "notebook_mode": self.notebook_modeTextHistory,
+            "chat_mode": self.chat_modeTextInput,
+        }
+
+        # Get the input widget based on the textgen mode
+        input_widget = input_widgets.get(self.textgen_mode)
+
+        # Get the input message from the input widget
+        input_message = input_widget.toPlainText()
+
+        # If the input message is not empty
+        if input_message:
+            if self.textgen_mode == "default_mode":
                 # Set the default mode text history widget to show the input message
                 self.default_modeTextHistory.setPlainText(input_message)
-                # Launch the backend with the input message and the backend name
-                self.launch_backend(input_message, backend)
+            elif self.textgen_mode == "chat_mode":
+                # Generate the final prompt for the chat mode
+                final_prompt = self.prompt_generation()
 
-        # If the pre-textgen mode is notebook mode
-        if self.textgen_mode == 'notebook_mode':
-            input_message = self.notebook_modeTextHistory.toPlainText()
-            # If the input message is not empty
-            if input_message:
-                # Launch the backend with the input message and the backend name
-                self.launch_backend(input_message, backend)
+                # Replace newlines with HTML line breaks in the input message
+                input_message = input_message.strip().replace("\n", "<br>")
+                # Format the chat text with the user and bot names and prefixes
+                chat_text = self.chat_formatting(input_message)
 
-        # If the pre-textgen mode is chat mode
-        if self.model_load or backend == 'llama.cpp_server' or backend == 'ts-server':
-            if self.textgen_mode == 'chat_mode':
+                # Append the chat text to the chat mode text history widget
+                self.chat_modeTextHistory.append(chat_text)
 
-                # Get the input message from the chat mode text input widget
-                input_message = self.chat_modeTextInput.toPlainText()
+                # Add the input message to the chat input history
+                self.chat_input_history_add(input_message)
+                # Clear the chat mode text input widget
+                self.chat_modeTextInput.clear()
 
-                # If the input message is not empty
-                if input_message:
+                # Use the final prompt as the input message for launching the backend
+                input_message = final_prompt
 
-                    # Generate a final prompt by calling the prompt_generation method with the pre-textgen mode argument
-                    final_prompt = self.prompt_generation()
+            # Launch the backend with the input message and the backend name
+            self.launch_backend(input_message, backend)
 
-                    # Get formatted chat text
-                    input_message = input_message.strip().replace("\n", "<br>")
-                    chat_text = self.chat_formatting(input_message)
-
-                    # Append the text to the chat mode text history widget
-                    self.chat_modeTextHistory.append(chat_text)
-
-                    # Launch the backend with the final prompt and the backend name
-                    self.launch_backend(final_prompt, backend)
-
-                    # Clear the chat mode text input widget
-                    self.chat_input_history_add(input_message)
-                    self.chat_modeTextInput.clear()
-
-    # Launch QThread to textgen
-    def launch_backend(self, message, run_backend):
-
+    def launch_backend(self, message, backend):
         # Get the exllama and cpp parameters from their respective methods
         exllama_params = self.get_exllama_params()
         cpp_params = self.get_llama_cpp_params()
 
         self.statusbar.showMessage("Status: Generating...")
 
-        # Create a textgenThread object with the exllama and cpp parameters, the message, the stream enabled status, and the backend name
+        # Create a thread to run the text generation asynchronously
         self.textgenThread = TextgenThread(
             exllama_params, message,
-            self.streamEnabledCheck.isChecked(), run_backend, cpp_params, self.settings_win.tsModelLine.text())
+            self.streamEnabledCheck.isChecked(), backend, cpp_params, self.settings_win.tsModelLine.text())
 
         # Connect signals and slots
         self.textgenThread.resultReady.connect(self.handleResult)
@@ -1298,7 +1248,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         # Start the thread
         self.textgenThread.start()
-        # Set the textgen things
+
+        # Set some attributes and methods related to text generation
         self.set_textgen_things()
 
         # Set the history to read-only mode
@@ -1356,7 +1307,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
     # Define a function to generate a final prompt for text generation based on the mode
     def prompt_generation(self):
-
         # Call process_turn_template function and get a tuple of values
         user, user_msg, bot, bot_msg, pre_prompt = self.process_instruct_turn_template()
 
@@ -1378,11 +1328,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.customResponsePrefixCheck.isChecked():
             final_prompt = final_prompt+self.customResponsePrefix.text()
 
-        # print('='+final_prompt+'=')
+        # print('==='+final_prompt+'===')
         return final_prompt
 
+    # Undo the last two chat turns and restore the previous chat output
     def chat_rewind(self):
-        # Undo the last two chat turns and restore the previous chat output
         # If there are at least two items in the name and message history lists
         if len(self.name_history) and len(self.message_history) >= 2:
             print('--- Chat rewind')
@@ -1406,15 +1356,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             # Set the chat mode text history widget to show the context string
             self.chat_modeTextHistory.setPlainText(pre_prompt)
 
+    # Add the chat input to the combo box and the history list
     def chat_input_history_add(self, chat_input):
-        # Add the chat input to the combo box and the history list
         # Add the first 96 characters of the chat input to the combo box
         self.chatInputSessionCombo.addItem(str(chat_input[:96]))
         # Append the chat input to the history list
         self.chat_input_history.append(chat_input)
 
+    # Set the chat input field to the saved history
     def chat_input_history_set(self):
-        # Set the chat input field to the saved history
         # If there are any items in the combo box
         if self.chatInputSessionCombo.count() >= 1:
             # Get the text from the history list based on the combo box index
@@ -1423,8 +1373,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             # Set the chat mode text input widget to show the text
             self.chat_modeTextInput.setPlainText(text)
 
+    # Refresh the chat preset based on the mode and partial arguments
     def chat_preset_refresh(self, mode, partial=None):
-        # Refresh the chat preset based on the mode and partial arguments
         # Clear the name, message and output lists
         self.name_history = []
         self.message_history = []
@@ -1432,8 +1382,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Set the preset parameters by calling set_preset_params method with mode argument
         self.set_preset_params(mode)
 
+    # Clear all histories
     def clear_histories(self):
-        # Clear all histories
         # If there are any items in the name and message lists
         if len(self.name_history) and len(self.message_history) >= 2:
             # Clear the name, message and output lists
