@@ -16,8 +16,8 @@ from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QFileDialog
 from qt_material import apply_stylesheet
 
+from main_window import Ui_MainWindow
 from settings_window import Ui_Settings_Dialog
-from ui_magi_llm_ui import Ui_magi_llm_window
 
 # Constants for the directories and file names
 APP_ICON = Path("assets/icons/appicon.png")
@@ -97,6 +97,8 @@ class TextgenThread(QThread):
         self.cpp_params = cpp_params
         self.ts_model = ts_model
         self.stop_flag = False
+
+        print('---'+self.message + '---')
 
     def run(self):
         """Run the appropriate backend method based on the run_backend attribute."""
@@ -237,12 +239,6 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
         icon = QIcon()
         icon.addFile(str(APP_ICON), QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
-
-        print('--- Launched app')
-
-        # Initialize flags for whether the models are loaded or not
-        self.cpp_model_loaded = False
-        self.exllama_model_loaded = False
 
         def exllama_lora_select():
             exllama_lora = get_directory_path('Select LoRA directory')
@@ -518,7 +514,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             lambda: apply_params_preset())
 
 
-class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
+class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self):
         super().__init__()
@@ -529,6 +525,8 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         icon = QIcon()
         icon.addFile(str(APP_ICON), QSize(), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
+
+        print('--- Launched app')
 
         self.model_load = False
         self.continue_textgen_mode = False
@@ -546,47 +544,44 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.name_history = []
         self.message_history = []
         self.chat_output_list = []
-
         self.chat_input_history = []
 
-        # Quit from menu
-        self.actionSettings.triggered.connect(self.settings_win.show)
+        # Actions from menu
+        self.actionChat.triggered.connect(
+            partial(self.set_textgen_mode, "chat_mode"))
+
+        self.actionStandard.triggered.connect(
+            partial(self.set_textgen_mode, "standard_mode"))
+        self.actionNotebook.triggered.connect(
+            partial(self.set_textgen_mode, "notebook_mode"))
+
+        self.actionPreferences.triggered.connect(self.settings_win.show)
         self.actionExit.triggered.connect(app.exit)
+
         # Status bar
         self.statusbar.showMessage("Status: Ready")
 
-        # Button clicks
-        self.defaultGenerateButton.clicked.connect(
-            partial(self.textgen_switcher, 'default_mode'))
-        self.notebookGenerateButton.clicked.connect(
-            partial(self.textgen_switcher, 'notebook_mode'))
-        self.chatGenerateButton.clicked.connect(
-            partial(self.textgen_switcher, 'chat_mode'))
+        # Textgen button clicks
+        self.generateButton.clicked.connect(self.textgen_switcher)
+        self.continueButton.clicked.connect(self.continue_textgen)
+        self.clearButton.clicked.connect(self.clear_histories)
+        self.stopButton.clicked.connect(self.stop_textgen)
+        self.rewindButton.clicked.connect(self.chat_rewind)
 
-        self.defaultContinueButton.clicked.connect(
-            partial(self.continue_textgen, 'default_modeContinue'))
-        self.notebookContinueButton.clicked.connect(
-            partial(self.continue_textgen, 'notebook_modeContinue'))
-        self.chatContinueButton.clicked.connect(
-            partial(self.continue_textgen, 'chat_modeContinue'))
-
+        # Load/unload backend
         self.loadModelButton.clicked.connect(self.load_model)
         self.unloadModelButton.clicked.connect(self.unload_model)
-
-        self.defaultStopButton.clicked.connect(self.stop_textgen)
-        self.notebookStopButton.clicked.connect(self.stop_textgen)
-        self.chatStopButton.clicked.connect(self.stop_textgen)
 
         # self.paramWinShowButton.clicked.connect(self.settings_win.show)
 
         self.settingsPathSaveButton.clicked.connect(self.save_settings)
 
-        self.chatClearButton.clicked.connect(self.clear_histories)
-
+        # Select the models
         self.cppModelSelect.clicked.connect(self.cpp_model_select)
         self.exllamaModelSelect.clicked.connect(self.exllama_model_select)
         self.RWKVcppModelSelect.clicked.connect(self.rwkv_model_select)
 
+        # Clear chat history and set the context
         self.instructPresetComboBox.textActivated.connect(
             partial(self.chat_preset_refresh, 'instruct'))
         self.characterPresetComboBox.textActivated.connect(
@@ -599,7 +594,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.awesomePresetComboBox.textActivated.connect(
             self.awesome_prompts)
 
-        self.chatInputSessionCombo.textActivated.connect(
+        self.chatInputHistoryCombo.textActivated.connect(
             lambda: self.chat_input_history_set())
 
         self.themeDarkCheck.clicked.connect(lambda: self.set_themes('dark'))
@@ -607,9 +602,56 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         self.themeNativeCheck.clicked.connect(
             lambda: self.set_themes('native'))
 
-        self.chatRewindButton.clicked.connect(lambda: self.chat_rewind())
-
         self.set_preset_params('instruct')
+
+        if self.backendAutoLaunch.isChecked():
+            self.load_model()
+
+    # Set the textgen mode and update the UI accordingly
+    def set_textgen_mode(self, textgen_mode):
+
+        self.continueButton.setEnabled(False)
+
+        # Use a dictionary to map the textgen modes to the UI settings
+        ui_settings = {
+            "chat_mode": {
+                "input_enabled": True,
+                "output_readonly": True,
+                "chat_history_enabled": True,
+                "rewind_enabled": self.model_load,
+                "tab_text": "Chat",
+            },
+            "standard_mode": {
+                "input_enabled": True,
+                "output_readonly": True,
+                "chat_history_enabled": False,
+                "rewind_enabled": False,
+                "tab_text": "Standard",
+            },
+            "notebook_mode": {
+                "input_enabled": False,
+                "output_readonly": False,
+                "chat_history_enabled": False,
+                "rewind_enabled": False,
+                "tab_text": "Notebook",
+            },
+        }
+
+        # Get the UI settings based on the textgen mode
+        settings = ui_settings.get(textgen_mode)
+
+        # Update the UI widgets with the settings
+        self.inputText.setEnabled(settings["input_enabled"])
+        self.outputText.setReadOnly(settings["output_readonly"])
+        self.chatInputHistoryCombo.setEnabled(settings["chat_history_enabled"])
+        self.rewindButton.setEnabled(settings["rewind_enabled"])
+        self.mainTabWidget.setTabText(0, settings["tab_text"])
+
+        # Set the textgen mode attribute
+        self.textgen_mode = textgen_mode
+
+        # Clear all histories
+        self.clear_histories()
 
     # Set themes
     def set_themes(self, theme):
@@ -690,6 +732,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Set themes by calling set_themes method with theme argument
         self.set_themes(config["Settings"]["theme"])
 
+        auto_launch_backend = eval(config["Settings"]["auto_launch_backend"])
+        self.backendAutoLaunch.setChecked(auto_launch_backend)
+
     # Define a helper function to get the file path from a dialog
 
     def get_file_path(self, title, filter):
@@ -739,6 +784,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         config.set("Params-TextSynth", "ts_model",
                    self.settings_win.tsModelLine.text())
 
+        config.set("Settings", "auto_launch_backend",
+                   str(self.backendAutoLaunch.isChecked()))
+
         # Save backend based on the checked radio button
         if self.cppCheck.isChecked():
             config.set("Settings", "backend", "llama_cpp")
@@ -768,20 +816,6 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         print('--- Settings saved')
 
     def history_readonly_logic(self, readonly_mode: bool):
-        """Set the history widget and the buttons to readonly mode or not.
-        Args:
-            readonly_mode (bool): Whether to enable readonly mode or not.
-        """
-
-        # A dictionary to map the textgen modes to the corresponding widgets
-        mode_widgets = {
-            "notebook_mode": self.notebook_modeTextHistory,
-        }
-
-        # Set the history widget to readonly mode based on the textgen mode
-        history_widget = mode_widgets.get(self.textgen_mode)
-        if history_widget:
-            history_widget.setReadOnly(readonly_mode)
 
         # Invert readonly_mode for buttons
         button_mode = not readonly_mode
@@ -791,19 +825,15 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.instructPresetComboBox,
             self.characterPresetComboBox,
             self.streamEnabledCheck,
-            self.defaultContinueButton,
-            self.notebookContinueButton,
-            self.chatContinueButton,
-            self.defaultGenerateButton,
-            self.notebookGenerateButton,
-            self.chatGenerateButton,
-            self.defaultClearButton,
-            self.notebookClearButton,
-            self.chatClearButton,
+            self.continueButton,
+            self.generateButton,
+            self.clearButton,
             self.instructRadioButton,
             self.charactersRadioButton,
-            self.chatRewindButton,
         ]
+
+        if self.textgen_mode == 'chat_mode':
+            buttons.append(self.rewindButton)
 
         # Iterate over the buttons and set their enabled status
         for button in buttons:
@@ -813,9 +843,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     def stop_textgen(self):
         self.textgenThread.stop()
 
-        # Disable all stop buttons
-        for button in [self.defaultStopButton, self.notebookStopButton, self.chatStopButton]:
-            button.setEnabled(False)
+        self.stopButton.setEnabled(False)
 
     # Continue button logic
     def continue_textgen(self, text_tab):
@@ -823,8 +851,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         if self.unloadModelButton.isEnabled():
 
             # Get the history text from the corresponding tab
-            history_text = getattr(self, text_tab.replace(
-                'Continue', 'TextHistory')).toPlainText()
+            history_text = self.outputText.toPlainText()
             if history_text:
                 self.continue_textgen_mode = True
 
@@ -844,7 +871,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
     @Slot(str)
     def handleResult(self, reply):
         # Get the text widget from the textgen mode
-        text_widget = getattr(self, self.textgen_mode + 'TextHistory')
+        text_widget = self.outputText
 
         # Insert the reply and scroll to the end
         self.insert_text_and_scroll(text_widget, reply)
@@ -874,7 +901,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             if self.logChatCheck.isChecked():
                 self.write_chatlog(False)
 
-            self.chat_output_list.append(self.chat_modeTextHistory.toHtml())
+            self.chat_output_list.append(self.outputText.toHtml())
 
         self.statusbar.showMessage(f"Status: Generation complete")
         self.history_readonly_logic(False)
@@ -994,13 +1021,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             print('--- Loaded model')
             self.statusbar.showMessage('Status: Loaded model')
 
-            self.chatGenerateButton.setEnabled(True)
-            self.defaultGenerateButton.setEnabled(True)
-            self.notebookGenerateButton.setEnabled(True)
+            self.generateButton.setEnabled(True)
 
             self.unloadModelButton.setEnabled(True)
             self.toggle_backend_visibility(False)
-            self.textgenTab.setCurrentIndex(0)
+            self.mainTabWidget.setCurrentIndex(0)
 
         else:
             print('---Error: Model load failure...')
@@ -1138,15 +1163,11 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         # Disable the unload and generate buttons
         self.unloadModelButton.setEnabled(False)
 
-        self.chatGenerateButton.setEnabled(False)
-        self.defaultGenerateButton.setEnabled(False)
-        self.notebookGenerateButton.setEnabled(False)
+        self.generateButton.setEnabled(False)
 
     def set_textgen_things(self):
         # Enable the stop buttons for each mode
-        self.defaultStopButton.setEnabled(True)
-        self.notebookStopButton.setEnabled(True)
-        self.chatStopButton.setEnabled(True)
+        self.stopButton.setEnabled(True)
 
     # Formatting the chat display text
     def chat_formatting(self, input_message):
@@ -1156,12 +1177,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
         paragraphs = []
         # Add a paragraph with the user name and chat input
         paragraphs.append(
-            f"<b style='color: #a92828'>{self.yourNameLine.text()}:</b><br>{chat_input}<br>")
+            f"<b style='color: #a92828'>{self.yourNameLine.text()}</b><br>{chat_input}<br>")
         # Add a paragraph with the bot name and custom response prefix if checked
         prefix = self.customResponsePrefix.text(
         ) if self.customResponsePrefixCheck.isChecked() else ""
         paragraphs.append(
-            f"<b style='color: #3194d0'>{self.botNameLine.text()}:</b><br>{prefix}")
+            f"<b style='color: #3194d0'>{self.botNameLine.text()}</b><br>{prefix}")
         # Join the paragraphs with line breaks and wrap them in <p> tags
         chat_text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
 
@@ -1183,29 +1204,21 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 return backend
 
     # Main launcher logic
-    def textgen_switcher(self, textgen_mode):
-        self.textgen_mode = textgen_mode
+    def textgen_switcher(self):
 
         backend = self.get_current_backend()
 
-        # Use a dictionary to map the textgen modes to the input widgets
-        input_widgets = {
-            "default_mode": self.defaultTextInput,
-            "notebook_mode": self.notebook_modeTextHistory,
-            "chat_mode": self.chat_modeTextInput,
-        }
-
-        # Get the input widget based on the textgen mode
-        input_widget = input_widgets.get(self.textgen_mode)
-
         # Get the input message from the input widget
-        input_message = input_widget.toPlainText()
+        if self.textgen_mode != 'notebook_mode':
+            input_message = self.inputText.toPlainText()
+        else:
+            input_message = self.outputText.toPlainText()
 
         # If the input message is not empty
         if input_message:
-            if self.textgen_mode == "default_mode":
+            if self.textgen_mode == "standard_mode":
                 # Set the default mode text history widget to show the input message
-                self.default_modeTextHistory.setPlainText(input_message)
+                self.outputText.setPlainText(input_message)
             elif self.textgen_mode == "chat_mode":
                 # Generate the final prompt for the chat mode
                 final_prompt = self.prompt_generation()
@@ -1216,12 +1229,12 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 chat_text = self.chat_formatting(input_message)
 
                 # Append the chat text to the chat mode text history widget
-                self.chat_modeTextHistory.append(chat_text)
+                self.outputText.append(chat_text)
 
                 # Add the input message to the chat input history
                 self.chat_input_history_add(input_message)
                 # Clear the chat mode text input widget
-                self.chat_modeTextInput.clear()
+                self.inputText.clear()
 
                 # Use the final prompt as the input message for launching the backend
                 input_message = final_prompt
@@ -1300,7 +1313,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
             # Replace the user message placeholder with the input text from the chat mode text input widget
         user_msg = template_user_msg.replace(
-            "<|user-message|>", self.chat_modeTextInput.toPlainText())
+            "<|user-message|>", self.inputText.toPlainText())
 
         # Return a tuple of user, user message, bot, bot message and pre prompt
         return user, user_msg, bot, template_bot_msg, pre_prompt
@@ -1342,9 +1355,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             self.message_history.pop()
             self.message_history.pop()
             # Set the chat mode text history widget to show the second last chat output
-            self.chat_modeTextHistory.setHtml(self.chat_output_list[-2])
-            self.chat_modeTextHistory.verticalScrollBar().setValue(
-                self.chat_modeTextHistory.verticalScrollBar().maximum())
+            self.outputText.setHtml(self.chat_output_list[-2])
+            self.outputText.verticalScrollBar().setValue(
+                self.outputText.verticalScrollBar().maximum())
             # Pop the last chat output from the list
             self.chat_output_list.pop()
         # If there are no items in the name history list
@@ -1354,55 +1367,60 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
             # Get the context string from the chat preset and strip any whitespace
             pre_prompt = chat_preset["context"].strip()
             # Set the chat mode text history widget to show the context string
-            self.chat_modeTextHistory.setPlainText(pre_prompt)
+            self.outputText.setPlainText(pre_prompt)
 
     # Add the chat input to the combo box and the history list
     def chat_input_history_add(self, chat_input):
         # Add the first 96 characters of the chat input to the combo box
-        self.chatInputSessionCombo.addItem(str(chat_input[:96]))
+        self.chatInputHistoryCombo.addItem(str(chat_input[:96]))
         # Append the chat input to the history list
         self.chat_input_history.append(chat_input)
 
     # Set the chat input field to the saved history
     def chat_input_history_set(self):
         # If there are any items in the combo box
-        if self.chatInputSessionCombo.count() >= 1:
+        if self.chatInputHistoryCombo.count() >= 1:
             # Get the text from the history list based on the combo box index
             text = self.chat_input_history[int(
-                self.chatInputSessionCombo.currentIndex())]
+                self.chatInputHistoryCombo.currentIndex())]
             # Set the chat mode text input widget to show the text
-            self.chat_modeTextInput.setPlainText(text)
+            self.inputText.setPlainText(text)
 
     # Refresh the chat preset based on the mode and partial arguments
     def chat_preset_refresh(self, mode, partial=None):
-        # Clear the name, message and output lists
-        self.name_history = []
-        self.message_history = []
-        self.chat_output_list = []
-        # Set the preset parameters by calling set_preset_params method with mode argument
-        self.set_preset_params(mode)
-
-    # Clear all histories
-    def clear_histories(self):
-        # If there are any items in the name and message lists
-        if len(self.name_history) and len(self.message_history) >= 2:
+        if self.textgen_mode == 'chat_mode' and len(self.message_history) < 2:
             # Clear the name, message and output lists
             self.name_history = []
             self.message_history = []
             self.chat_output_list = []
+            self.outputText.clear()
+            # Set the preset parameters by calling set_preset_params method with mode argument
+            self.set_preset_params(mode)
 
-        # Set the preset parameters by calling set_preset_params method without arguments
-        self.set_preset_params()
+    # Clear all histories
+    def clear_histories(self):
+
+        self.continueButton.setEnabled(False)
+        self.outputText.clear()
+
+        if self.textgen_mode == 'chat_mode':
+            # If there are any items in the name and message lists
+            if len(self.name_history) and len(self.message_history) >= 2:
+                # Clear the name, message and output lists
+                self.name_history = []
+                self.message_history = []
+                self.chat_output_list = []
+
+            # Set the preset parameters by calling set_preset_params method without arguments
+            self.set_preset_params()
 
     # Set the preset parameters based on the preset mode argument
-    def set_preset_params(self, preset_mode=None, partial=None):
-        # Clear the chat mode text history widget
-        self.chat_modeTextHistory.clear()
+    def set_preset_params(self, preset_mode=None):
 
         # Clear rewind history by creating a new empty list for output list
         self.chat_output_list = []
         # Append the current html of chat mode text history widget to output list
-        self.chat_output_list.append(self.chat_modeTextHistory.toHtml())
+        self.chat_output_list.append(self.outputText.toHtml())
 
         # Use a dictionary to map the preset modes to the radio buttons and file names
         preset_dict = {"instruct": (self.instructRadioButton, "instruct"),
@@ -1424,8 +1442,9 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
 
         # Get the context string from the chat preset and strip any whitespace
         pre_prompt = str(chat_preset["context"]).strip()
-        # Append it to the chat mode text history widget
-        self.chat_modeTextHistory.append(pre_prompt)
+        
+        # Append it to the chat mode text history widget with a line break
+        self.outputText.append(pre_prompt)
 
     # Get awesome prompts from a csv file
     def awesome_prompts(self):
@@ -1436,7 +1455,7 @@ class ChatWindow(QtWidgets.QMainWindow, Ui_magi_llm_window):
                 # If the row matches the current text of the awesome preset combo box
                 if row[0] == self.awesomePresetComboBox.currentText():
                     # Set the chat mode text input widget to show the prompt from the row
-                    self.chat_modeTextInput.setPlainText(row[1])
+                    self.inputText.setPlainText(row[1])
                     break
 
 
@@ -1448,7 +1467,7 @@ if __name__ == "__main__":
         app.setStyle('Fusion')
 
     # Create a chat window instance and show it
-    window = ChatWindow()
+    window = MagiApp()
     window.show()
 
     # Start the Qt event loop

@@ -1,4 +1,4 @@
 user: "USER: Edit the following for spelling and grammar mistakes: "
 bot: "ASSISTANT:"
-turn_template: "<|user|> <|user-message|>\n<|bot|> <|bot-message|>\n\n"
+turn_template: "<|user|> <|user-message|>\n<|bot|> <|bot-message|>"
 context: "Assistant is a meticulous senior editor with a specialization in editing fictional stories. When given text, Assistant detects and corrects grammatical errors, including subject-verb agreement, tense consistency, punctuation, capitalization, use of correct articles and correct present perfect and past perfect tense.\n"
