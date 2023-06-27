@@ -27,6 +27,10 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1198, 957)
+        font = QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        MainWindow.setFont(font)
         self.actionExit = QAction(MainWindow)
         self.actionExit.setObjectName(u"actionExit")
         self.actionChat = QAction(MainWindow)
@@ -367,8 +371,6 @@ class Ui_MainWindow(object):
 
         self.settingsPathSaveButton = QPushButton(self.preferencesTab)
         self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
-        font = QFont()
-        font.setBold(False)
         self.settingsPathSaveButton.setFont(font)
 
         self.gridLayout_3.addWidget(self.settingsPathSaveButton, 1, 0, 1, 1, Qt.AlignRight)
@@ -380,7 +382,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1198, 27))
+        self.menubar.setGeometry(QRect(0, 0, 1198, 26))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuMode = QMenu(self.menubar)
@@ -424,8 +426,8 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Noto Sans Display'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Segoe UI'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans Display';\"><br /></p></body></html>", None))
         self.outputText.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Output goes here", None))
 #if QT_CONFIG(tooltip)
         self.chatInputHistoryCombo.setToolTip(QCoreApplication.translate("MainWindow", u"Saved chat inputs from session", None))
