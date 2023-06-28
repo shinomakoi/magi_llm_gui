@@ -98,7 +98,7 @@ class TextgenThread(QThread):
         self.ts_model = ts_model
         self.stop_flag = False
 
-        print('---'+self.message + '---')
+        # print('---'+self.message + '---')
 
     def run(self):
         """Run the appropriate backend method based on the run_backend attribute."""
