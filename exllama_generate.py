@@ -26,7 +26,6 @@ class ExllamaModel:
     # Create an instance of the class from a pretrained model
     @classmethod
     def from_pretrained(cls, params):
-
         MODEL_PATH = Path(params["model_path"])
         # Get the paths for the tokenizer model and the model config
         TOKENIZER_MODEL_PATH = MODEL_PATH / "tokenizer.model"
@@ -46,14 +45,14 @@ class ExllamaModel:
                         f"More than one {ext} model has been found. The last one will be selected. It could be wrong."
                     )
                 model_path = found[-1]
-                print('--- Exllama model:', model_path)
+                print("--- Exllama model:", model_path)
                 break
 
         # Set the model path and max sequence length in the config
         config.model_path = str(model_path)
 
         config.max_seq_len = params["max_seq_len"]
-        print('--- Exllama: Max context size:', config.max_seq_len)
+        print("--- Exllama: Max context size:", config.max_seq_len)
 
         if params["compress_pos_emb_check"]:
             config.compress_pos_emb = float(params["compress_pos_emb"])
@@ -83,18 +82,18 @@ class ExllamaModel:
 
     # Check if exceeded context limit and if so prune it from the start
     def check_token_count(self, in_tokens, max_response_tokens, max_seq_len):
-
         token_count = in_tokens.shape[-1]
 
         if token_count >= (max_seq_len / 2):
-            print('--- Context size:', token_count)
+            print("--- Context size:", token_count)
         if token_count >= max_seq_len:
-            print('Context limit reached. Trimming')
+            print("Context limit reached. Trimming")
 
             amount_to_trim = (token_count - max_seq_len) + max_response_tokens
             # print('trimming amount', amount_to_trim)
             in_tokens = torch.cat(
-                (in_tokens[:, :0], in_tokens[:, amount_to_trim:]), axis=1)
+                (in_tokens[:, :0], in_tokens[:, amount_to_trim:]), axis=1
+            )
             amount_to_trim = 0
         return in_tokens
 
@@ -112,16 +111,15 @@ class ExllamaModel:
 
         # LoRA
         if params["exllama_lora_check"]:
-            print('--- Using Exllama LoRA')
+            print("--- Using Exllama LoRA")
 
             exllama_lora_directory = params["exllama_lora_directory"]
             lora_config_path = os.path.join(
-                exllama_lora_directory, "adapter_config.json")
-            lora_path = os.path.join(
-                exllama_lora_directory, "adapter_model.bin")
+                exllama_lora_directory, "adapter_config.json"
+            )
+            lora_path = os.path.join(exllama_lora_directory, "adapter_model.bin")
 
-            lora = ExLlamaLora(
-                self.model, lora_config_path, lora_path)
+            lora = ExLlamaLora(self.model, lora_config_path, lora_path)
 
             generator.lora = lora
         else:
@@ -149,7 +147,8 @@ class ExllamaModel:
 
         # Trim if needed and check if trimmed
         in_tokens = self.check_token_count(
-            in_tokens, max_response_tokens, params['max_seq_len'])
+            in_tokens, max_response_tokens, params["max_seq_len"]
+        )
 
         context = generator.tokenizer.decode(in_tokens)
         context = context[0]
@@ -167,18 +166,21 @@ class ExllamaModel:
         generator.begin_beam_search()
 
         # Initialize an empty response line
-        res_line = ''
+        res_line = ""
 
         if stop_string:
             stop_string = stop_string[0]
 
         # Loop for up to max response tokens
         for i in range(max_response_tokens):
-
             # Disallow newline and eos tokens if below min response tokens
             if i < min_response_tokens:
                 generator.disallow_tokens(
-                    [generator.tokenizer.newline_token_id, generator.tokenizer.eos_token_id])
+                    [
+                        generator.tokenizer.newline_token_id,
+                        generator.tokenizer.eos_token_id,
+                    ]
+                )
             else:
                 generator.disallow_tokens(None)
 
@@ -187,17 +189,17 @@ class ExllamaModel:
 
             # If token is EOS, replace it with newline before continuing
             if gen_token.item() == generator.tokenizer.eos_token_id:
-                generator.replace_last_token(
-                    generator.tokenizer.newline_token_id)
+                generator.replace_last_token(generator.tokenizer.newline_token_id)
 
             # Increment the number of response tokens
             num_res_tokens += 1
 
             # Decode the current sequence and get the new text added
             text = generator.tokenizer.decode(
-                generator.sequence_actual[:, -num_res_tokens:][0])
-            new_text = text[len(context):]
-            new_text = new_text[len(res_line):]
+                generator.sequence_actual[:, -num_res_tokens:][0]
+            )
+            new_text = text[len(context) :]
+            new_text = new_text[len(res_line) :]
 
             # Append the new text to the response line
             res_line += new_text

@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path("rwkvcpp/rwkv")))
 
 import rwkv_cpp_model
@@ -9,10 +10,11 @@ from rwkv_tokenizer import get_tokenizer
 from pathlib import Path
 import time
 
+
 def load_model(rwkv_cpp_model_params):
     # Load the shared library and print system info
     library = rwkv_cpp_shared_library.load_rwkv_shared_library()
-    print(f'System info: {library.rwkv_get_system_info_string()}')
+    print(f"System info: {library.rwkv_get_system_info_string()}")
 
     # Get the model path from the parameters
     model_path = rwkv_cpp_model_params["model_path"]
@@ -22,9 +24,10 @@ def load_model(rwkv_cpp_model_params):
         library,
         model_path,
         thread_count=rwkv_cpp_model_params["n_threads"],
-        gpu_layers_count=rwkv_cpp_model_params["n_gpu_layers"]
+        gpu_layers_count=rwkv_cpp_model_params["n_gpu_layers"],
     )
     return model
+
 
 def generate(prompt, model, rwkv_cpp_params):
     # Set generation parameters
@@ -34,9 +37,9 @@ def generate(prompt, model, rwkv_cpp_params):
     top_p = rwkv_cpp_params["top_p"]
 
     # Check that the prompt is not empty
-    assert prompt != '', 'Prompt must not be empty'
+    assert prompt != "", "Prompt must not be empty"
     # Get the tokenizer functions
-    tokenizer_decode, tokenizer_encode = get_tokenizer('20B')
+    tokenizer_decode, tokenizer_encode = get_tokenizer("20B")
     # Encode the prompt into tokens
     prompt_tokens = tokenizer_encode(prompt)
     init_logits, init_state = None, None
@@ -59,13 +62,15 @@ def generate(prompt, model, rwkv_cpp_params):
         for i in range(tokens_per_generation):
             token = sampling.sample_logits(logits, temperature, top_p)
             if token == stop[0]:
-                print('--- Hit stop token')
-                yield ''
+                print("--- Hit stop token")
+                yield ""
                 break
             response = tokenizer_decode([token])
             yield response
             logits, state = model.eval(token, state, state, logits)
 
         delay = time.time() - start
-        print('\n\nTook %.3f sec, %d ms per token' %
-              (delay, delay / tokens_per_generation * 1000))
+        print(
+            "\n\nTook %.3f sec, %d ms per token"
+            % (delay, delay / tokens_per_generation * 1000)
+        )

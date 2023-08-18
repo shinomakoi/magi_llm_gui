@@ -8,7 +8,6 @@ DATA_PREFIX = "data: "
 
 
 def create_data(prompt: str, cpp_params: dict, stream: bool = False) -> str:
-
     data = {
         "prompt": prompt,
         "max_tokens": cpp_params["max_new_tokens"],
@@ -28,7 +27,6 @@ def create_data(prompt: str, cpp_params: dict, stream: bool = False) -> str:
 
 
 def generate_nostream(prompt: str, cpp_params: dict) -> str:
-
     data = create_data(prompt, cpp_params)
 
     # Make a POST request without streaming
@@ -43,7 +41,6 @@ def generate_nostream(prompt: str, cpp_params: dict) -> str:
 
 
 def generate_with_streaming(prompt: str, cpp_params: dict):
-
     data = create_data(prompt, cpp_params, stream=True)
 
     # Make a POST request with streaming
@@ -57,7 +54,7 @@ def generate_with_streaming(prompt: str, cpp_params: dict):
             if line:
                 decoded_line = line.decode("utf8")
                 if decoded_line.startswith(DATA_PREFIX):
-                    json_data = json.loads(decoded_line[len(DATA_PREFIX):])
+                    json_data = json.loads(decoded_line[len(DATA_PREFIX) :])
                     final = json_data["content"]
                     yield final
     except requests.exceptions.RequestException as e:
