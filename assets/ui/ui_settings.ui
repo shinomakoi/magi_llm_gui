@@ -667,7 +667,7 @@
        <bool>true</bool>
       </property>
       <attribute name="title">
-       <string>llama.cpp/rwkv.cpp</string>
+       <string>llama.cpp</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -1033,183 +1033,12 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tsParamTab">
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <attribute name="title">
-       <string>TextSynth</string>
-      </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Model:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="tsModelLine">
-         <property name="toolTip">
-          <string>Name of TextSynth model engine to use</string>
-         </property>
-         <property name="placeholderText">
-          <string>pythia_deduped_1.4B</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>minPSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>minPSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>557</x>
-     <y>180</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>188</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minPSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>minPSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>615</x>
-     <y>188</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>557</x>
-     <y>180</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>token_repetition_penalty_decaySlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>token_repetition_penalty_decaySpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>557</x>
-     <y>288</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>296</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>token_repetition_penalty_decaySpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>token_repetition_penalty_decaySlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>615</x>
-     <y>296</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>557</x>
-     <y>288</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>numbeamsSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>numbeamsSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>557</x>
-     <y>396</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>404</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>numbeamsSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>numbeamsSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>615</x>
-     <y>404</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>557</x>
-     <y>396</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>beamLengthSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>beamLengthSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>541</x>
-     <y>500</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>599</x>
-     <y>508</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>beamLengthSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>beamLengthSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>599</x>
-     <y>508</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>541</x>
-     <y>500</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>top_kSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>top_kSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>515</x>
-     <y>350</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>358</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>top_kSpin</sender>
    <signal>valueChanged(int)</signal>
@@ -1223,102 +1052,6 @@
     <hint type="destinationlabel">
      <x>515</x>
      <y>350</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>max_new_tokensSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>max_new_tokensSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>515</x>
-     <y>472</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>480</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>max_new_tokensSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>max_new_tokensSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>615</x>
-     <y>480</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>515</x>
-     <y>472</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ctxsizeSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>ctxsizeSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>431</x>
-     <y>228</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>236</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ctxsizeSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>ctxsizeSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>591</x>
-     <y>234</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>476</x>
-     <y>228</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>gpuLayersSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>gpuLayersSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>565</x>
-     <y>170</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>156</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cppBatchSizeSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>cppBatchSizeSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>548</x>
-     <y>323</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>311</y>
     </hint>
    </hints>
   </connection>
@@ -1339,6 +1072,166 @@
    </hints>
   </connection>
   <connection>
+   <sender>token_repetition_penalty_decaySlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>token_repetition_penalty_decaySpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minPSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>minPSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_new_tokensSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>max_new_tokensSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>472</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>480</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ctxsizeSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ctxsizeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>591</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>476</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>numbeamsSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>numbeamsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>404</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>396</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gpuLayersSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>gpuLayersSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>565</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ctxsizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ctxsizeSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>top_kSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>top_kSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>358</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_new_tokensSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>max_new_tokensSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>480</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>515</x>
+     <y>472</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cppBatchSizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cppBatchSizeSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>548</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>cppBatchSizeSpin</sender>
    <signal>valueChanged(int)</signal>
    <receiver>cppBatchSizeSlider</receiver>
@@ -1351,6 +1244,86 @@
     <hint type="destinationlabel">
      <x>548</x>
      <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>numbeamsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>numbeamsSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beamLengthSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>beamLengthSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>541</x>
+     <y>500</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>599</x>
+     <y>508</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>token_repetition_penalty_decaySpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>token_repetition_penalty_decaySlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>296</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minPSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>minPSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beamLengthSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>beamLengthSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>508</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>500</y>
     </hint>
    </hints>
   </connection>

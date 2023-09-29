@@ -246,6 +246,42 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <string>Backend</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_10">
+               <item row="9" column="0">
+                <widget class="QCheckBox" name="streamEnabledCheck">
+                 <property name="toolTip">
+                  <string>Stream responses</string>
+                 </property>
+                 <property name="text">
+                  <string>Stream responses</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QPushButton" name="unloadModelButton">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="toolTip">
+                  <string>Unload the selected backend and model</string>
+                 </property>
+                 <property name="text">
+                  <string>Unload backend</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QCheckBox" name="backendAutoLaunch">
+                 <property name="text">
+                  <string>Auto load backend at launch</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
                <item row="0" column="0">
                 <widget class="QRadioButton" name="cppCheck">
                  <property name="toolTip">
@@ -256,6 +292,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </property>
                  <property name="checked">
                   <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QRadioButton" name="cppServerCheck">
+                 <property name="toolTip">
+                  <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
+                 </property>
+                 <property name="text">
+                  <string>llama.cpp server</string>
                  </property>
                 </widget>
                </item>
@@ -272,82 +318,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QRadioButton" name="cppServerCheck">
-                 <property name="toolTip">
-                  <string>Connects to a launched llama.cpp server instead of llama-cpp-python</string>
-                 </property>
-                 <property name="text">
-                  <string>llama.cpp server</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="0">
+               <item row="7" column="0">
                 <widget class="QPushButton" name="loadModelButton">
                  <property name="toolTip">
                   <string>Load the selected backend and model</string>
                  </property>
                  <property name="text">
                   <string>Load backend</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0">
-                <widget class="QRadioButton" name="tsServerCheck">
-                 <property name="toolTip">
-                  <string>Use TextSynth server backend</string>
-                 </property>
-                 <property name="text">
-                  <string>TextSynth</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="0">
-                <widget class="QCheckBox" name="streamEnabledCheck">
-                 <property name="toolTip">
-                  <string>Stream responses</string>
-                 </property>
-                 <property name="text">
-                  <string>Stream responses</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QRadioButton" name="rwkvCppCheck">
-                 <property name="toolTip">
-                  <string>Use rwkv.cpp backend</string>
-                 </property>
-                 <property name="text">
-                  <string>rwkv.cpp</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="1">
-                <widget class="QPushButton" name="unloadModelButton">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="toolTip">
-                  <string>Unload the selected backend and model</string>
-                 </property>
-                 <property name="text">
-                  <string>Unload backend</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="0">
-                <widget class="QCheckBox" name="backendAutoLaunch">
-                 <property name="text">
-                  <string>Auto load backend at launch</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
                  </property>
                 </widget>
                </item>

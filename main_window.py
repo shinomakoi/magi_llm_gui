@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -135,11 +135,34 @@ class Ui_MainWindow(object):
         self.backendGroup.setObjectName(u"backendGroup")
         self.gridLayout_10 = QGridLayout(self.backendGroup)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.streamEnabledCheck = QCheckBox(self.backendGroup)
+        self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
+        self.streamEnabledCheck.setChecked(True)
+
+        self.gridLayout_10.addWidget(self.streamEnabledCheck, 9, 0, 1, 1)
+
+        self.unloadModelButton = QPushButton(self.backendGroup)
+        self.unloadModelButton.setObjectName(u"unloadModelButton")
+        self.unloadModelButton.setEnabled(False)
+
+        self.gridLayout_10.addWidget(self.unloadModelButton, 7, 1, 1, 1)
+
+        self.backendAutoLaunch = QCheckBox(self.backendGroup)
+        self.backendAutoLaunch.setObjectName(u"backendAutoLaunch")
+        self.backendAutoLaunch.setChecked(True)
+
+        self.gridLayout_10.addWidget(self.backendAutoLaunch, 8, 0, 1, 1)
+
         self.cppCheck = QRadioButton(self.backendGroup)
         self.cppCheck.setObjectName(u"cppCheck")
         self.cppCheck.setChecked(True)
 
         self.gridLayout_10.addWidget(self.cppCheck, 0, 0, 1, 1)
+
+        self.cppServerCheck = QRadioButton(self.backendGroup)
+        self.cppServerCheck.setObjectName(u"cppServerCheck")
+
+        self.gridLayout_10.addWidget(self.cppServerCheck, 1, 0, 1, 1)
 
         self.exllamaCheck = QRadioButton(self.backendGroup)
         self.exllamaCheck.setObjectName(u"exllamaCheck")
@@ -147,44 +170,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_10.addWidget(self.exllamaCheck, 2, 0, 1, 1)
 
-        self.cppServerCheck = QRadioButton(self.backendGroup)
-        self.cppServerCheck.setObjectName(u"cppServerCheck")
-
-        self.gridLayout_10.addWidget(self.cppServerCheck, 1, 0, 1, 1)
-
         self.loadModelButton = QPushButton(self.backendGroup)
         self.loadModelButton.setObjectName(u"loadModelButton")
 
-        self.gridLayout_10.addWidget(self.loadModelButton, 9, 0, 1, 1)
-
-        self.tsServerCheck = QRadioButton(self.backendGroup)
-        self.tsServerCheck.setObjectName(u"tsServerCheck")
-        self.tsServerCheck.setChecked(False)
-
-        self.gridLayout_10.addWidget(self.tsServerCheck, 8, 0, 1, 1)
-
-        self.streamEnabledCheck = QCheckBox(self.backendGroup)
-        self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
-        self.streamEnabledCheck.setChecked(True)
-
-        self.gridLayout_10.addWidget(self.streamEnabledCheck, 11, 0, 1, 1)
-
-        self.rwkvCppCheck = QRadioButton(self.backendGroup)
-        self.rwkvCppCheck.setObjectName(u"rwkvCppCheck")
-
-        self.gridLayout_10.addWidget(self.rwkvCppCheck, 4, 0, 1, 1)
-
-        self.unloadModelButton = QPushButton(self.backendGroup)
-        self.unloadModelButton.setObjectName(u"unloadModelButton")
-        self.unloadModelButton.setEnabled(False)
-
-        self.gridLayout_10.addWidget(self.unloadModelButton, 9, 1, 1, 1)
-
-        self.backendAutoLaunch = QCheckBox(self.backendGroup)
-        self.backendAutoLaunch.setObjectName(u"backendAutoLaunch")
-        self.backendAutoLaunch.setChecked(True)
-
-        self.gridLayout_10.addWidget(self.backendAutoLaunch, 10, 0, 1, 1)
+        self.gridLayout_10.addWidget(self.loadModelButton, 7, 0, 1, 1)
 
 
         self.gridLayout_6.addWidget(self.backendGroup, 0, 0, 1, 1)
@@ -464,38 +453,30 @@ class Ui_MainWindow(object):
         self.mainTabWidget.setTabText(self.mainTabWidget.indexOf(self.textgenTab), QCoreApplication.translate("MainWindow", u"Chat", None))
         self.backendGroup.setTitle(QCoreApplication.translate("MainWindow", u"Backend", None))
 #if QT_CONFIG(tooltip)
-        self.cppCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Use llama.cpp backend", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppCheck.setText(QCoreApplication.translate("MainWindow", u"llama-cpp-python", None))
-#if QT_CONFIG(tooltip)
-        self.exllamaCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Use Exllama backend", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaCheck.setText(QCoreApplication.translate("MainWindow", u"Exllama", None))
-#if QT_CONFIG(tooltip)
-        self.cppServerCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Connects to a launched llama.cpp server instead of llama-cpp-python", None))
-#endif // QT_CONFIG(tooltip)
-        self.cppServerCheck.setText(QCoreApplication.translate("MainWindow", u"llama.cpp server", None))
-#if QT_CONFIG(tooltip)
-        self.loadModelButton.setToolTip(QCoreApplication.translate("MainWindow", u"Load the selected backend and model", None))
-#endif // QT_CONFIG(tooltip)
-        self.loadModelButton.setText(QCoreApplication.translate("MainWindow", u"Load backend", None))
-#if QT_CONFIG(tooltip)
-        self.tsServerCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Use TextSynth server backend", None))
-#endif // QT_CONFIG(tooltip)
-        self.tsServerCheck.setText(QCoreApplication.translate("MainWindow", u"TextSynth", None))
-#if QT_CONFIG(tooltip)
         self.streamEnabledCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Stream responses", None))
 #endif // QT_CONFIG(tooltip)
         self.streamEnabledCheck.setText(QCoreApplication.translate("MainWindow", u"Stream responses", None))
-#if QT_CONFIG(tooltip)
-        self.rwkvCppCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Use rwkv.cpp backend", None))
-#endif // QT_CONFIG(tooltip)
-        self.rwkvCppCheck.setText(QCoreApplication.translate("MainWindow", u"rwkv.cpp", None))
 #if QT_CONFIG(tooltip)
         self.unloadModelButton.setToolTip(QCoreApplication.translate("MainWindow", u"Unload the selected backend and model", None))
 #endif // QT_CONFIG(tooltip)
         self.unloadModelButton.setText(QCoreApplication.translate("MainWindow", u"Unload backend", None))
         self.backendAutoLaunch.setText(QCoreApplication.translate("MainWindow", u"Auto load backend at launch", None))
+#if QT_CONFIG(tooltip)
+        self.cppCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Use llama.cpp backend", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppCheck.setText(QCoreApplication.translate("MainWindow", u"llama-cpp-python", None))
+#if QT_CONFIG(tooltip)
+        self.cppServerCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Connects to a launched llama.cpp server instead of llama-cpp-python", None))
+#endif // QT_CONFIG(tooltip)
+        self.cppServerCheck.setText(QCoreApplication.translate("MainWindow", u"llama.cpp server", None))
+#if QT_CONFIG(tooltip)
+        self.exllamaCheck.setToolTip(QCoreApplication.translate("MainWindow", u"Use Exllama backend", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaCheck.setText(QCoreApplication.translate("MainWindow", u"Exllama", None))
+#if QT_CONFIG(tooltip)
+        self.loadModelButton.setToolTip(QCoreApplication.translate("MainWindow", u"Load the selected backend and model", None))
+#endif // QT_CONFIG(tooltip)
+        self.loadModelButton.setText(QCoreApplication.translate("MainWindow", u"Load backend", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Paths", None))
 #if QT_CONFIG(tooltip)
         self.cppModelPath.setToolTip(QCoreApplication.translate("MainWindow", u"Path to GGML model for llama.cpp", None))

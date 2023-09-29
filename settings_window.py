@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_settings.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,10 +16,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
-    QFrame, QGridLayout, QGroupBox, QHBoxLayout,
-    QLabel, QLineEdit, QSizePolicy, QSlider,
-    QSpinBox, QSplitter, QTabWidget, QToolButton,
-    QVBoxLayout, QWidget)
+    QFrame, QGridLayout, QGroupBox, QLabel,
+    QLineEdit, QSizePolicy, QSlider, QSpinBox,
+    QSplitter, QTabWidget, QToolButton, QVBoxLayout,
+    QWidget)
 
 class Ui_Settings_Dialog(object):
     def setupUi(self, Settings_Dialog):
@@ -579,45 +579,29 @@ class Ui_Settings_Dialog(object):
         self.verticalLayout_3.addWidget(self.splitter)
 
         self.parametersTab.addTab(self.llamacppParamTab, "")
-        self.tsParamTab = QWidget()
-        self.tsParamTab.setObjectName(u"tsParamTab")
-        self.tsParamTab.setAutoFillBackground(True)
-        self.horizontalLayout = QHBoxLayout(self.tsParamTab)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_3 = QLabel(self.tsParamTab)
-        self.label_3.setObjectName(u"label_3")
-
-        self.horizontalLayout.addWidget(self.label_3)
-
-        self.tsModelLine = QLineEdit(self.tsParamTab)
-        self.tsModelLine.setObjectName(u"tsModelLine")
-
-        self.horizontalLayout.addWidget(self.tsModelLine)
-
-        self.parametersTab.addTab(self.tsParamTab, "")
 
         self.verticalLayout.addWidget(self.parametersTab)
 
 
         self.retranslateUi(Settings_Dialog)
-        self.minPSlider.valueChanged.connect(self.minPSpin.setValue)
-        self.minPSpin.valueChanged.connect(self.minPSlider.setValue)
-        self.token_repetition_penalty_decaySlider.valueChanged.connect(self.token_repetition_penalty_decaySpin.setValue)
-        self.token_repetition_penalty_decaySpin.valueChanged.connect(self.token_repetition_penalty_decaySlider.setValue)
-        self.numbeamsSlider.valueChanged.connect(self.numbeamsSpin.setValue)
-        self.numbeamsSpin.valueChanged.connect(self.numbeamsSlider.setValue)
-        self.beamLengthSlider.valueChanged.connect(self.beamLengthSpin.setValue)
-        self.beamLengthSpin.valueChanged.connect(self.beamLengthSlider.setValue)
-        self.top_kSlider.valueChanged.connect(self.top_kSpin.setValue)
         self.top_kSpin.valueChanged.connect(self.top_kSlider.setValue)
-        self.max_new_tokensSlider.valueChanged.connect(self.max_new_tokensSpin.setValue)
-        self.max_new_tokensSpin.valueChanged.connect(self.max_new_tokensSlider.setValue)
-        self.ctxsizeSlider.valueChanged.connect(self.ctxsizeSpin.setValue)
-        self.ctxsizeSpin.valueChanged.connect(self.ctxsizeSlider.setValue)
-        self.gpuLayersSlider.valueChanged.connect(self.gpuLayersSpin.setValue)
-        self.cppBatchSizeSlider.valueChanged.connect(self.cppBatchSizeSpin.setValue)
         self.gpuLayersSpin.valueChanged.connect(self.gpuLayersSlider.setValue)
+        self.token_repetition_penalty_decaySlider.valueChanged.connect(self.token_repetition_penalty_decaySpin.setValue)
+        self.minPSpin.valueChanged.connect(self.minPSlider.setValue)
+        self.max_new_tokensSlider.valueChanged.connect(self.max_new_tokensSpin.setValue)
+        self.ctxsizeSpin.valueChanged.connect(self.ctxsizeSlider.setValue)
+        self.numbeamsSpin.valueChanged.connect(self.numbeamsSlider.setValue)
+        self.gpuLayersSlider.valueChanged.connect(self.gpuLayersSpin.setValue)
+        self.ctxsizeSlider.valueChanged.connect(self.ctxsizeSpin.setValue)
+        self.top_kSlider.valueChanged.connect(self.top_kSpin.setValue)
+        self.max_new_tokensSpin.valueChanged.connect(self.max_new_tokensSlider.setValue)
+        self.cppBatchSizeSlider.valueChanged.connect(self.cppBatchSizeSpin.setValue)
         self.cppBatchSizeSpin.valueChanged.connect(self.cppBatchSizeSlider.setValue)
+        self.numbeamsSlider.valueChanged.connect(self.numbeamsSpin.setValue)
+        self.beamLengthSlider.valueChanged.connect(self.beamLengthSpin.setValue)
+        self.token_repetition_penalty_decaySpin.valueChanged.connect(self.token_repetition_penalty_decaySlider.setValue)
+        self.minPSlider.valueChanged.connect(self.minPSpin.setValue)
+        self.beamLengthSpin.valueChanged.connect(self.beamLengthSlider.setValue)
 
         self.parametersTab.setCurrentIndex(0)
 
@@ -816,12 +800,6 @@ class Ui_Settings_Dialog(object):
         self.cppLoraSelect.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Select LoRA file", None))
 #endif // QT_CONFIG(tooltip)
         self.cppLoraSelect.setText(QCoreApplication.translate("Settings_Dialog", u"...", None))
-        self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp/rwkv.cpp", None))
-        self.label_3.setText(QCoreApplication.translate("Settings_Dialog", u"Model:", None))
-#if QT_CONFIG(tooltip)
-        self.tsModelLine.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Name of TextSynth model engine to use", None))
-#endif // QT_CONFIG(tooltip)
-        self.tsModelLine.setPlaceholderText(QCoreApplication.translate("Settings_Dialog", u"pythia_deduped_1.4B", None))
-        self.parametersTab.setTabText(self.parametersTab.indexOf(self.tsParamTab), QCoreApplication.translate("Settings_Dialog", u"TextSynth", None))
+        self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
     # retranslateUi
 
