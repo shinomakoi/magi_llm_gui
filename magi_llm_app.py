@@ -694,7 +694,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     # Browse for the GGML model
     def cpp_model_select(self):
-        cpp_model = self.get_file_path("Open file", "GGML models (*gguf)")
+        cpp_model = self.get_file_path("Open file", "GGUF/GGML models (*.bin *.gguf)")
         if cpp_model:
             self.cppModelPath.setText(cpp_model)
 
