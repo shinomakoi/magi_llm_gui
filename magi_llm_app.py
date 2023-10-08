@@ -225,8 +225,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
         # Connect the settings sliders to the spin boxes
         self.temperatureSlider.valueChanged.connect(
-            lambda: self.temperatureSpin.setValue(
-                self.temperatureSlider.value() / 100)
+            lambda: self.temperatureSpin.setValue(self.temperatureSlider.value() / 100)
         )
         self.top_pSlider.valueChanged.connect(
             lambda: self.top_pSpin.setValue(self.top_pSlider.value() / 100)
@@ -237,12 +236,10 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             )
         )
         self.cpp_tfszSlider.valueChanged.connect(
-            lambda: self.cpp_tfszSpin.setValue(
-                self.cpp_tfszSlider.value() / 100)
+            lambda: self.cpp_tfszSpin.setValue(self.cpp_tfszSlider.value() / 100)
         )
         self.freqPenaltySlider.valueChanged.connect(
-            lambda: self.freqPenaltySpin.setValue(
-                self.freqPenaltySlider.value() / 100)
+            lambda: self.freqPenaltySpin.setValue(self.freqPenaltySlider.value() / 100)
         )
         self.presencePenaltySlider.valueChanged.connect(
             lambda: self.presencePenaltySpin.setValue(
@@ -250,14 +247,12 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             )
         )
         self.typical_pSlider.valueChanged.connect(
-            lambda: self.typical_pSpin.setValue(
-                self.typical_pSlider.value() / 100)
+            lambda: self.typical_pSpin.setValue(self.typical_pSlider.value() / 100)
         )
 
         # Connect the spin boxes to the settings sliders
         self.temperatureSpin.valueChanged.connect(
-            lambda: self.temperatureSlider.setValue(
-                self.temperatureSpin.value() * 100)
+            lambda: self.temperatureSlider.setValue(self.temperatureSpin.value() * 100)
         )
         self.top_pSpin.valueChanged.connect(
             lambda: self.top_pSlider.setValue(self.top_pSpin.value() * 100)
@@ -268,12 +263,10 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             )
         )
         self.cpp_tfszSpin.valueChanged.connect(
-            lambda: self.cpp_tfszSlider.setValue(
-                self.cpp_tfszSpin.value() * 100)
+            lambda: self.cpp_tfszSlider.setValue(self.cpp_tfszSpin.value() * 100)
         )
         self.freqPenaltySpin.valueChanged.connect(
-            lambda: self.freqPenaltySlider.setValue(
-                self.freqPenaltySpin.value() * 100)
+            lambda: self.freqPenaltySlider.setValue(self.freqPenaltySpin.value() * 100)
         )
         self.presencePenaltySpin.valueChanged.connect(
             lambda: self.presencePenaltySlider.setValue(
@@ -281,8 +274,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             )
         )
         self.typical_pSpin.valueChanged.connect(
-            lambda: self.typical_pSlider.setValue(
-                self.typical_pSpin.value() * 100)
+            lambda: self.typical_pSlider.setValue(self.typical_pSpin.value() * 100)
         )
         # Define a function to load parameters presets
 
@@ -371,8 +363,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.max_new_tokensSlider.setValue(int(max_new_tokens))
 
             self.repetition_penaltySpin.setValue(float(repetition_penalty))
-            self.repetition_penaltySlider.setValue(
-                int(float(repetition_penalty) * 100))
+            self.repetition_penaltySlider.setValue(int(float(repetition_penalty) * 100))
 
             self.typical_pSpin.setValue(float(typical_p))
             self.typical_pSlider.setValue(int(float(typical_p) * 100))
@@ -401,8 +392,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
 
             self.exllamaLora.setText(exllama_lora_path)
             self.exllamaLoraCheck.setChecked(eval(exllama_lora_check))
-            self.compressPosEmbedCheck.setChecked(
-                eval(compress_pos_embed_check))
+            self.compressPosEmbedCheck.setChecked(eval(compress_pos_embed_check))
             self.compressPosEmbedSpin.setValue(int(compress_pos_embed_value))
 
             # Params-LlamaCPP
@@ -453,10 +443,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.top_pSlider.setValue(int(param_preset_name["top_p"] * 100))
             self.top_kSpin.setValue(int(param_preset_name["top_k"]))
             self.top_kSlider.setValue(int(param_preset_name["top_k"]))
-            self.temperatureSpin.setValue(
-                float(param_preset_name["temperature"]))
-            self.temperatureSlider.setValue(
-                int(param_preset_name["temperature"] * 100))
+            self.temperatureSpin.setValue(float(param_preset_name["temperature"]))
+            self.temperatureSlider.setValue(int(param_preset_name["temperature"] * 100))
             self.repetition_penaltySpin.setValue(
                 float(param_preset_name["repetition_penalty"])
             )
@@ -468,8 +456,7 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             print("--- Applied parameter preset:", Path(preset_file).stem)
 
         # Connect the function to the combo box signal
-        self.paramPresets_comboBox.textActivated.connect(
-            lambda: apply_params_preset())
+        self.paramPresets_comboBox.textActivated.connect(lambda: apply_params_preset())
 
 
 class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -504,8 +491,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chat_input_history = []
 
         # Actions from menu
-        self.actionChat.triggered.connect(
-            partial(self.set_textgen_mode, "chat_mode"))
+        self.actionChat.triggered.connect(partial(self.set_textgen_mode, "chat_mode"))
 
         self.actionStandard.triggered.connect(
             partial(self.set_textgen_mode, "standard_mode")
@@ -515,7 +501,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         self.actionPreferences.triggered.connect(self.settings_win.show)
-        self.actionExit.triggered.connect(app.exit)
+        self.actionExit.triggered.connect(self.close)
 
         # Status bar
         self.statusbar.showMessage("Status: Ready")
@@ -561,13 +547,17 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.themeDarkCheck.clicked.connect(lambda: self.set_themes("dark"))
         self.themeLightCheck.clicked.connect(lambda: self.set_themes("light"))
-        self.themeNativeCheck.clicked.connect(
-            lambda: self.set_themes("native"))
+        self.themeNativeCheck.clicked.connect(lambda: self.set_themes("native"))
 
         self.set_preset_params("instruct")
 
         if self.backendAutoLaunch.isChecked():
             self.load_model()
+
+    def closeEvent(self, event):
+        # close the child window when the parent window is closed
+        self.settings_win.close()
+        event.accept()
 
     # Set the textgen mode and update the UI accordingly
     def set_textgen_mode(self, textgen_mode):
@@ -580,21 +570,18 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 "output_readonly": True,
                 "chat_history_enabled": True,
                 "rewind_enabled": self.model_load,
-                "tab_text": "Chat",
             },
             "standard_mode": {
                 "input_enabled": True,
                 "output_readonly": True,
                 "chat_history_enabled": False,
                 "rewind_enabled": False,
-                "tab_text": "Standard",
             },
             "notebook_mode": {
                 "input_enabled": False,
                 "output_readonly": False,
                 "chat_history_enabled": False,
                 "rewind_enabled": False,
-                "tab_text": "Notebook",
             },
         }
 
@@ -606,7 +593,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.outputText.setReadOnly(settings["output_readonly"])
         self.chatInputHistoryCombo.setEnabled(settings["chat_history_enabled"])
         self.rewindButton.setEnabled(settings["rewind_enabled"])
-        self.mainTabWidget.setTabText(0, settings["tab_text"])
 
         # Set the textgen mode attribute
         self.textgen_mode = textgen_mode
@@ -728,15 +714,13 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Set the values for the settings section based on the widgets
         config.set("Settings", "cpp_model_path", self.cppModelPath.text())
-        config.set("Settings", "exllama_model_path",
-                   self.exllamaModelPath.text())
+        config.set("Settings", "exllama_model_path", self.exllamaModelPath.text())
 
         config.set("Settings", "user_name", self.yourNameLine.text())
         config.set("Settings", "bot_name", self.botNameLine.text())
 
         config.set(
-            "Settings", "auto_launch_backend", str(
-                self.backendAutoLaunch.isChecked())
+            "Settings", "auto_launch_backend", str(self.backendAutoLaunch.isChecked())
         )
 
         # Save backend based on the checked radio button
@@ -832,8 +816,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.continue_textgen_mode:
                 # Append the final text to the last message in the history
                 updated = str(
-                    (self.message_history[-1].rstrip()) +
-                    final_text.rstrip() + "\n\n"
+                    (self.message_history[-1].rstrip()) + final_text.rstrip() + "\n\n"
                 )
                 self.message_history[-1] = updated
                 self.chat_output_list.pop(-1)
@@ -845,8 +828,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     if self.customResponsePrefixCheck.isChecked()
                     else ""
                 )
-                self.message_history.append(
-                    prefix + final_text.rstrip() + "\n\n")
+                self.message_history.append(prefix + final_text.rstrip() + "\n\n")
 
             # Write chatlog with write_chatlog, no new session
             if self.logChatCheck.isChecked():
@@ -975,14 +957,14 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
     @Slot(bool)
     def loadModel_handleResult(self, response):
         if response:
-            print("--- Loaded model")
-            self.statusbar.showMessage("Status: Loaded model")
+            model_stem = Path(self.cppModelPath.text()).stem
+            print(f"--- Status: Loaded model '{model_stem}'")
+            self.statusbar.showMessage(f"--- Status: Loaded model '{model_stem}'")
 
             self.generateButton.setEnabled(True)
 
             self.unloadModelButton.setEnabled(True)
             self.toggle_backend_visibility(False)
-            self.mainTabWidget.setCurrentIndex(0)
 
         else:
             print("---Error: Model load failure...")
@@ -1023,8 +1005,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         }
 
         if self.settings_win.gpuAccelCheck.isChecked():
-            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value(
-            )
+            cpp_model_params["n_gpu_layers"] = self.settings_win.gpuLayersSpin.value()
         if self.settings_win.cppLoraLineEdit.text():
             cpp_model_params["lora_path"] = self.get_model_path(
                 self.settings_win.cppLoraLineEdit
@@ -1066,10 +1047,8 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 exllama_model_params,
                 llama_cpp_cache,
             )
-            self.load_modelThread.final_resultReady.connect(
-                self.loadModel_handleResult)
-            self.load_modelThread.finished.connect(
-                self.load_modelThread.deleteLater)
+            self.load_modelThread.final_resultReady.connect(self.loadModel_handleResult)
+            self.load_modelThread.finished.connect(self.load_modelThread.deleteLater)
             self.load_modelThread.start()
 
             # Disable the backend widgets while loading
