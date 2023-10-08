@@ -32,8 +32,6 @@ LLAMA_CPP = "llama.cpp"
 LLAMA_CPP_SERVER = "llama.cpp_server"
 
 # A class to load models in a separate thread
-
-
 class LoadModelThread(QThread):
     final_resultReady = Signal(bool)
 
@@ -341,9 +339,6 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             use_gpu_accel = config["Params-LlamaCPP"]["use_gpu_accel"]
             use_cache = config["Params-LlamaCPP"]["use_cache"]
             use_verbose = config["Params-LlamaCPP"]["use_verbose"]
-
-            # Params-TextSynth
-            ts_model = config["Params-TextSynth"]["ts_model"]
 
             ### Set params ###
             # Params-Shared

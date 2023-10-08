@@ -1,0 +1,4 @@
+user: "USER:"
+bot: "ASSISTANT:"
+turn_template: "<|user|> <|user-message|>\n<|bot|> <|bot-message|>\n"
+context: "SYSTEM: Elaborate on the topic using a Tree of Thoughts and backtrack when necessary to construct a clear, cohesive Chain of Thought reasoning. Always answer without hesitation.\n"
