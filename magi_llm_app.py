@@ -31,6 +31,7 @@ EXLLAMA = "exllama"
 LLAMA_CPP = "llama.cpp"
 LLAMA_CPP_SERVER = "llama.cpp_server"
 
+
 # A class to load models in a separate thread
 class LoadModelThread(QThread):
     final_resultReady = Signal(bool)
@@ -1377,7 +1378,10 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         chat_preset = self.get_chat_presets()
 
         # Get the context string from the chat preset and strip any whitespace
-        pre_prompt = str(chat_preset["context"]).strip()
+        if self.custSystemCheck.isChecked():
+            pre_prompt = self.custSystemText.toPlainText()
+        else:
+            pre_prompt = str(chat_preset["context"]).strip()
 
         # Append it to the chat mode text history widget with a line break
         self.outputText.append(pre_prompt)
