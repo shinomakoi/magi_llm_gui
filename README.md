@@ -45,7 +45,8 @@ To launch the Magi LLM GUI, use:
 python magi_llm_app.py
 ```
 You can set the generation parameters in Settings > Parameters
-![image](https://github.com/shinomakoi/magi_llm_gui/assets/112139428/f39002b9-e450-459c-b2bb-fd3940956fd3)
+![image](https://github.com/shinomakoi/magi_llm_gui/assets/112139428/b02af911-e7eb-4353-a9f4-7b1f1f23bfe2)
+
 Uses https://github.com/abetlen/llama-cpp-python for llama.cpp support
 
 Uses https://github.com/UN-GCPDS/qt-material for themes
