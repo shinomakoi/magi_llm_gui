@@ -78,7 +78,7 @@
           <number>512</number>
          </property>
          <property name="maximum">
-          <number>16384</number>
+          <number>32768</number>
          </property>
          <property name="singleStep">
           <number>2048</number>
@@ -106,7 +106,7 @@
           <number>512</number>
          </property>
          <property name="maximum">
-          <number>16384</number>
+          <number>32768</number>
          </property>
          <property name="singleStep">
           <number>64</number>
@@ -656,75 +656,57 @@
        <string>llama.cpp</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="6">
-        <widget class="QSpinBox" name="cppBatchSizeSpin">
-         <property name="toolTip">
-          <string>Batch size to use</string>
-         </property>
-         <property name="minimum">
-          <number>8</number>
-         </property>
-         <property name="maximum">
-          <number>1024</number>
-         </property>
-         <property name="singleStep">
-          <number>8</number>
-         </property>
-         <property name="value">
-          <number>512</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Batch size:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2" colspan="2">
-        <widget class="QSlider" name="presencePenaltySlider">
-         <property name="toolTip">
-          <string>Repeat alpha presence penalty (0.0 = disabled)</string>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
+       <item row="10" column="2">
+        <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="9" column="5" colspan="2">
-        <widget class="QDoubleSpinBox" name="presencePenaltySpin">
-         <property name="toolTip">
-          <string>Repeat alpha presence penalty (0.0 = disabled)</string>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.010000000000000</double>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Threads:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="6">
-        <widget class="QSpinBox" name="gpuLayersSpin">
+       <item row="9" column="0" colspan="3">
+        <widget class="QCheckBox" name="gpuAccelCheck">
          <property name="toolTip">
-          <string>Number of GPU layers to use</string>
+          <string>Offload model layers to GPU. llama.cpp must be compiled with GPU acceleration</string>
+         </property>
+         <property name="text">
+          <string>Use GPU acceleration</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Mirostat Tau:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="6">
+        <widget class="QSpinBox" name="cppThreads">
+         <property name="toolTip">
+          <string>Number of threads to use during computation</string>
          </property>
          <property name="minimum">
           <number>1</number>
          </property>
          <property name="maximum">
-          <number>80</number>
+          <number>128</number>
          </property>
          <property name="value">
-          <number>18</number>
+          <number>6</number>
          </property>
         </widget>
        </item>
-       <item row="8" column="2" colspan="2">
+       <item row="11" column="2" colspan="2">
         <widget class="QSlider" name="freqPenaltySlider">
          <property name="toolTip">
           <string>Repeat alpha frequency penalty (0.0 = disabled)</string>
@@ -743,106 +725,73 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="6">
-        <widget class="QSpinBox" name="cppThreads">
+       <item row="21" column="2" colspan="2">
+        <widget class="QCheckBox" name="cppVerboseCheck">
          <property name="toolTip">
-          <string>Number of threads to use during computation</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>64</number>
-         </property>
-         <property name="value">
-          <number>6</number>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="label_31">
-         <property name="text">
-          <string>Tail Free Sampling:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string>GPU Layers:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="label_18">
-         <property name="text">
-          <string>LoRA:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="3">
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>Threads:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QCheckBox" name="cppCacheCheck">
-         <property name="toolTip">
-          <string>Saves context cache to RAM for faster prompt processing</string>
+          <string>Print timings and cache info after prompts</string>
          </property>
          <property name="text">
-          <string>Use cache</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
+          <string>Verbose</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
+       <item row="14" column="0">
         <widget class="QLabel" name="label_14">
          <property name="text">
           <string>Mirostat mode:</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="5" colspan="2">
-        <widget class="QDoubleSpinBox" name="cpp_tfszSpin">
+       <item row="5" column="6">
+        <widget class="QSpinBox" name="gpuLayersSpin">
          <property name="toolTip">
-          <string>Tail free sampling, parameter z (1.0 = disabled)</string>
+          <string>Number of GPU layers to use</string>
          </property>
          <property name="minimum">
-          <double>1.000000000000000</double>
+          <number>1</number>
          </property>
          <property name="maximum">
-          <double>5.000000000000000</double>
+          <number>80</number>
+         </property>
+         <property name="value">
+          <number>18</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Batch size:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="5" colspan="2">
+        <widget class="QDoubleSpinBox" name="presencePenaltySpin">
+         <property name="toolTip">
+          <string>Repeat alpha presence penalty (0.0 = disabled)</string>
+         </property>
+         <property name="maximum">
+          <double>1.000000000000000</double>
          </property>
          <property name="singleStep">
           <double>0.010000000000000</double>
          </property>
         </widget>
        </item>
-       <item row="10" column="2" colspan="2">
-        <widget class="QSlider" name="cpp_tfszSlider">
-         <property name="toolTip">
-          <string>Tail free sampling, parameter z (1.0 = disabled)</string>
+       <item row="12" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Presence penalty:</string>
          </property>
-         <property name="minimum">
-          <number>100</number>
-         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QSlider" name="horizontalSlider">
          <property name="maximum">
-          <number>500</number>
+          <number>128</number>
          </property>
          <property name="value">
-          <number>100</number>
+          <number>6</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -850,36 +799,45 @@
         </widget>
        </item>
        <item row="11" column="5" colspan="2">
-        <widget class="QSpinBox" name="cppMirastatMode">
+        <widget class="QDoubleSpinBox" name="freqPenaltySpin">
          <property name="toolTip">
-          <string>Use Mirostat sampling. Top K, Nucleus, Tail Free and Locally Typical samplers are ignored if used. (0 = disabled, 1 = Mirostat, 2 = Mirostat 2.0)</string>
+          <string>Repeat alpha frequency penalty (0.0 = disabled)</string>
          </property>
          <property name="maximum">
-          <number>2</number>
+          <double>1.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Presence penalty:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="3">
-        <widget class="QCheckBox" name="gpuAccelCheck">
+       <item row="4" column="6">
+        <widget class="QSpinBox" name="cppBatchSizeSpin">
          <property name="toolTip">
-          <string>Offload model layers to GPU. llama.cpp must be compiled with GPU acceleration</string>
+          <string>Batch size to use</string>
          </property>
-         <property name="text">
-          <string>Use GPU acceleration</string>
+         <property name="minimum">
+          <number>8</number>
          </property>
-         <property name="checked">
-          <bool>true</bool>
+         <property name="maximum">
+          <number>1024</number>
+         </property>
+         <property name="singleStep">
+          <number>8</number>
+         </property>
+         <property name="value">
+          <number>512</number>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="18" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>LoRA:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
         <widget class="QSlider" name="cppBatchSizeSlider">
          <property name="toolTip">
           <string>Batch size to use</string>
@@ -904,57 +862,23 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="2" colspan="2">
-        <widget class="QCheckBox" name="cppVerboseCheck">
+       <item row="13" column="5" colspan="2">
+        <widget class="QDoubleSpinBox" name="cpp_tfszSpin">
          <property name="toolTip">
-          <string>Print timings and cache info after prompts</string>
+          <string>Tail free sampling, parameter z (1.0 = disabled)</string>
          </property>
-         <property name="text">
-          <string>Verbose</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Frequency penalty:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="2" colspan="2">
-        <widget class="QLineEdit" name="cppLoraLineEdit">
-         <property name="toolTip">
-          <string>Path to a LoRA .bin file</string>
-         </property>
-         <property name="placeholderText">
-          <string>ggml-adapter-model.bin</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="6">
-        <widget class="QDoubleSpinBox" name="freqPenaltySpin">
-         <property name="toolTip">
-          <string>Repeat alpha frequency penalty (0.0 = disabled)</string>
+         <property name="minimum">
+          <double>1.000000000000000</double>
          </property>
          <property name="maximum">
-          <double>1.000000000000000</double>
+          <double>5.000000000000000</double>
          </property>
          <property name="singleStep">
           <double>0.010000000000000</double>
          </property>
         </widget>
        </item>
-       <item row="12" column="5" colspan="2">
-        <widget class="QToolButton" name="cppLoraSelect">
-         <property name="toolTip">
-          <string>Select LoRA file</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
+       <item row="20" column="0">
         <widget class="QCheckBox" name="cppMmapCheck">
          <property name="toolTip">
           <string>Memory-map model. Disabled = slower load but may reduce pageouts if not using mlock</string>
@@ -967,7 +891,61 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="2" colspan="2">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>GPU Layers:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Frequency penalty:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="2" colspan="2">
+        <widget class="QLineEdit" name="cppLoraLineEdit">
+         <property name="toolTip">
+          <string>Path to a LoRA .bin file</string>
+         </property>
+         <property name="placeholderText">
+          <string>ggml-adapter-model.bin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Mirostat Eta:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="5" colspan="2">
+        <widget class="QSpinBox" name="cppMirostatTau">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>8</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="5" colspan="2">
+        <widget class="QSpinBox" name="cppMirostatMode">
+         <property name="toolTip">
+          <string>Use Mirostat sampling. Top K, Nucleus, Tail Free and Locally Typical samplers are ignored if used. (0 = disabled, 1 = Mirostat, 2 = Mirostat 2.0)</string>
+         </property>
+         <property name="maximum">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="2" colspan="2">
         <widget class="QCheckBox" name="cppMlockCheck">
          <property name="toolTip">
           <string>Force system to keep model in RAM rather than swapping or compressing</string>
@@ -977,7 +955,27 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="21" column="0">
+        <widget class="QCheckBox" name="cppCacheCheck">
+         <property name="toolTip">
+          <string>Saves context cache to RAM for faster prompt processing</string>
+         </property>
+         <property name="text">
+          <string>Use cache</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="label_31">
+         <property name="text">
+          <string>Tail Free Sampling:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
         <widget class="QSlider" name="gpuLayersSlider">
          <property name="toolTip">
           <string>Number of GPU layers to use</string>
@@ -996,7 +994,62 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="2">
+       <item row="13" column="2" colspan="2">
+        <widget class="QSlider" name="cpp_tfszSlider">
+         <property name="toolTip">
+          <string>Tail free sampling, parameter z (1.0 = disabled)</string>
+         </property>
+         <property name="minimum">
+          <number>100</number>
+         </property>
+         <property name="maximum">
+          <number>500</number>
+         </property>
+         <property name="value">
+          <number>100</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="5" colspan="2">
+        <widget class="QToolButton" name="cppLoraSelect">
+         <property name="toolTip">
+          <string>Select LoRA file</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2" colspan="2">
+        <widget class="QSlider" name="presencePenaltySlider">
+         <property name="toolTip">
+          <string>Repeat alpha presence penalty (0.0 = disabled)</string>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="5" colspan="2">
+        <widget class="QDoubleSpinBox" name="cppMirostatEta">
+         <property name="maximum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.100000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="2">
         <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -1010,5 +1063,326 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>ctxsizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ctxsizeSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>571</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ctxsizeSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ctxsizeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>588</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>top_kSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>top_kSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>403</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>588</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>top_kSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>top_kSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_new_tokensSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>max_new_tokensSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>577</x>
+     <y>459</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>456</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_new_tokensSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>max_new_tokensSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>340</x>
+     <y>460</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>587</x>
+     <y>456</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>token_repetition_penalty_decaySlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>token_repetition_penalty_decaySpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>416</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>616</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>token_repetition_penalty_decaySpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>token_repetition_penalty_decaySlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>607</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>517</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minPSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>minPSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>391</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>612</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minPSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>minPSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>590</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>474</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>numbeamsSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>numbeamsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>581</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>numbeamsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>numbeamsSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beamLengthSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>beamLengthSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>417</x>
+     <y>349</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>603</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beamLengthSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>beamLengthSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>602</x>
+     <y>357</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cppThreads</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>614</x>
+     <y>93</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cppThreads</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>583</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cppBatchSizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cppBatchSizeSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>291</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>586</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cppBatchSizeSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cppBatchSizeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>595</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>408</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gpuLayersSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>gpuLayersSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>584</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gpuLayersSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>gpuLayersSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>586</x>
+     <y>189</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1518</width>
-    <height>1014</height>
+    <width>1523</width>
+    <height>999</height>
    </rect>
   </property>
   <property name="font">
@@ -41,259 +41,71 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <widget class="QToolBox" name="toolBox_2">
+         <widget class="QToolBox" name="mode_tab">
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
-          <widget class="QWidget" name="page_13">
+          <widget class="QWidget" name="instructTab">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>280</width>
-             <height>779</height>
+             <width>278</width>
+             <height>728</height>
             </rect>
            </property>
            <attribute name="label">
-            <string>Backend</string>
+            <string>Instruct</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_3">
-            <item row="11" column="0">
-             <widget class="QLineEdit" name="cppModelPath"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="cppServerCheck">
+           <layout class="QGridLayout" name="gridLayout_9">
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="label">
               <property name="text">
-               <string>llama.cpp server</string>
+               <string>Instruct preset:</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QPushButton" name="unloadModelButton">
-              <property name="text">
-               <string>Unload backend</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="label_29">
-              <property name="text">
-               <string>llama.cpp: Model path:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="exllamaCheck">
-              <property name="text">
-               <string>Exllama</string>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_40">
-              <property name="text">
-               <string>Exllama: Model directory:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="1">
-             <widget class="QToolButton" name="cppModelSelect">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="cppCheck">
-              <property name="text">
-               <string>llama-cpp-python</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="0">
-             <widget class="QLineEdit" name="exllamaModelPath"/>
-            </item>
-            <item row="6" column="0">
-             <widget class="Line" name="line_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="0">
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="13" column="1">
-             <widget class="QToolButton" name="exllamaModelSelect">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QCheckBox" name="streamEnabledCheck">
-              <property name="text">
-               <string>Stream responses</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QCheckBox" name="backendAutoLaunch">
-              <property name="text">
-               <string>Auto load backend at launch</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="Line" name="line_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QPushButton" name="loadModelButton">
-              <property name="text">
-               <string>Load backend</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="Line" name="line">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="page_15">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>270</width>
-             <height>779</height>
-            </rect>
-           </property>
-           <attribute name="label">
-            <string>Chat</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout_45">
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="instructRadioButton">
-              <property name="text">
-               <string>Instruct:</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="0">
-             <widget class="QLineEdit" name="yourNameLine"/>
-            </item>
-            <item row="7" column="0">
-             <widget class="QComboBox" name="awesomePresetComboBox"/>
-            </item>
-            <item row="8" column="0">
-             <widget class="Line" name="line_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="15" column="0">
-             <widget class="QLabel" name="label_42">
-              <property name="text">
-               <string>Bot name:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="18" column="0">
-             <widget class="QLineEdit" name="customResponsePrefix"/>
-            </item>
-            <item row="13" column="0">
-             <widget class="QLabel" name="label_41">
-              <property name="text">
-               <string>User name:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="19" column="0">
-             <widget class="QCheckBox" name="custSystemCheck">
-              <property name="text">
-               <string>Custom system prompt</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QCheckBox" name="logChatCheck">
-              <property name="text">
-               <string>Log chats</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QComboBox" name="instructPresetComboBox"/>
-            </item>
-            <item row="11" column="0">
-             <widget class="Line" name="line_6">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QCheckBox" name="sendStopStringCheck">
-              <property name="text">
-               <string>Send chat stop string</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
+            <item row="2" column="0" colspan="2">
              <widget class="QLabel" name="label_3">
               <property name="text">
                <string>Awesome prompts:</string>
               </property>
              </widget>
             </item>
-            <item row="17" column="0">
+            <item row="4" column="0" colspan="2">
              <widget class="QCheckBox" name="customResponsePrefixCheck">
               <property name="text">
                <string>Response prefix:</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QComboBox" name="characterPresetComboBox"/>
+            <item row="5" column="0" colspan="2">
+             <widget class="QLineEdit" name="customResponsePrefix"/>
             </item>
-            <item row="16" column="0">
+            <item row="6" column="0" colspan="2">
+             <widget class="QLabel" name="label_41">
+              <property name="text">
+               <string>User name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0" colspan="2">
+             <widget class="QLineEdit" name="yourNameLine"/>
+            </item>
+            <item row="8" column="0" colspan="2">
+             <widget class="QLabel" name="label_42">
+              <property name="text">
+               <string>Bot name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0" colspan="2">
              <widget class="QLineEdit" name="botNameLine"/>
             </item>
-            <item row="21" column="0">
+            <item row="10" column="1">
              <spacer name="verticalSpacer_11">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -306,44 +118,427 @@
               </property>
              </spacer>
             </item>
-            <item row="4" column="0">
-             <widget class="QRadioButton" name="charactersRadioButton">
-              <property name="text">
-               <string>Characters:</string>
-              </property>
-             </widget>
+            <item row="1" column="0" colspan="2">
+             <widget class="QComboBox" name="instructPresetComboBox"/>
             </item>
-            <item row="20" column="0">
-             <widget class="QPlainTextEdit" name="custSystemText"/>
+            <item row="3" column="0" colspan="2">
+             <widget class="QComboBox" name="awesomePresetComboBox"/>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="page_16">
+          <widget class="QWidget" name="characterTab">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>270</width>
-             <height>779</height>
+             <width>278</width>
+             <height>728</height>
             </rect>
            </property>
            <attribute name="label">
-            <string>Themes</string>
+            <string>Character</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_46">
-            <item row="3" column="0">
-             <spacer name="verticalSpacer_12">
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Character:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
+             <widget class="QLabel" name="label_43">
+              <property name="text">
+               <string>Your name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="2">
+             <widget class="QLineEdit" name="yourNameLineChar"/>
+            </item>
+            <item row="4" column="1">
+             <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-                <height>725</height>
+                <height>40</height>
                </size>
               </property>
              </spacer>
             </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QComboBox" name="characterPresetComboBox"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="standardTab">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>278</width>
+             <height>728</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Standard</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="notebookTab">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>278</width>
+             <height>728</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Notebook</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="settingsPathSaveButton">
+          <property name="text">
+           <string>Save settings</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tabWidgetPage1">
+        <attribute name="title">
+         <string>Main</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="2" column="6">
+          <widget class="QPushButton" name="stopButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Stop generation</string>
+           </property>
+           <property name="text">
+            <string>St</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="6">
+          <widget class="QComboBox" name="chatOutputSession">
+           <property name="toolTip">
+            <string>Saved chat sessions</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>Current</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QPushButton" name="generateButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Send (CTRL+Enter)</string>
+           </property>
+           <property name="text">
+            <string>Gen</string>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+Return</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="5">
+          <widget class="QPushButton" name="clearButton">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Clear the output history</string>
+           </property>
+           <property name="text">
+            <string>Clr</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QComboBox" name="chatInputHistoryCombo">
+           <property name="toolTip">
+            <string>Saved chat inputs from session</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QPushButton" name="retryButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Retry</string>
+           </property>
+           <property name="text">
+            <string>Ret</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QPlainTextEdit" name="inputText">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>90</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Type something here</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="7">
+          <widget class="QTextEdit" name="outputText">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans Display'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="placeholderText">
+            <string>Output goes here</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QPushButton" name="rewindButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Continue the last generation</string>
+           </property>
+           <property name="text">
+            <string>Rw</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="4">
+          <widget class="QPushButton" name="continueButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Rewinds the chat 1 turn</string>
+           </property>
+           <property name="text">
+            <string>Con</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Preferences</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Backend</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="cppCheck">
+              <property name="text">
+               <string>llama-cpp-python</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLineEdit" name="exllamaModelPath"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="loadModelButton">
+              <property name="text">
+               <string>Load backend</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="streamEnabledCheck">
+              <property name="text">
+               <string>Stream responses</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>llama.cpp: Model path:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLineEdit" name="cppModelPath"/>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_40">
+              <property name="text">
+               <string>Exllama: Model directory:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="exllamaCheck">
+              <property name="text">
+               <string>Exllama</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="QToolButton" name="cppModelSelect">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="cppServerCheck">
+              <property name="text">
+               <string>llama.cpp server</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QToolButton" name="exllamaModelSelect">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QPushButton" name="unloadModelButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Unload backend</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="backendAutoLaunch">
+              <property name="text">
+               <string>Auto load backend at launch</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>Themes</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
             <item row="0" column="0">
              <widget class="QRadioButton" name="themeDarkCheck">
               <property name="text">
@@ -370,206 +565,45 @@
             </item>
            </layout>
           </widget>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="settingsPathSaveButton">
-          <property name="text">
-           <string>Save settings</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QFrame" name="frame">
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="2" column="2">
-         <widget class="QPushButton" name="continueButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Continue the last generation</string>
-          </property>
-          <property name="text">
-           <string>Con</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="5">
-         <widget class="QPushButton" name="stopButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Stop generation</string>
-          </property>
-          <property name="text">
-           <string>St</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QPlainTextEdit" name="inputText">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>90</height>
-           </size>
-          </property>
-          <property name="placeholderText">
-           <string>Type something here</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="generateButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Send (CTRL+Enter)</string>
-          </property>
-          <property name="text">
-           <string>Gen</string>
-          </property>
-          <property name="shortcut">
-           <string>Ctrl+Return</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="6">
-         <widget class="QTextEdit" name="outputText">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans Display'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="placeholderText">
-           <string>Output goes here</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QPushButton" name="rewindButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Rewinds the chat 1 turn</string>
-          </property>
-          <property name="text">
-           <string>Rw</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="4">
-         <widget class="QPushButton" name="clearButton">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Clear the output history</string>
-          </property>
-          <property name="text">
-           <string>Clr</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QComboBox" name="chatInputHistoryCombo">
-          <property name="toolTip">
-           <string>Saved chat inputs from session</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="5">
-         <widget class="QComboBox" name="chatOutputSession">
-          <property name="toolTip">
-           <string>Saved chat sessions</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>Current</string>
+         </item>
+         <item row="2" column="0">
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>Chat</string>
            </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="3" column="0">
+             <widget class="QPlainTextEdit" name="custSystemText"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="sendStopStringCheck">
+              <property name="text">
+               <string>Send chat stop string</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="custSystemCheck">
+              <property name="text">
+               <string>Custom system prompt:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="logChatCheck">
+              <property name="text">
+               <string>Log chats</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -580,7 +614,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1518</width>
+     <width>1523</width>
      <height>27</height>
     </rect>
    </property>
@@ -590,14 +624,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </property>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuMode">
-    <property name="title">
-     <string>Mode</string>
-    </property>
-    <addaction name="actionChat"/>
-    <addaction name="actionStandard"/>
-    <addaction name="actionNotebook"/>
-   </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>Settings</string>
@@ -605,7 +631,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuMode"/>
    <addaction name="menuSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

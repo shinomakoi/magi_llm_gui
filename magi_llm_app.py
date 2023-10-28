@@ -101,7 +101,7 @@ class TextgenThread(QThread):
         self.cpp_params = cpp_params
         self.stop_flag = False
 
-        # print('---'+self.message + '---')
+        # print("---" + self.message + "---")
 
     def run(self):
         """Run the appropriate backend method based on the run_backend attribute."""
@@ -146,17 +146,21 @@ class TextgenThread(QThread):
             "top_k": self.cpp_params["top_k"],
             "repeat_penalty": self.cpp_params["repetition_penalty"],
             "mirostat_mode": self.cpp_params["mirostat_mode"],
+            "mirostat_tau": self.cpp_params["mirostat_tau"],
+            "mirostat_eta": self.cpp_params["mirostat_eta"],
             "stop": self.cpp_params["stop"],
             "tfs_z": self.cpp_params["tfs_z"],
             "frequency_penalty": self.cpp_params["frequency_penalty"],
             "presence_penalty": self.cpp_params["presence_penalty"],
         }
+
         responses = (
             cpp_model.generate_with_streaming(self.message, **kwargs)
             if self.stream_enabled
             else [cpp_model.generate(self.message, **kwargs)]
         )
         response_list = []
+
         for response in responses:
             if self.stop_flag:
                 break
@@ -330,6 +334,8 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             tfs_z = config["Params-LlamaCPP"]["tfs_z"]
             batch_size = config["Params-LlamaCPP"]["batch_size"]
             mirostat_mode = config["Params-LlamaCPP"]["mirostat_mode"]
+            mirostat_tau = config["Params-LlamaCPP"]["mirostat_tau"]
+            mirostat_eta = config["Params-LlamaCPP"]["mirostat_eta"]
             n_gpu_layers = config["Params-LlamaCPP"]["n_gpu_layers"]
             lora_path = config["Params-LlamaCPP"]["lora_path"]
             frequency_penalty = config["Params-LlamaCPP"]["frequency_penalty"]
@@ -404,7 +410,9 @@ class SettingsWindow(QtWidgets.QWidget, Ui_Settings_Dialog):
             self.gpuLayersSlider.setValue(int(n_gpu_layers))
 
             self.cppLoraLineEdit.setText(str(lora_path))
-            self.cppMirastatMode.setValue(int(mirostat_mode))
+            self.cppMirostatMode.setValue(int(mirostat_mode))
+            self.cppMirostatTau.setValue(int(mirostat_tau))
+            self.cppMirostatEta.setValue(float(mirostat_eta))
 
             self.freqPenaltySpin.setValue(float(frequency_penalty))
             self.freqPenaltySlider.setValue(float(frequency_penalty))
@@ -487,14 +495,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chat_input_history = []
 
         # Actions from menu
-        self.actionChat.triggered.connect(partial(self.set_textgen_mode, "chat_mode"))
-
-        self.actionStandard.triggered.connect(
-            partial(self.set_textgen_mode, "standard_mode")
-        )
-        self.actionNotebook.triggered.connect(
-            partial(self.set_textgen_mode, "notebook_mode")
-        )
+        self.mode_tab.currentChanged.connect(self.mode_tab_manage)
 
         self.actionPreferences.triggered.connect(self.settings_win.show)
         self.actionExit.triggered.connect(self.close)
@@ -508,6 +509,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.clearButton.clicked.connect(self.clear_histories)
         self.stopButton.clicked.connect(self.stop_textgen)
         self.rewindButton.clicked.connect(self.chat_rewind)
+        self.retryButton.clicked.connect(self.retry_button_manage)
 
         # Load/unload backend
         self.loadModelButton.clicked.connect(self.load_model)
@@ -526,12 +528,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             partial(self.chat_preset_refresh, "instruct")
         )
         self.characterPresetComboBox.textActivated.connect(
-            partial(self.chat_preset_refresh, "character")
-        )
-        self.instructRadioButton.clicked.connect(
-            partial(self.chat_preset_refresh, "instruct")
-        )
-        self.charactersRadioButton.clicked.connect(
             partial(self.chat_preset_refresh, "character")
         )
 
@@ -555,8 +551,28 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.settings_win.close()
         event.accept()
 
+    def retry_button_manage(self):
+        self.chat_rewind()
+        self.textgen_switcher(True)
+
+    def mode_tab_manage(self):
+        index = self.mode_tab.currentIndex()
+
+        if index == 0:
+            self.textgen_mode = "chat_mode"
+            self.chat_preset_refresh("instruct")
+        elif index == 1:
+            self.textgen_mode = "chat_mode"
+            self.chat_preset_refresh("character")
+        elif index == 2:
+            self.textgen_mode = "standard_mode"
+        elif index == 3:
+            self.textgen_mode = "notebook_mode"
+
+        self.set_textgen_mode()
+
     # Set the textgen mode and update the UI accordingly
-    def set_textgen_mode(self, textgen_mode):
+    def set_textgen_mode(self):
         self.continueButton.setEnabled(False)
 
         # Use a dictionary to map the textgen modes to the UI settings
@@ -582,16 +598,12 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         }
 
         # Get the UI settings based on the textgen mode
-        settings = ui_settings.get(textgen_mode)
+        settings = ui_settings.get(self.textgen_mode)
 
         # Update the UI widgets with the settings
         self.inputText.setEnabled(settings["input_enabled"])
         self.outputText.setReadOnly(settings["output_readonly"])
         self.chatInputHistoryCombo.setEnabled(settings["chat_history_enabled"])
-        self.rewindButton.setEnabled(settings["rewind_enabled"])
-
-        # Set the textgen mode attribute
-        self.textgen_mode = textgen_mode
 
         # Clear all histories
         self.clear_histories()
@@ -658,8 +670,10 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.yourNameLine.setText(config["Settings"]["user_name"])
 
         # Set backend based on the value from the settings section
-        if config["Settings"]["backend"] == "llama_cpp":
+        if config["Settings"]["backend"] == "llama_cpp_python":
             self.cppCheck.setChecked(True)
+        elif config["Settings"]["backend"] == "llama_cpp_server":
+            self.cppServerCheck.setChecked(True)
         elif config["Settings"]["backend"] == "exllama":
             self.exllamaCheck.setChecked(True)
 
@@ -721,7 +735,9 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Save backend based on the checked radio button
         if self.cppCheck.isChecked():
-            config.set("Settings", "backend", "llama_cpp")
+            config.set("Settings", "backend", "llama_cpp_python")
+        elif self.cppServerCheck.isChecked():
+            config.set("Settings", "backend", "llama_cpp_server")
         elif self.exllamaCheck.isChecked():
             config.set("Settings", "backend", "exllama")
 
@@ -755,12 +771,11 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.continueButton,
             self.generateButton,
             self.clearButton,
-            self.instructRadioButton,
-            self.charactersRadioButton,
         ]
 
         if self.textgen_mode == "chat_mode":
             buttons.append(self.rewindButton)
+            buttons.append(self.retryButton)
 
         # Iterate over the buttons and set their enabled status
         for button in buttons:
@@ -863,14 +878,14 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
     # Get and set the chat stop strings
     def get_stop_strings(self):
         stop_strings = []
+        chat_preset = self.get_chat_presets()
         if self.sendStopStringCheck.isChecked():
-            if self.instructRadioButton.isChecked():
-                chat_preset = self.get_chat_presets()
+            if self.mode_tab.currentIndex() == 0:
                 stop_strings.append(chat_preset["user"])
-            elif self.charactersRadioButton.isChecked():
-                stop_strings.append(self.yourNameLine.text() + ":")
-
-        # print('stopstrings', stop_strings)
+            elif self.mode_tab.currentIndex() == 1:
+                user_name, bot_name = self.get_user_bot_names()
+                stop_strings.append(user_name + ":")
+                stop_strings.append(bot_name + ":")
         return stop_strings
 
     # Get the llama.cpp parameters
@@ -885,12 +900,17 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             "repetition_penalty": float(
                 self.settings_win.repetition_penaltySpin.value()
             ),
-            "mirostat_mode": int(self.settings_win.cppMirastatMode.value()),
+            "mirostat_mode": int(self.settings_win.cppMirostatMode.value()),
+            "mirostat_tau": int(self.settings_win.cppMirostatTau.value()),
+            "mirostat_eta": float(self.settings_win.cppMirostatEta.value()),
             "stop": list(stop_strings),
             "tfs_z": float(self.settings_win.cpp_tfszSpin.value()),
             "frequency_penalty": float(self.settings_win.freqPenaltySpin.value()),
             "presence_penalty": float(self.settings_win.presencePenaltySpin.value()),
         }
+
+        cpp_params["server_cache_check"] = self.settings_win.cppCacheCheck.isChecked()
+
         # print('--- cpp_params:', cpp_params)
         return cpp_params
 
@@ -933,16 +953,23 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Get chat presets from a YAML file
 
     def get_chat_presets(self):
-        if self.instructRadioButton.isChecked():
+        if self.mode_tab.currentIndex() == 0:
             chat_mode = "instruct"
 
-        elif self.charactersRadioButton.isChecked():
+        elif self.mode_tab.currentIndex() == 1:
             chat_mode = "character"
 
         preset_name = getattr(self, chat_mode + "PresetComboBox").currentText()
         preset_file = f"presets/{chat_mode}/{preset_name}.yaml"
         with open(preset_file, "r") as file:
             chat_preset = yaml.safe_load(file)
+        if self.mode_tab.currentIndex() == 1:
+            user_name = (
+                self.yourNameLineChar.text() if self.yourNameLineChar.text() else "User"
+            )
+            chat_preset["context"] = chat_preset["context"].replace(
+                "{{user}}", user_name
+            )
         return chat_preset
 
     def get_model_path(self, line_edit):
@@ -954,14 +981,13 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def loadModel_handleResult(self, response):
         if response:
             model_stem = Path(self.cppModelPath.text()).stem
-            print(f"--- Status: Loaded model '{model_stem}'")
-            self.statusbar.showMessage(f"--- Status: Loaded model '{model_stem}'")
+            if not self.cppServerCheck.isChecked():
+                print(f"--- Status: Loaded model '{model_stem}'")
+                self.statusbar.showMessage(f"--- Status: Loaded model '{model_stem}'")
 
             self.generateButton.setEnabled(True)
-
             self.unloadModelButton.setEnabled(True)
             self.toggle_backend_visibility(False)
-
         else:
             print("---Error: Model load failure...")
             self.statusbar.showMessage("Error: Model load failure")
@@ -1054,10 +1080,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.model_load = True
 
         else:
-            print(f"--- Notice: This backend ({backend}) has no model to load")
-            self.statusbar.showMessage(
-                f"Notice: This backend ({backend}) has no model to load"
-            )
             self.loadModel_handleResult(True)
 
     def unload_model(self):
@@ -1092,6 +1114,20 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Enable the stop buttons for each mode
         self.stopButton.setEnabled(True)
 
+    def get_user_bot_names(self):
+        if self.mode_tab.currentIndex() == 0:
+            user_name = (
+                self.yourNameLine.text() if self.yourNameLine.text() else "Assistant"
+            )
+            bot_name = self.botNameLine.text() if self.botNameLine.text() else "User"
+        elif self.mode_tab.currentIndex() == 1:
+            chat_preset = self.get_chat_presets()
+            bot_name = chat_preset["name"]
+            user_name = (
+                self.yourNameLineChar.text() if self.yourNameLineChar.text() else "User"
+            )
+        return user_name, bot_name
+
     # Formatting the chat display text
     def chat_formatting(self, input_message):
         # Get the chat input and strip any leading or trailing whitespace
@@ -1099,8 +1135,11 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Create a list of paragraphs for the text history
         paragraphs = []
         # Add a paragraph with the user name and chat input
+
+        user_name, bot_name = self.get_user_bot_names()
+
         paragraphs.append(
-            f"<b style='color: #a92828'>{self.yourNameLine.text()}</b><br>{chat_input}<br>"
+            f"<b style='color: #a92828'>{user_name}</b><br>{chat_input}<br>"
         )
         # Add a paragraph with the bot name and custom response prefix if checked
         prefix = (
@@ -1108,11 +1147,9 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.customResponsePrefixCheck.isChecked()
             else ""
         )
-        paragraphs.append(
-            f"<b style='color: #3194d0'>{self.botNameLine.text()}</b><br>{prefix}"
-        )
+        paragraphs.append(f"<b style='color: #3194d0'>{bot_name}</b><br>{prefix}")
         # Join the paragraphs with line breaks and wrap them in <p> tags
-        chat_text = f"<p><br>{'<br>'.join(paragraphs)}</p>"
+        chat_text = f"<p><br>{'<br>'.join(paragraphs)}</p>".strip()
 
         return chat_text
 
@@ -1130,12 +1167,16 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 return backend
 
     # Main launcher logic
-    def textgen_switcher(self):
+    def textgen_switcher(self, retry=False):
         backend = self.get_current_backend()
 
         # Get the input message from the input widget
         if self.textgen_mode != "notebook_mode":
-            input_message = self.inputText.toPlainText()
+            if retry:
+                input_message = self.chat_input_history[-1]
+            else:
+                input_message = self.inputText.toPlainText()
+                self.chat_input_history_add(input_message)
         else:
             input_message = self.outputText.toPlainText()
 
@@ -1156,8 +1197,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 # Append the chat text to the chat mode text history widget
                 self.outputText.append(chat_text)
 
-                # Add the input message to the chat input history
-                self.chat_input_history_add(input_message)
                 # Clear the chat mode text input widget
                 self.inputText.clear()
 
@@ -1199,14 +1238,14 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     # Define a function to process the turn template for chat mode
     def process_instruct_turn_template(self):
-        if self.instructRadioButton.isChecked():
+        if self.mode_tab.currentIndex() == 0:
             chat_preset = self.get_chat_presets()
             first_turn_template = str(chat_preset["turn_template"])
 
-        elif self.charactersRadioButton.isChecked():
+        elif self.mode_tab.currentIndex() == 1:
             chat_preset = self.get_chat_presets()
             first_turn_template = (
-                "<|user|>:\n<|user-message|>\n\n<|bot|>:\n<|bot-message|>\n\n"
+                "<|user|>: <|user-message|>\n\n<|bot|>:<|bot-message|>\n"
             )
 
         # Get the context string from the chat preset
@@ -1238,16 +1277,25 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             .replace(template_bot, "")
         )
 
-        if self.instructRadioButton.isChecked():
+        if self.mode_tab.currentIndex() == 0:
             user = template_user.replace("<|user|>", chat_preset["user"])
             bot = template_bot.replace("<|bot|>", chat_preset["bot"])
-        elif self.charactersRadioButton.isChecked():
-            user = template_user.replace("<|user|>", self.yourNameLine.text())
-            bot = template_bot.replace("<|bot|>", chat_preset["name"])
+        elif self.mode_tab.currentIndex() == 1:
+            user_name, bot_name = self.get_user_bot_names()
+            user = template_user.replace("<|user|>", user_name)
+            bot = template_bot.replace("<|bot|>", bot_name)
+
+            example_dialogue = (
+                str(chat_preset["example_dialogue"])
+                .replace("{{char}}", bot_name)
+                .replace("{{user}}", user_name)
+            )
+
+            pre_prompt = f"{pre_prompt}\n\n{example_dialogue}\n"
 
             # Replace the user message placeholder with the input text from the chat mode text input widget
         user_msg = template_user_msg.replace(
-            "<|user-message|>", self.inputText.toPlainText()
+            "<|user-message|>", self.chat_input_history[-1]
         )
 
         # Return a tuple of user, user message, bot, bot message and pre prompt
@@ -1283,7 +1331,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def chat_rewind(self):
         # If there are at least two items in the name and message history lists
         if len(self.name_history) and len(self.message_history) >= 2:
-            print("--- Chat rewind")
+            # print("--- Chat rewind")
             # Pop the last two names and messages from their respective lists
             self.name_history.pop()
             self.name_history.pop()
@@ -1296,6 +1344,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             )
             # Pop the last chat output from the list
             self.chat_output_list.pop()
+            
         # If there are no items in the name history list
         if len(self.name_history) == 0:
             # Get the chat preset dictionary from a file
@@ -1304,7 +1353,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pre_prompt = chat_preset["context"].strip()
             # Set the chat mode text history widget to show the context string
             self.outputText.setPlainText(pre_prompt)
-
+            
     # Add the chat input to the combo box and the history list
     def chat_input_history_add(self, chat_input):
         # Add the first 96 characters of the chat input to the combo box
@@ -1355,24 +1404,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Clear rewind history by creating a new empty list for output list
         self.chat_output_list = []
         # Append the current html of chat mode text history widget to output list
-        self.chat_output_list.append(self.outputText.toHtml())
-
-        # Use a dictionary to map the preset modes to the radio buttons and file names
-        preset_dict = {
-            "instruct": (self.instructRadioButton, "instruct"),
-            "character": (self.charactersRadioButton, "character"),
-        }
-
-        # If no preset mode is given, use the checked radio button to determine it
-        if not preset_mode:
-            for mode, (radio_button, file_name) in preset_dict.items():
-                if radio_button.isChecked():
-                    preset_mode = mode
-                    break
-
-        # Check the radio button for the preset mode
-        radio_button, file_name = preset_dict[preset_mode]
-        radio_button.setChecked(True)
+        self.chat_output_list.append(self.outputText.toHtml().strip())
 
         # Get the chat preset dictionary for the preset mode from a file
         chat_preset = self.get_chat_presets()

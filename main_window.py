@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.6.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -17,17 +17,17 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGridLayout, QLabel, QLineEdit, QMainWindow,
-    QMenu, QMenuBar, QPlainTextEdit, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QSplitter,
-    QStatusBar, QTextEdit, QToolBox, QToolButton,
-    QWidget)
+    QGridLayout, QGroupBox, QLabel, QLineEdit,
+    QMainWindow, QMenu, QMenuBar, QPlainTextEdit,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QSplitter, QStatusBar, QTabWidget, QTextEdit,
+    QToolBox, QToolButton, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1518, 1014)
+        MainWindow.resize(1523, 999)
         font = QFont()
         font.setPointSize(11)
         font.setBold(False)
@@ -58,241 +58,109 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShadow(QFrame.Raised)
         self.gridLayout_2 = QGridLayout(self.frame_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.toolBox_2 = QToolBox(self.frame_2)
-        self.toolBox_2.setObjectName(u"toolBox_2")
-        self.toolBox_2.setAutoFillBackground(False)
-        self.page_13 = QWidget()
-        self.page_13.setObjectName(u"page_13")
-        self.page_13.setGeometry(QRect(0, 0, 280, 779))
-        self.gridLayout_3 = QGridLayout(self.page_13)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.cppModelPath = QLineEdit(self.page_13)
-        self.cppModelPath.setObjectName(u"cppModelPath")
+        self.mode_tab = QToolBox(self.frame_2)
+        self.mode_tab.setObjectName(u"mode_tab")
+        self.mode_tab.setAutoFillBackground(False)
+        self.instructTab = QWidget()
+        self.instructTab.setObjectName(u"instructTab")
+        self.instructTab.setGeometry(QRect(0, 0, 278, 728))
+        self.gridLayout_9 = QGridLayout(self.instructTab)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.label = QLabel(self.instructTab)
+        self.label.setObjectName(u"label")
 
-        self.gridLayout_3.addWidget(self.cppModelPath, 11, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.label, 0, 0, 1, 2)
 
-        self.cppServerCheck = QRadioButton(self.page_13)
-        self.cppServerCheck.setObjectName(u"cppServerCheck")
-
-        self.gridLayout_3.addWidget(self.cppServerCheck, 1, 0, 1, 1)
-
-        self.unloadModelButton = QPushButton(self.page_13)
-        self.unloadModelButton.setObjectName(u"unloadModelButton")
-
-        self.gridLayout_3.addWidget(self.unloadModelButton, 5, 0, 1, 1)
-
-        self.label_29 = QLabel(self.page_13)
-        self.label_29.setObjectName(u"label_29")
-
-        self.gridLayout_3.addWidget(self.label_29, 10, 0, 1, 1)
-
-        self.exllamaCheck = QRadioButton(self.page_13)
-        self.exllamaCheck.setObjectName(u"exllamaCheck")
-
-        self.gridLayout_3.addWidget(self.exllamaCheck, 2, 0, 1, 1)
-
-        self.label_40 = QLabel(self.page_13)
-        self.label_40.setObjectName(u"label_40")
-
-        self.gridLayout_3.addWidget(self.label_40, 12, 0, 1, 1)
-
-        self.cppModelSelect = QToolButton(self.page_13)
-        self.cppModelSelect.setObjectName(u"cppModelSelect")
-
-        self.gridLayout_3.addWidget(self.cppModelSelect, 11, 1, 1, 1)
-
-        self.cppCheck = QRadioButton(self.page_13)
-        self.cppCheck.setObjectName(u"cppCheck")
-        self.cppCheck.setChecked(True)
-
-        self.gridLayout_3.addWidget(self.cppCheck, 0, 0, 1, 1)
-
-        self.exllamaModelPath = QLineEdit(self.page_13)
-        self.exllamaModelPath.setObjectName(u"exllamaModelPath")
-
-        self.gridLayout_3.addWidget(self.exllamaModelPath, 13, 0, 1, 1)
-
-        self.line_5 = QFrame(self.page_13)
-        self.line_5.setObjectName(u"line_5")
-        self.line_5.setFrameShape(QFrame.HLine)
-        self.line_5.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_3.addWidget(self.line_5, 6, 0, 1, 1)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_3.addItem(self.verticalSpacer, 14, 0, 1, 1)
-
-        self.exllamaModelSelect = QToolButton(self.page_13)
-        self.exllamaModelSelect.setObjectName(u"exllamaModelSelect")
-
-        self.gridLayout_3.addWidget(self.exllamaModelSelect, 13, 1, 1, 1)
-
-        self.streamEnabledCheck = QCheckBox(self.page_13)
-        self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
-        self.streamEnabledCheck.setChecked(True)
-
-        self.gridLayout_3.addWidget(self.streamEnabledCheck, 8, 0, 1, 1)
-
-        self.backendAutoLaunch = QCheckBox(self.page_13)
-        self.backendAutoLaunch.setObjectName(u"backendAutoLaunch")
-
-        self.gridLayout_3.addWidget(self.backendAutoLaunch, 7, 0, 1, 1)
-
-        self.line_4 = QFrame(self.page_13)
-        self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.HLine)
-        self.line_4.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_3.addWidget(self.line_4, 9, 0, 1, 1)
-
-        self.loadModelButton = QPushButton(self.page_13)
-        self.loadModelButton.setObjectName(u"loadModelButton")
-
-        self.gridLayout_3.addWidget(self.loadModelButton, 4, 0, 1, 1)
-
-        self.line = QFrame(self.page_13)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_3.addWidget(self.line, 3, 0, 1, 1)
-
-        self.toolBox_2.addItem(self.page_13, u"Backend")
-        self.page_15 = QWidget()
-        self.page_15.setObjectName(u"page_15")
-        self.page_15.setGeometry(QRect(0, 0, 270, 779))
-        self.gridLayout_45 = QGridLayout(self.page_15)
-        self.gridLayout_45.setObjectName(u"gridLayout_45")
-        self.instructRadioButton = QRadioButton(self.page_15)
-        self.instructRadioButton.setObjectName(u"instructRadioButton")
-        self.instructRadioButton.setChecked(True)
-
-        self.gridLayout_45.addWidget(self.instructRadioButton, 0, 0, 1, 1)
-
-        self.yourNameLine = QLineEdit(self.page_15)
-        self.yourNameLine.setObjectName(u"yourNameLine")
-
-        self.gridLayout_45.addWidget(self.yourNameLine, 14, 0, 1, 1)
-
-        self.awesomePresetComboBox = QComboBox(self.page_15)
-        self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
-
-        self.gridLayout_45.addWidget(self.awesomePresetComboBox, 7, 0, 1, 1)
-
-        self.line_3 = QFrame(self.page_15)
-        self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.HLine)
-        self.line_3.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_45.addWidget(self.line_3, 8, 0, 1, 1)
-
-        self.label_42 = QLabel(self.page_15)
-        self.label_42.setObjectName(u"label_42")
-
-        self.gridLayout_45.addWidget(self.label_42, 15, 0, 1, 1)
-
-        self.customResponsePrefix = QLineEdit(self.page_15)
-        self.customResponsePrefix.setObjectName(u"customResponsePrefix")
-
-        self.gridLayout_45.addWidget(self.customResponsePrefix, 18, 0, 1, 1)
-
-        self.label_41 = QLabel(self.page_15)
-        self.label_41.setObjectName(u"label_41")
-
-        self.gridLayout_45.addWidget(self.label_41, 13, 0, 1, 1)
-
-        self.custSystemCheck = QCheckBox(self.page_15)
-        self.custSystemCheck.setObjectName(u"custSystemCheck")
-
-        self.gridLayout_45.addWidget(self.custSystemCheck, 19, 0, 1, 1)
-
-        self.logChatCheck = QCheckBox(self.page_15)
-        self.logChatCheck.setObjectName(u"logChatCheck")
-
-        self.gridLayout_45.addWidget(self.logChatCheck, 9, 0, 1, 1)
-
-        self.instructPresetComboBox = QComboBox(self.page_15)
-        self.instructPresetComboBox.setObjectName(u"instructPresetComboBox")
-
-        self.gridLayout_45.addWidget(self.instructPresetComboBox, 1, 0, 1, 1)
-
-        self.line_6 = QFrame(self.page_15)
-        self.line_6.setObjectName(u"line_6")
-        self.line_6.setFrameShape(QFrame.HLine)
-        self.line_6.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_45.addWidget(self.line_6, 11, 0, 1, 1)
-
-        self.sendStopStringCheck = QCheckBox(self.page_15)
-        self.sendStopStringCheck.setObjectName(u"sendStopStringCheck")
-        self.sendStopStringCheck.setChecked(True)
-
-        self.gridLayout_45.addWidget(self.sendStopStringCheck, 10, 0, 1, 1)
-
-        self.label_3 = QLabel(self.page_15)
+        self.label_3 = QLabel(self.instructTab)
         self.label_3.setObjectName(u"label_3")
 
-        self.gridLayout_45.addWidget(self.label_3, 6, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.label_3, 2, 0, 1, 2)
 
-        self.customResponsePrefixCheck = QCheckBox(self.page_15)
+        self.customResponsePrefixCheck = QCheckBox(self.instructTab)
         self.customResponsePrefixCheck.setObjectName(u"customResponsePrefixCheck")
 
-        self.gridLayout_45.addWidget(self.customResponsePrefixCheck, 17, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.customResponsePrefixCheck, 4, 0, 1, 2)
 
-        self.characterPresetComboBox = QComboBox(self.page_15)
-        self.characterPresetComboBox.setObjectName(u"characterPresetComboBox")
+        self.customResponsePrefix = QLineEdit(self.instructTab)
+        self.customResponsePrefix.setObjectName(u"customResponsePrefix")
 
-        self.gridLayout_45.addWidget(self.characterPresetComboBox, 5, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.customResponsePrefix, 5, 0, 1, 2)
 
-        self.botNameLine = QLineEdit(self.page_15)
+        self.label_41 = QLabel(self.instructTab)
+        self.label_41.setObjectName(u"label_41")
+
+        self.gridLayout_9.addWidget(self.label_41, 6, 0, 1, 2)
+
+        self.yourNameLine = QLineEdit(self.instructTab)
+        self.yourNameLine.setObjectName(u"yourNameLine")
+
+        self.gridLayout_9.addWidget(self.yourNameLine, 7, 0, 1, 2)
+
+        self.label_42 = QLabel(self.instructTab)
+        self.label_42.setObjectName(u"label_42")
+
+        self.gridLayout_9.addWidget(self.label_42, 8, 0, 1, 2)
+
+        self.botNameLine = QLineEdit(self.instructTab)
         self.botNameLine.setObjectName(u"botNameLine")
 
-        self.gridLayout_45.addWidget(self.botNameLine, 16, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.botNameLine, 9, 0, 1, 2)
 
         self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_45.addItem(self.verticalSpacer_11, 21, 0, 1, 1)
+        self.gridLayout_9.addItem(self.verticalSpacer_11, 10, 1, 1, 1)
 
-        self.charactersRadioButton = QRadioButton(self.page_15)
-        self.charactersRadioButton.setObjectName(u"charactersRadioButton")
+        self.instructPresetComboBox = QComboBox(self.instructTab)
+        self.instructPresetComboBox.setObjectName(u"instructPresetComboBox")
 
-        self.gridLayout_45.addWidget(self.charactersRadioButton, 4, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.instructPresetComboBox, 1, 0, 1, 2)
 
-        self.custSystemText = QPlainTextEdit(self.page_15)
-        self.custSystemText.setObjectName(u"custSystemText")
+        self.awesomePresetComboBox = QComboBox(self.instructTab)
+        self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
 
-        self.gridLayout_45.addWidget(self.custSystemText, 20, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.awesomePresetComboBox, 3, 0, 1, 2)
 
-        self.toolBox_2.addItem(self.page_15, u"Chat")
-        self.page_16 = QWidget()
-        self.page_16.setObjectName(u"page_16")
-        self.page_16.setGeometry(QRect(0, 0, 270, 779))
-        self.gridLayout_46 = QGridLayout(self.page_16)
-        self.gridLayout_46.setObjectName(u"gridLayout_46")
-        self.verticalSpacer_12 = QSpacerItem(20, 725, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.mode_tab.addItem(self.instructTab, u"Instruct")
+        self.characterTab = QWidget()
+        self.characterTab.setObjectName(u"characterTab")
+        self.characterTab.setGeometry(QRect(0, 0, 278, 728))
+        self.gridLayout_8 = QGridLayout(self.characterTab)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.label_2 = QLabel(self.characterTab)
+        self.label_2.setObjectName(u"label_2")
 
-        self.gridLayout_46.addItem(self.verticalSpacer_12, 3, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.label_2, 0, 0, 1, 1)
 
-        self.themeDarkCheck = QRadioButton(self.page_16)
-        self.themeDarkCheck.setObjectName(u"themeDarkCheck")
-        self.themeDarkCheck.setChecked(True)
+        self.label_43 = QLabel(self.characterTab)
+        self.label_43.setObjectName(u"label_43")
 
-        self.gridLayout_46.addWidget(self.themeDarkCheck, 0, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.label_43, 2, 0, 1, 2)
 
-        self.themeLightCheck = QRadioButton(self.page_16)
-        self.themeLightCheck.setObjectName(u"themeLightCheck")
+        self.yourNameLineChar = QLineEdit(self.characterTab)
+        self.yourNameLineChar.setObjectName(u"yourNameLineChar")
 
-        self.gridLayout_46.addWidget(self.themeLightCheck, 1, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.yourNameLineChar, 3, 0, 1, 2)
 
-        self.themeNativeCheck = QRadioButton(self.page_16)
-        self.themeNativeCheck.setObjectName(u"themeNativeCheck")
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_46.addWidget(self.themeNativeCheck, 2, 0, 1, 1)
+        self.gridLayout_8.addItem(self.verticalSpacer, 4, 1, 1, 1)
 
-        self.toolBox_2.addItem(self.page_16, u"Themes")
+        self.characterPresetComboBox = QComboBox(self.characterTab)
+        self.characterPresetComboBox.setObjectName(u"characterPresetComboBox")
 
-        self.gridLayout_2.addWidget(self.toolBox_2, 0, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.characterPresetComboBox, 1, 0, 1, 2)
+
+        self.mode_tab.addItem(self.characterTab, u"Character")
+        self.standardTab = QWidget()
+        self.standardTab.setObjectName(u"standardTab")
+        self.standardTab.setGeometry(QRect(0, 0, 278, 728))
+        self.mode_tab.addItem(self.standardTab, u"Standard")
+        self.notebookTab = QWidget()
+        self.notebookTab.setObjectName(u"notebookTab")
+        self.notebookTab.setGeometry(QRect(0, 0, 278, 728))
+        self.mode_tab.addItem(self.notebookTab, u"Notebook")
+
+        self.gridLayout_2.addWidget(self.mode_tab, 0, 0, 1, 1)
 
         self.settingsPathSaveButton = QPushButton(self.frame_2)
         self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
@@ -300,35 +168,27 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.settingsPathSaveButton, 1, 0, 1, 1)
 
         self.splitter.addWidget(self.frame_2)
-        self.frame = QFrame(self.splitter)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.gridLayout = QGridLayout(self.frame)
+        self.tabWidget = QTabWidget(self.splitter)
+        self.tabWidget.setObjectName(u"tabWidget")
+        self.tabWidgetPage1 = QWidget()
+        self.tabWidgetPage1.setObjectName(u"tabWidgetPage1")
+        self.gridLayout = QGridLayout(self.tabWidgetPage1)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.continueButton = QPushButton(self.frame)
-        self.continueButton.setObjectName(u"continueButton")
-        self.continueButton.setEnabled(False)
-        self.continueButton.setMinimumSize(QSize(64, 64))
-        self.continueButton.setMaximumSize(QSize(64, 64))
-
-        self.gridLayout.addWidget(self.continueButton, 2, 2, 1, 1)
-
-        self.stopButton = QPushButton(self.frame)
+        self.stopButton = QPushButton(self.tabWidgetPage1)
         self.stopButton.setObjectName(u"stopButton")
         self.stopButton.setEnabled(False)
         self.stopButton.setMinimumSize(QSize(64, 64))
         self.stopButton.setMaximumSize(QSize(64, 64))
 
-        self.gridLayout.addWidget(self.stopButton, 2, 5, 1, 1)
+        self.gridLayout.addWidget(self.stopButton, 2, 6, 1, 1)
 
-        self.inputText = QPlainTextEdit(self.frame)
-        self.inputText.setObjectName(u"inputText")
-        self.inputText.setMaximumSize(QSize(16777215, 90))
+        self.chatOutputSession = QComboBox(self.tabWidgetPage1)
+        self.chatOutputSession.addItem("")
+        self.chatOutputSession.setObjectName(u"chatOutputSession")
 
-        self.gridLayout.addWidget(self.inputText, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.chatOutputSession, 1, 1, 1, 6)
 
-        self.generateButton = QPushButton(self.frame)
+        self.generateButton = QPushButton(self.tabWidgetPage1)
         self.generateButton.setObjectName(u"generateButton")
         self.generateButton.setEnabled(False)
         self.generateButton.setMinimumSize(QSize(64, 64))
@@ -336,13 +196,40 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.generateButton, 2, 1, 1, 1)
 
-        self.outputText = QTextEdit(self.frame)
+        self.clearButton = QPushButton(self.tabWidgetPage1)
+        self.clearButton.setObjectName(u"clearButton")
+        self.clearButton.setEnabled(True)
+        self.clearButton.setMinimumSize(QSize(64, 64))
+        self.clearButton.setMaximumSize(QSize(64, 64))
+
+        self.gridLayout.addWidget(self.clearButton, 2, 5, 1, 1)
+
+        self.chatInputHistoryCombo = QComboBox(self.tabWidgetPage1)
+        self.chatInputHistoryCombo.setObjectName(u"chatInputHistoryCombo")
+
+        self.gridLayout.addWidget(self.chatInputHistoryCombo, 1, 0, 1, 1)
+
+        self.retryButton = QPushButton(self.tabWidgetPage1)
+        self.retryButton.setObjectName(u"retryButton")
+        self.retryButton.setEnabled(False)
+        self.retryButton.setMinimumSize(QSize(64, 64))
+        self.retryButton.setMaximumSize(QSize(64, 64))
+
+        self.gridLayout.addWidget(self.retryButton, 2, 2, 1, 1)
+
+        self.inputText = QPlainTextEdit(self.tabWidgetPage1)
+        self.inputText.setObjectName(u"inputText")
+        self.inputText.setMaximumSize(QSize(16777215, 90))
+
+        self.gridLayout.addWidget(self.inputText, 2, 0, 1, 1)
+
+        self.outputText = QTextEdit(self.tabWidgetPage1)
         self.outputText.setObjectName(u"outputText")
         self.outputText.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.outputText, 0, 0, 1, 6)
+        self.gridLayout.addWidget(self.outputText, 0, 0, 1, 7)
 
-        self.rewindButton = QPushButton(self.frame)
+        self.rewindButton = QPushButton(self.tabWidgetPage1)
         self.rewindButton.setObjectName(u"rewindButton")
         self.rewindButton.setEnabled(False)
         self.rewindButton.setMinimumSize(QSize(64, 64))
@@ -350,37 +237,156 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.rewindButton, 2, 3, 1, 1)
 
-        self.clearButton = QPushButton(self.frame)
-        self.clearButton.setObjectName(u"clearButton")
-        self.clearButton.setEnabled(True)
-        self.clearButton.setMinimumSize(QSize(64, 64))
-        self.clearButton.setMaximumSize(QSize(64, 64))
+        self.continueButton = QPushButton(self.tabWidgetPage1)
+        self.continueButton.setObjectName(u"continueButton")
+        self.continueButton.setEnabled(False)
+        self.continueButton.setMinimumSize(QSize(64, 64))
+        self.continueButton.setMaximumSize(QSize(64, 64))
 
-        self.gridLayout.addWidget(self.clearButton, 2, 4, 1, 1)
+        self.gridLayout.addWidget(self.continueButton, 2, 4, 1, 1)
 
-        self.chatInputHistoryCombo = QComboBox(self.frame)
-        self.chatInputHistoryCombo.setObjectName(u"chatInputHistoryCombo")
+        self.tabWidget.addTab(self.tabWidgetPage1, "")
+        self.tab = QWidget()
+        self.tab.setObjectName(u"tab")
+        self.gridLayout_7 = QGridLayout(self.tab)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.groupBox = QGroupBox(self.tab)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_4 = QGridLayout(self.groupBox)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.cppCheck = QRadioButton(self.groupBox)
+        self.cppCheck.setObjectName(u"cppCheck")
+        self.cppCheck.setChecked(True)
 
-        self.gridLayout.addWidget(self.chatInputHistoryCombo, 1, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.cppCheck, 0, 0, 1, 1)
 
-        self.chatOutputSession = QComboBox(self.frame)
-        self.chatOutputSession.addItem("")
-        self.chatOutputSession.setObjectName(u"chatOutputSession")
+        self.exllamaModelPath = QLineEdit(self.groupBox)
+        self.exllamaModelPath.setObjectName(u"exllamaModelPath")
 
-        self.gridLayout.addWidget(self.chatOutputSession, 1, 1, 1, 5)
+        self.gridLayout_4.addWidget(self.exllamaModelPath, 10, 0, 1, 1)
 
-        self.splitter.addWidget(self.frame)
+        self.loadModelButton = QPushButton(self.groupBox)
+        self.loadModelButton.setObjectName(u"loadModelButton")
+
+        self.gridLayout_4.addWidget(self.loadModelButton, 3, 0, 1, 1)
+
+        self.streamEnabledCheck = QCheckBox(self.groupBox)
+        self.streamEnabledCheck.setObjectName(u"streamEnabledCheck")
+        self.streamEnabledCheck.setChecked(True)
+
+        self.gridLayout_4.addWidget(self.streamEnabledCheck, 6, 0, 1, 1)
+
+        self.label_29 = QLabel(self.groupBox)
+        self.label_29.setObjectName(u"label_29")
+
+        self.gridLayout_4.addWidget(self.label_29, 7, 0, 1, 1)
+
+        self.cppModelPath = QLineEdit(self.groupBox)
+        self.cppModelPath.setObjectName(u"cppModelPath")
+
+        self.gridLayout_4.addWidget(self.cppModelPath, 8, 0, 1, 1)
+
+        self.label_40 = QLabel(self.groupBox)
+        self.label_40.setObjectName(u"label_40")
+
+        self.gridLayout_4.addWidget(self.label_40, 9, 0, 1, 1)
+
+        self.exllamaCheck = QRadioButton(self.groupBox)
+        self.exllamaCheck.setObjectName(u"exllamaCheck")
+
+        self.gridLayout_4.addWidget(self.exllamaCheck, 2, 0, 1, 1)
+
+        self.cppModelSelect = QToolButton(self.groupBox)
+        self.cppModelSelect.setObjectName(u"cppModelSelect")
+
+        self.gridLayout_4.addWidget(self.cppModelSelect, 8, 1, 1, 1)
+
+        self.cppServerCheck = QRadioButton(self.groupBox)
+        self.cppServerCheck.setObjectName(u"cppServerCheck")
+
+        self.gridLayout_4.addWidget(self.cppServerCheck, 1, 0, 1, 1)
+
+        self.exllamaModelSelect = QToolButton(self.groupBox)
+        self.exllamaModelSelect.setObjectName(u"exllamaModelSelect")
+
+        self.gridLayout_4.addWidget(self.exllamaModelSelect, 10, 1, 1, 1)
+
+        self.unloadModelButton = QPushButton(self.groupBox)
+        self.unloadModelButton.setObjectName(u"unloadModelButton")
+        self.unloadModelButton.setEnabled(False)
+
+        self.gridLayout_4.addWidget(self.unloadModelButton, 4, 0, 1, 1)
+
+        self.backendAutoLaunch = QCheckBox(self.groupBox)
+        self.backendAutoLaunch.setObjectName(u"backendAutoLaunch")
+
+        self.gridLayout_4.addWidget(self.backendAutoLaunch, 5, 0, 1, 1)
+
+
+        self.gridLayout_7.addWidget(self.groupBox, 0, 0, 1, 1)
+
+        self.groupBox_2 = QGroupBox(self.tab)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_5 = QGridLayout(self.groupBox_2)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.themeDarkCheck = QRadioButton(self.groupBox_2)
+        self.themeDarkCheck.setObjectName(u"themeDarkCheck")
+        self.themeDarkCheck.setChecked(True)
+
+        self.gridLayout_5.addWidget(self.themeDarkCheck, 0, 0, 1, 1)
+
+        self.themeLightCheck = QRadioButton(self.groupBox_2)
+        self.themeLightCheck.setObjectName(u"themeLightCheck")
+
+        self.gridLayout_5.addWidget(self.themeLightCheck, 1, 0, 1, 1)
+
+        self.themeNativeCheck = QRadioButton(self.groupBox_2)
+        self.themeNativeCheck.setObjectName(u"themeNativeCheck")
+
+        self.gridLayout_5.addWidget(self.themeNativeCheck, 2, 0, 1, 1)
+
+
+        self.gridLayout_7.addWidget(self.groupBox_2, 1, 0, 1, 1)
+
+        self.groupBox_3 = QGroupBox(self.tab)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.gridLayout_3 = QGridLayout(self.groupBox_3)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.custSystemText = QPlainTextEdit(self.groupBox_3)
+        self.custSystemText.setObjectName(u"custSystemText")
+
+        self.gridLayout_3.addWidget(self.custSystemText, 3, 0, 1, 1)
+
+        self.sendStopStringCheck = QCheckBox(self.groupBox_3)
+        self.sendStopStringCheck.setObjectName(u"sendStopStringCheck")
+        self.sendStopStringCheck.setChecked(True)
+
+        self.gridLayout_3.addWidget(self.sendStopStringCheck, 1, 0, 1, 1)
+
+        self.custSystemCheck = QCheckBox(self.groupBox_3)
+        self.custSystemCheck.setObjectName(u"custSystemCheck")
+
+        self.gridLayout_3.addWidget(self.custSystemCheck, 2, 0, 1, 1)
+
+        self.logChatCheck = QCheckBox(self.groupBox_3)
+        self.logChatCheck.setObjectName(u"logChatCheck")
+
+        self.gridLayout_3.addWidget(self.logChatCheck, 0, 0, 1, 1)
+
+
+        self.gridLayout_7.addWidget(self.groupBox_3, 2, 0, 1, 1)
+
+        self.tabWidget.addTab(self.tab, "")
+        self.splitter.addWidget(self.tabWidget)
 
         self.gridLayout_6.addWidget(self.splitter, 0, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1518, 27))
+        self.menubar.setGeometry(QRect(0, 0, 1523, 27))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
-        self.menuMode = QMenu(self.menubar)
-        self.menuMode.setObjectName(u"menuMode")
         self.menuSettings = QMenu(self.menubar)
         self.menuSettings.setObjectName(u"menuSettings")
         MainWindow.setMenuBar(self.menubar)
@@ -389,17 +395,14 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuMode.menuAction())
         self.menubar.addAction(self.menuSettings.menuAction())
         self.menuFile.addAction(self.actionExit)
-        self.menuMode.addAction(self.actionChat)
-        self.menuMode.addAction(self.actionStandard)
-        self.menuMode.addAction(self.actionNotebook)
         self.menuSettings.addAction(self.actionPreferences)
 
         self.retranslateUi(MainWindow)
 
-        self.toolBox_2.setCurrentIndex(0)
+        self.mode_tab.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -413,42 +416,27 @@ class Ui_MainWindow(object):
         self.actionNotebook.setText(QCoreApplication.translate("MainWindow", u"Notebook", None))
         self.actionParameters.setText(QCoreApplication.translate("MainWindow", u"Parameters", None))
         self.actionPreferences.setText(QCoreApplication.translate("MainWindow", u"Parameters", None))
-        self.cppServerCheck.setText(QCoreApplication.translate("MainWindow", u"llama.cpp server", None))
-        self.unloadModelButton.setText(QCoreApplication.translate("MainWindow", u"Unload backend", None))
-        self.label_29.setText(QCoreApplication.translate("MainWindow", u"llama.cpp: Model path:", None))
-        self.exllamaCheck.setText(QCoreApplication.translate("MainWindow", u"Exllama", None))
-        self.label_40.setText(QCoreApplication.translate("MainWindow", u"Exllama: Model directory:", None))
-        self.cppModelSelect.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.cppCheck.setText(QCoreApplication.translate("MainWindow", u"llama-cpp-python", None))
-        self.exllamaModelSelect.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.streamEnabledCheck.setText(QCoreApplication.translate("MainWindow", u"Stream responses", None))
-        self.backendAutoLaunch.setText(QCoreApplication.translate("MainWindow", u"Auto load backend at launch", None))
-        self.loadModelButton.setText(QCoreApplication.translate("MainWindow", u"Load backend", None))
-        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.page_13), QCoreApplication.translate("MainWindow", u"Backend", None))
-        self.instructRadioButton.setText(QCoreApplication.translate("MainWindow", u"Instruct:", None))
-        self.label_42.setText(QCoreApplication.translate("MainWindow", u"Bot name:", None))
-        self.label_41.setText(QCoreApplication.translate("MainWindow", u"User name:", None))
-        self.custSystemCheck.setText(QCoreApplication.translate("MainWindow", u"Custom system prompt", None))
-        self.logChatCheck.setText(QCoreApplication.translate("MainWindow", u"Log chats", None))
-        self.sendStopStringCheck.setText(QCoreApplication.translate("MainWindow", u"Send chat stop string", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Instruct preset:", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Awesome prompts:", None))
         self.customResponsePrefixCheck.setText(QCoreApplication.translate("MainWindow", u"Response prefix:", None))
-        self.charactersRadioButton.setText(QCoreApplication.translate("MainWindow", u"Characters:", None))
-        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.page_15), QCoreApplication.translate("MainWindow", u"Chat", None))
-        self.themeDarkCheck.setText(QCoreApplication.translate("MainWindow", u"Dark", None))
-        self.themeLightCheck.setText(QCoreApplication.translate("MainWindow", u"Light", None))
-        self.themeNativeCheck.setText(QCoreApplication.translate("MainWindow", u"Native", None))
-        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.page_16), QCoreApplication.translate("MainWindow", u"Themes", None))
+        self.label_41.setText(QCoreApplication.translate("MainWindow", u"User name:", None))
+        self.label_42.setText(QCoreApplication.translate("MainWindow", u"Bot name:", None))
+        self.mode_tab.setItemText(self.mode_tab.indexOf(self.instructTab), QCoreApplication.translate("MainWindow", u"Instruct", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Character:", None))
+        self.label_43.setText(QCoreApplication.translate("MainWindow", u"Your name:", None))
+        self.mode_tab.setItemText(self.mode_tab.indexOf(self.characterTab), QCoreApplication.translate("MainWindow", u"Character", None))
+        self.mode_tab.setItemText(self.mode_tab.indexOf(self.standardTab), QCoreApplication.translate("MainWindow", u"Standard", None))
+        self.mode_tab.setItemText(self.mode_tab.indexOf(self.notebookTab), QCoreApplication.translate("MainWindow", u"Notebook", None))
         self.settingsPathSaveButton.setText(QCoreApplication.translate("MainWindow", u"Save settings", None))
-#if QT_CONFIG(tooltip)
-        self.continueButton.setToolTip(QCoreApplication.translate("MainWindow", u"Continue the last generation", None))
-#endif // QT_CONFIG(tooltip)
-        self.continueButton.setText(QCoreApplication.translate("MainWindow", u"Con", None))
 #if QT_CONFIG(tooltip)
         self.stopButton.setToolTip(QCoreApplication.translate("MainWindow", u"Stop generation", None))
 #endif // QT_CONFIG(tooltip)
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"St", None))
-        self.inputText.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Type something here", None))
+        self.chatOutputSession.setItemText(0, QCoreApplication.translate("MainWindow", u"Current", None))
+
+#if QT_CONFIG(tooltip)
+        self.chatOutputSession.setToolTip(QCoreApplication.translate("MainWindow", u"Saved chat sessions", None))
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.generateButton.setToolTip(QCoreApplication.translate("MainWindow", u"Send (CTRL+Enter)", None))
 #endif // QT_CONFIG(tooltip)
@@ -456,6 +444,18 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.generateButton.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Return", None))
 #endif // QT_CONFIG(shortcut)
+#if QT_CONFIG(tooltip)
+        self.clearButton.setToolTip(QCoreApplication.translate("MainWindow", u"Clear the output history", None))
+#endif // QT_CONFIG(tooltip)
+        self.clearButton.setText(QCoreApplication.translate("MainWindow", u"Clr", None))
+#if QT_CONFIG(tooltip)
+        self.chatInputHistoryCombo.setToolTip(QCoreApplication.translate("MainWindow", u"Saved chat inputs from session", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.retryButton.setToolTip(QCoreApplication.translate("MainWindow", u"Retry", None))
+#endif // QT_CONFIG(tooltip)
+        self.retryButton.setText(QCoreApplication.translate("MainWindow", u"Ret", None))
+        self.inputText.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Type something here", None))
         self.outputText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -466,23 +466,36 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.outputText.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Output goes here", None))
 #if QT_CONFIG(tooltip)
-        self.rewindButton.setToolTip(QCoreApplication.translate("MainWindow", u"Rewinds the chat 1 turn", None))
+        self.rewindButton.setToolTip(QCoreApplication.translate("MainWindow", u"Continue the last generation", None))
 #endif // QT_CONFIG(tooltip)
         self.rewindButton.setText(QCoreApplication.translate("MainWindow", u"Rw", None))
 #if QT_CONFIG(tooltip)
-        self.clearButton.setToolTip(QCoreApplication.translate("MainWindow", u"Clear the output history", None))
+        self.continueButton.setToolTip(QCoreApplication.translate("MainWindow", u"Rewinds the chat 1 turn", None))
 #endif // QT_CONFIG(tooltip)
-        self.clearButton.setText(QCoreApplication.translate("MainWindow", u"Clr", None))
-#if QT_CONFIG(tooltip)
-        self.chatInputHistoryCombo.setToolTip(QCoreApplication.translate("MainWindow", u"Saved chat inputs from session", None))
-#endif // QT_CONFIG(tooltip)
-        self.chatOutputSession.setItemText(0, QCoreApplication.translate("MainWindow", u"Current", None))
-
-#if QT_CONFIG(tooltip)
-        self.chatOutputSession.setToolTip(QCoreApplication.translate("MainWindow", u"Saved chat sessions", None))
-#endif // QT_CONFIG(tooltip)
+        self.continueButton.setText(QCoreApplication.translate("MainWindow", u"Con", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage1), QCoreApplication.translate("MainWindow", u"Main", None))
+        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Backend", None))
+        self.cppCheck.setText(QCoreApplication.translate("MainWindow", u"llama-cpp-python", None))
+        self.loadModelButton.setText(QCoreApplication.translate("MainWindow", u"Load backend", None))
+        self.streamEnabledCheck.setText(QCoreApplication.translate("MainWindow", u"Stream responses", None))
+        self.label_29.setText(QCoreApplication.translate("MainWindow", u"llama.cpp: Model path:", None))
+        self.label_40.setText(QCoreApplication.translate("MainWindow", u"Exllama: Model directory:", None))
+        self.exllamaCheck.setText(QCoreApplication.translate("MainWindow", u"Exllama", None))
+        self.cppModelSelect.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.cppServerCheck.setText(QCoreApplication.translate("MainWindow", u"llama.cpp server", None))
+        self.exllamaModelSelect.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.unloadModelButton.setText(QCoreApplication.translate("MainWindow", u"Unload backend", None))
+        self.backendAutoLaunch.setText(QCoreApplication.translate("MainWindow", u"Auto load backend at launch", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Themes", None))
+        self.themeDarkCheck.setText(QCoreApplication.translate("MainWindow", u"Dark", None))
+        self.themeLightCheck.setText(QCoreApplication.translate("MainWindow", u"Light", None))
+        self.themeNativeCheck.setText(QCoreApplication.translate("MainWindow", u"Native", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Chat", None))
+        self.sendStopStringCheck.setText(QCoreApplication.translate("MainWindow", u"Send chat stop string", None))
+        self.custSystemCheck.setText(QCoreApplication.translate("MainWindow", u"Custom system prompt:", None))
+        self.logChatCheck.setText(QCoreApplication.translate("MainWindow", u"Log chats", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Preferences", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
-        self.menuMode.setTitle(QCoreApplication.translate("MainWindow", u"Mode", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
     # retranslateUi
 

@@ -16,11 +16,14 @@ def create_data(prompt: str, cpp_params: dict, stream: bool = False) -> str:
         "top_k": cpp_params["top_k"],
         "repeat_penalty": cpp_params["repetition_penalty"],
         "mirostat_mode": cpp_params["mirostat_mode"],
+        "mirostat_tau": cpp_params["mirostat_tau"],
+        "mirostat_eta": cpp_params["mirostat_eta"],
         "stop": cpp_params["stop"],
         "tfs_z": cpp_params["tfs_z"],
         "stream": stream,
         "frequency_penalty": cpp_params["frequency_penalty"],
         "presence_penalty": cpp_params["presence_penalty"],
+        "cache_prompt": cpp_params["server_cache_check"]
     }
 
     return json.dumps(data)

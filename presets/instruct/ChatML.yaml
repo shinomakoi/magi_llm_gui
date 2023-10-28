@@ -1,4 +1,7 @@
-user: "<|im_start|>user"
-bot: "<|im_start|>assistant"
-turn_template: "<|user|>\n<|user-message|><|im_end|>\n<|bot|>\n<|bot-message|><|im_end|>\n"
-context: "<|im_start|>system\nYou are a large language model AI. Write out your reasoning step-by-step to be sure you get the right answers!"
+user: "user"
+bot: "assistant"
+context: |
+  <|im_start|>system
+  <|im_end|>
+turn_template: "<|im_start|><|user|>\n<|user-message|><|im_end|>\n<|im_start|><|bot|>\n<|bot-message|><|im_end|>\n"
+
