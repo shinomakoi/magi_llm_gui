@@ -207,7 +207,7 @@ class Ui_Settings_Dialog(object):
         self.typical_pSpin.setObjectName(u"typical_pSpin")
         self.typical_pSpin.setMaximum(1.000000000000000)
         self.typical_pSpin.setSingleStep(0.010000000000000)
-        self.typical_pSpin.setValue(0.250000000000000)
+        self.typical_pSpin.setValue(1.000000000000000)
 
         self.gridLayout_2.addWidget(self.typical_pSpin, 8, 2, 1, 1)
 

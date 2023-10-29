@@ -885,7 +885,10 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     # Get the llama.cpp parameters
     def get_llama_cpp_params(self):
-        stop_strings = self.get_stop_strings()
+        if self.mode_tab.currentIndex() <= 1: 
+            stop_strings = self.get_stop_strings()
+        else:
+            stop_strings = ""
 
         cpp_params = {
             "max_new_tokens": int(self.settings_win.max_new_tokensSpin.value()),
@@ -953,21 +956,22 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         elif self.mode_tab.currentIndex() == 1:
             chat_mode = "character"
 
-        preset_name = getattr(self, chat_mode + "PresetComboBox").currentText()
-        preset_file = f"presets/{chat_mode}/{preset_name}.yaml"
-        with open(preset_file, "r") as file:
-            chat_preset = yaml.safe_load(file)
-        if self.mode_tab.currentIndex() == 1:
-            user_name = (
-                self.yourNameLineChar.text() if self.yourNameLineChar.text() else "User"
-            )
-            chat_preset["context"] = chat_preset["context"].replace(
-                "{{user}}", user_name
-            )
-            chat_preset["context"] = chat_preset["context"].replace(
-                "{{char}}", chat_preset["name"]
-            )
-        return chat_preset
+        if self.mode_tab.currentIndex() <= 1:
+            preset_name = getattr(self, chat_mode + "PresetComboBox").currentText()
+            preset_file = f"presets/{chat_mode}/{preset_name}.yaml"
+            with open(preset_file, "r") as file:
+                chat_preset = yaml.safe_load(file)
+            if self.mode_tab.currentIndex() == 1:
+                user_name = (
+                    self.yourNameLineChar.text() if self.yourNameLineChar.text() else "User"
+                )
+                chat_preset["context"] = chat_preset["context"].replace(
+                    "{{user}}", user_name
+                )
+                chat_preset["context"] = chat_preset["context"].replace(
+                    "{{char}}", chat_preset["name"]
+                )
+            return chat_preset
 
     def get_model_path(self, line_edit):
         # Get the model path from a line edit widget
@@ -1203,8 +1207,13 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def launch_backend(self, message, backend):
         # Get the exllama and cpp parameters from their respective methods
-        exllama_params = self.get_exllama_params()
-        cpp_params = self.get_llama_cpp_params()
+
+        if backend == "exllama":
+            exllama_params = self.get_exllama_params()
+            cpp_params = None
+        elif backend == "llama.cpp" or backend == "llama.cpp_server":
+            cpp_params = self.get_llama_cpp_params()
+            exllama_params = None
 
         self.statusbar.showMessage("Status: Generating...")
 
@@ -1240,7 +1249,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         elif self.mode_tab.currentIndex() == 1:
             chat_preset = self.get_chat_presets()
             first_turn_template = (
-                "<|user|>: <|user-message|>\n\n<|bot|>:<|bot-message|>\n"
+                "<|user|>: <|user-message|>\n\n<|bot|>:<|bot-message|>\n\n"
             )
 
         # Get the context string from the chat preset
