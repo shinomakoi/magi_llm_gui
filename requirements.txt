@@ -3,5 +3,5 @@ requests
 pyyaml
 diskcache
 qt-material
-llama-cpp-python==0.2.7; platform_system != "Windows"
-https://github.com/abetlen/llama-cpp-python/releases/download/v0.2.7/llama_cpp_python-0.2.7-cp310-cp310-win_amd64.whl; platform_system == "Windows"
+llama-cpp-python==0.2.11; platform_system != "Windows"
+https://github.com/abetlen/llama-cpp-python/releases/download/v0.2.11/llama_cpp_python-0.2.11-cp310-cp310-win_amd64.whl; platform_system == "Windows"

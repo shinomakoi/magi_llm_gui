@@ -1299,8 +1299,8 @@
      <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>614</x>
-     <y>93</y>
+     <x>627</x>
+     <y>91</y>
     </hint>
    </hints>
   </connection>
@@ -1315,8 +1315,8 @@
      <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>363</x>
-     <y>85</y>
+     <x>490</x>
+     <y>83</y>
     </hint>
    </hints>
   </connection>
@@ -1327,12 +1327,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>291</x>
-     <y>141</y>
+     <x>418</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
-     <x>586</x>
-     <y>141</y>
+     <x>627</x>
+     <y>138</y>
     </hint>
    </hints>
   </connection>
@@ -1343,12 +1343,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>595</x>
-     <y>142</y>
+     <x>627</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
-     <x>408</x>
-     <y>141</y>
+     <x>535</x>
+     <y>130</y>
     </hint>
    </hints>
   </connection>
@@ -1359,12 +1359,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>298</x>
-     <y>188</y>
+     <x>425</x>
+     <y>177</y>
     </hint>
     <hint type="destinationlabel">
-     <x>584</x>
-     <y>190</y>
+     <x>627</x>
+     <y>185</y>
     </hint>
    </hints>
   </connection>
@@ -1375,12 +1375,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>586</x>
-     <y>189</y>
+     <x>627</x>
+     <y>185</y>
     </hint>
     <hint type="destinationlabel">
-     <x>368</x>
-     <y>196</y>
+     <x>495</x>
+     <y>177</y>
     </hint>
    </hints>
   </connection>

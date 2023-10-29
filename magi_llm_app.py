@@ -886,6 +886,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 user_name, bot_name = self.get_user_bot_names()
                 stop_strings.append(user_name + ":")
                 stop_strings.append(bot_name + ":")
+        # print(stop_strings)
         return stop_strings
 
     # Get the llama.cpp parameters
@@ -967,9 +968,8 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             user_name = (
                 self.yourNameLineChar.text() if self.yourNameLineChar.text() else "User"
             )
-            chat_preset["context"] = chat_preset["context"].replace(
-                "{{user}}", user_name
-            )
+            chat_preset["context"] = chat_preset["context"].replace("{{user}}", user_name)
+            chat_preset["context"] = chat_preset["context"].replace("{{char}}", chat_preset["name"])
         return chat_preset
 
     def get_model_path(self, line_edit):
