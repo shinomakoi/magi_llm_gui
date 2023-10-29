@@ -1,14 +1,12 @@
 import configparser
 import csv
 import glob
-import json
 import platform
 import sys
 from datetime import datetime
 from functools import partial
 from pathlib import Path
 
-import requests
 import yaml
 from PySide6 import QtWidgets
 from PySide6.QtCore import QSize, QThread, Signal, Slot
@@ -692,7 +690,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.backendAutoLaunch.setChecked(auto_launch_backend)
 
     # Define a helper function to get the file path from a dialog
-
     def get_file_path(self, title, filter):
         file_path = QFileDialog.getOpenFileName(self, title, "", filter)[0]
         return file_path
@@ -702,14 +699,13 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         directory_path = str(QFileDialog.getExistingDirectory(self, title))
         return directory_path
 
-    # Browse for the GGML model
+    # Browse for the GGUF/GGML model
     def cpp_model_select(self):
         cpp_model = self.get_file_path("Open file", "GGUF/GGML models (*.bin *.gguf)")
         if cpp_model:
             self.cppModelPath.setText(cpp_model)
 
     # Browse for the exllama model
-
     def exllama_model_select(self):
         exllama_model = self.get_directory_path("Select Directory")
         if exllama_model:
@@ -794,9 +790,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             history_text = self.outputText.toPlainText()
             if history_text:
                 self.continue_textgen_mode = True
-
                 backend = self.get_current_backend()
-
                 # Launch the backend with the history text and the run backend
                 self.launch_backend(history_text, backend)
 
@@ -908,7 +902,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             "tfs_z": float(self.settings_win.cpp_tfszSpin.value()),
             "frequency_penalty": float(self.settings_win.freqPenaltySpin.value()),
             "presence_penalty": float(self.settings_win.presencePenaltySpin.value()),
-        }
+            "typical_p": self.settings_win.typical_pSpin.value(),        }
 
         cpp_params["server_cache_check"] = self.settings_win.cppCacheCheck.isChecked()
 
@@ -951,8 +945,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
         year = today.year
         return f"{day}-{month}-{year}"
 
-        # Get chat presets from a YAML file
-
+    # Get chat presets from a YAML file
     def get_chat_presets(self):
         if self.mode_tab.currentIndex() == 0:
             chat_mode = "instruct"
@@ -968,8 +961,12 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             user_name = (
                 self.yourNameLineChar.text() if self.yourNameLineChar.text() else "User"
             )
-            chat_preset["context"] = chat_preset["context"].replace("{{user}}", user_name)
-            chat_preset["context"] = chat_preset["context"].replace("{{char}}", chat_preset["name"])
+            chat_preset["context"] = chat_preset["context"].replace(
+                "{{user}}", user_name
+            )
+            chat_preset["context"] = chat_preset["context"].replace(
+                "{{char}}", chat_preset["name"]
+            )
         return chat_preset
 
     def get_model_path(self, line_edit):
@@ -1093,7 +1090,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             global exllama_model
             del exllama_model
             from exllama_generate import exllama_free_memory
-
             exllama_free_memory()
 
         print(f"--- Unloaded {backend} model")
@@ -1107,7 +1103,6 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Disable the unload and generate buttons
         self.unloadModelButton.setEnabled(False)
-
         self.generateButton.setEnabled(False)
 
     def set_textgen_things(self):
@@ -1344,7 +1339,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             )
             # Pop the last chat output from the list
             self.chat_output_list.pop()
-            
+
         # If there are no items in the name history list
         if len(self.name_history) == 0:
             # Get the chat preset dictionary from a file
@@ -1353,7 +1348,7 @@ class MagiApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pre_prompt = chat_preset["context"].strip()
             # Set the chat mode text history widget to show the context string
             self.outputText.setPlainText(pre_prompt)
-            
+
     # Add the chat input to the combo box and the history list
     def chat_input_history_add(self, chat_input):
         # Add the first 96 characters of the chat input to the combo box

@@ -10,7 +10,7 @@ DATA_PREFIX = "data: "
 def create_data(prompt: str, cpp_params: dict, stream: bool = False) -> str:
     data = {
         "prompt": prompt,
-        "max_tokens": cpp_params["max_new_tokens"],
+        "n_predict": cpp_params["max_new_tokens"],
         "temperature": cpp_params["temperature"],
         "top_p": cpp_params["top_p"],
         "top_k": cpp_params["top_k"],
@@ -23,7 +23,8 @@ def create_data(prompt: str, cpp_params: dict, stream: bool = False) -> str:
         "stream": stream,
         "frequency_penalty": cpp_params["frequency_penalty"],
         "presence_penalty": cpp_params["presence_penalty"],
-        "cache_prompt": cpp_params["server_cache_check"]
+        "cache_prompt": cpp_params["server_cache_check"],
+        "typical_p": cpp_params["typical_p"],
     }
 
     return json.dumps(data)

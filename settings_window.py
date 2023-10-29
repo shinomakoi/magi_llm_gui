@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
-    QFrame, QGridLayout, QLabel, QLineEdit,
-    QSizePolicy, QSlider, QSpinBox, QTabWidget,
-    QToolButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
+    QDoubleSpinBox, QFrame, QGridLayout, QLabel,
+    QLineEdit, QSizePolicy, QSlider, QSpinBox,
+    QTabWidget, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_Settings_Dialog(object):
     def setupUi(self, Settings_Dialog):
@@ -62,20 +62,21 @@ class Ui_Settings_Dialog(object):
 
         self.ctxsizeSlider = QSlider(self.sharedParamTab)
         self.ctxsizeSlider.setObjectName(u"ctxsizeSlider")
-        self.ctxsizeSlider.setMinimum(512)
+        self.ctxsizeSlider.setMinimum(2048)
         self.ctxsizeSlider.setMaximum(32768)
         self.ctxsizeSlider.setSingleStep(2048)
         self.ctxsizeSlider.setPageStep(2048)
-        self.ctxsizeSlider.setValue(2048)
+        self.ctxsizeSlider.setValue(4096)
         self.ctxsizeSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.ctxsizeSlider, 2, 1, 1, 1)
 
         self.ctxsizeSpin = QSpinBox(self.sharedParamTab)
         self.ctxsizeSpin.setObjectName(u"ctxsizeSpin")
-        self.ctxsizeSpin.setMinimum(512)
+        self.ctxsizeSpin.setMinimum(2048)
         self.ctxsizeSpin.setMaximum(32768)
-        self.ctxsizeSpin.setSingleStep(64)
+        self.ctxsizeSpin.setSingleStep(2048)
+        self.ctxsizeSpin.setStepType(QAbstractSpinBox.DefaultStepType)
         self.ctxsizeSpin.setValue(4096)
 
         self.gridLayout_2.addWidget(self.ctxsizeSpin, 2, 2, 1, 1)
@@ -224,147 +225,6 @@ class Ui_Settings_Dialog(object):
         self.gridLayout_2.addWidget(self.seedSpin, 9, 2, 1, 1)
 
         self.parametersTab.addTab(self.sharedParamTab, "")
-        self.exllamaParamTab = QWidget()
-        self.exllamaParamTab.setObjectName(u"exllamaParamTab")
-        self.exllamaParamTab.setAutoFillBackground(True)
-        self.gridLayout = QGridLayout(self.exllamaParamTab)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.exllamaLoraCheck = QCheckBox(self.exllamaParamTab)
-        self.exllamaLoraCheck.setObjectName(u"exllamaLoraCheck")
-        self.exllamaLoraCheck.setChecked(False)
-
-        self.gridLayout.addWidget(self.exllamaLoraCheck, 6, 0, 1, 1)
-
-        self.label_19 = QLabel(self.exllamaParamTab)
-        self.label_19.setObjectName(u"label_19")
-
-        self.gridLayout.addWidget(self.label_19, 0, 0, 1, 1)
-
-        self.beamLengthSlider = QSlider(self.exllamaParamTab)
-        self.beamLengthSlider.setObjectName(u"beamLengthSlider")
-        self.beamLengthSlider.setMinimum(1)
-        self.beamLengthSlider.setMaximum(10)
-        self.beamLengthSlider.setPageStep(1)
-        self.beamLengthSlider.setValue(1)
-        self.beamLengthSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.beamLengthSlider, 3, 1, 1, 1)
-
-        self.beamLengthSpin = QSpinBox(self.exllamaParamTab)
-        self.beamLengthSpin.setObjectName(u"beamLengthSpin")
-        self.beamLengthSpin.setMinimum(1)
-        self.beamLengthSpin.setMaximum(10)
-
-        self.gridLayout.addWidget(self.beamLengthSpin, 3, 2, 1, 1)
-
-        self.token_repetition_penalty_decaySpin = QSpinBox(self.exllamaParamTab)
-        self.token_repetition_penalty_decaySpin.setObjectName(u"token_repetition_penalty_decaySpin")
-        self.token_repetition_penalty_decaySpin.setMaximum(512)
-        self.token_repetition_penalty_decaySpin.setSingleStep(16)
-        self.token_repetition_penalty_decaySpin.setValue(256)
-
-        self.gridLayout.addWidget(self.token_repetition_penalty_decaySpin, 1, 2, 1, 1)
-
-        self.numbeamsSpin = QSpinBox(self.exllamaParamTab)
-        self.numbeamsSpin.setObjectName(u"numbeamsSpin")
-        self.numbeamsSpin.setMinimum(1)
-        self.numbeamsSpin.setMaximum(10)
-
-        self.gridLayout.addWidget(self.numbeamsSpin, 2, 2, 1, 1)
-
-        self.minPSpin = QSpinBox(self.exllamaParamTab)
-        self.minPSpin.setObjectName(u"minPSpin")
-        self.minPSpin.setMaximum(100)
-
-        self.gridLayout.addWidget(self.minPSpin, 0, 2, 1, 1)
-
-        self.exllamaGpuSplitCheck = QCheckBox(self.exllamaParamTab)
-        self.exllamaGpuSplitCheck.setObjectName(u"exllamaGpuSplitCheck")
-
-        self.gridLayout.addWidget(self.exllamaGpuSplitCheck, 5, 0, 1, 1)
-
-        self.label25 = QLabel(self.exllamaParamTab)
-        self.label25.setObjectName(u"label25")
-
-        self.gridLayout.addWidget(self.label25, 1, 0, 1, 1)
-
-        self.label_22 = QLabel(self.exllamaParamTab)
-        self.label_22.setObjectName(u"label_22")
-
-        self.gridLayout.addWidget(self.label_22, 2, 0, 1, 1)
-
-        self.exllamaLora = QLineEdit(self.exllamaParamTab)
-        self.exllamaLora.setObjectName(u"exllamaLora")
-
-        self.gridLayout.addWidget(self.exllamaLora, 6, 1, 1, 1)
-
-        self.numbeamsSlider = QSlider(self.exllamaParamTab)
-        self.numbeamsSlider.setObjectName(u"numbeamsSlider")
-        self.numbeamsSlider.setMinimum(1)
-        self.numbeamsSlider.setMaximum(10)
-        self.numbeamsSlider.setPageStep(1)
-        self.numbeamsSlider.setValue(1)
-        self.numbeamsSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.numbeamsSlider, 2, 1, 1, 1)
-
-        self.compressPosEmbedSpin = QSpinBox(self.exllamaParamTab)
-        self.compressPosEmbedSpin.setObjectName(u"compressPosEmbedSpin")
-        self.compressPosEmbedSpin.setMinimum(2)
-        self.compressPosEmbedSpin.setMaximum(8)
-        self.compressPosEmbedSpin.setSingleStep(2)
-        self.compressPosEmbedSpin.setValue(4)
-
-        self.gridLayout.addWidget(self.compressPosEmbedSpin, 7, 1, 1, 1)
-
-        self.label_26 = QLabel(self.exllamaParamTab)
-        self.label_26.setObjectName(u"label_26")
-
-        self.gridLayout.addWidget(self.label_26, 3, 0, 1, 1)
-
-        self.token_repetition_penalty_decaySlider = QSlider(self.exllamaParamTab)
-        self.token_repetition_penalty_decaySlider.setObjectName(u"token_repetition_penalty_decaySlider")
-        self.token_repetition_penalty_decaySlider.setMaximum(512)
-        self.token_repetition_penalty_decaySlider.setSingleStep(16)
-        self.token_repetition_penalty_decaySlider.setPageStep(16)
-        self.token_repetition_penalty_decaySlider.setValue(256)
-        self.token_repetition_penalty_decaySlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.token_repetition_penalty_decaySlider, 1, 1, 1, 1)
-
-        self.compressPosEmbedCheck = QCheckBox(self.exllamaParamTab)
-        self.compressPosEmbedCheck.setObjectName(u"compressPosEmbedCheck")
-        self.compressPosEmbedCheck.setCheckable(True)
-        self.compressPosEmbedCheck.setChecked(False)
-
-        self.gridLayout.addWidget(self.compressPosEmbedCheck, 7, 0, 1, 1)
-
-        self.minPSlider = QSlider(self.exllamaParamTab)
-        self.minPSlider.setObjectName(u"minPSlider")
-        self.minPSlider.setMaximum(100)
-        self.minPSlider.setValue(0)
-        self.minPSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout.addWidget(self.minPSlider, 0, 1, 1, 1)
-
-        self.exllamaGpuSplitLine = QLineEdit(self.exllamaParamTab)
-        self.exllamaGpuSplitLine.setObjectName(u"exllamaGpuSplitLine")
-
-        self.gridLayout.addWidget(self.exllamaGpuSplitLine, 5, 1, 1, 1)
-
-        self.exllamaLoraSelect = QToolButton(self.exllamaParamTab)
-        self.exllamaLoraSelect.setObjectName(u"exllamaLoraSelect")
-
-        self.gridLayout.addWidget(self.exllamaLoraSelect, 6, 2, 1, 1)
-
-        self.line_4 = QFrame(self.exllamaParamTab)
-        self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.HLine)
-        self.line_4.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout.addWidget(self.line_4, 4, 1, 1, 1)
-
-        self.parametersTab.addTab(self.exllamaParamTab, "")
         self.llamacppParamTab = QWidget()
         self.llamacppParamTab.setObjectName(u"llamacppParamTab")
         self.llamacppParamTab.setAutoFillBackground(True)
@@ -595,6 +455,147 @@ class Ui_Settings_Dialog(object):
         self.gridLayout_3.addWidget(self.line_3, 17, 2, 1, 1)
 
         self.parametersTab.addTab(self.llamacppParamTab, "")
+        self.exllamaParamTab = QWidget()
+        self.exllamaParamTab.setObjectName(u"exllamaParamTab")
+        self.exllamaParamTab.setAutoFillBackground(True)
+        self.gridLayout = QGridLayout(self.exllamaParamTab)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.exllamaLoraCheck = QCheckBox(self.exllamaParamTab)
+        self.exllamaLoraCheck.setObjectName(u"exllamaLoraCheck")
+        self.exllamaLoraCheck.setChecked(False)
+
+        self.gridLayout.addWidget(self.exllamaLoraCheck, 6, 0, 1, 1)
+
+        self.label_19 = QLabel(self.exllamaParamTab)
+        self.label_19.setObjectName(u"label_19")
+
+        self.gridLayout.addWidget(self.label_19, 0, 0, 1, 1)
+
+        self.beamLengthSlider = QSlider(self.exllamaParamTab)
+        self.beamLengthSlider.setObjectName(u"beamLengthSlider")
+        self.beamLengthSlider.setMinimum(1)
+        self.beamLengthSlider.setMaximum(10)
+        self.beamLengthSlider.setPageStep(1)
+        self.beamLengthSlider.setValue(1)
+        self.beamLengthSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout.addWidget(self.beamLengthSlider, 3, 1, 1, 1)
+
+        self.beamLengthSpin = QSpinBox(self.exllamaParamTab)
+        self.beamLengthSpin.setObjectName(u"beamLengthSpin")
+        self.beamLengthSpin.setMinimum(1)
+        self.beamLengthSpin.setMaximum(10)
+
+        self.gridLayout.addWidget(self.beamLengthSpin, 3, 2, 1, 1)
+
+        self.token_repetition_penalty_decaySpin = QSpinBox(self.exllamaParamTab)
+        self.token_repetition_penalty_decaySpin.setObjectName(u"token_repetition_penalty_decaySpin")
+        self.token_repetition_penalty_decaySpin.setMaximum(512)
+        self.token_repetition_penalty_decaySpin.setSingleStep(16)
+        self.token_repetition_penalty_decaySpin.setValue(256)
+
+        self.gridLayout.addWidget(self.token_repetition_penalty_decaySpin, 1, 2, 1, 1)
+
+        self.numbeamsSpin = QSpinBox(self.exllamaParamTab)
+        self.numbeamsSpin.setObjectName(u"numbeamsSpin")
+        self.numbeamsSpin.setMinimum(1)
+        self.numbeamsSpin.setMaximum(10)
+
+        self.gridLayout.addWidget(self.numbeamsSpin, 2, 2, 1, 1)
+
+        self.minPSpin = QSpinBox(self.exllamaParamTab)
+        self.minPSpin.setObjectName(u"minPSpin")
+        self.minPSpin.setMaximum(100)
+
+        self.gridLayout.addWidget(self.minPSpin, 0, 2, 1, 1)
+
+        self.exllamaGpuSplitCheck = QCheckBox(self.exllamaParamTab)
+        self.exllamaGpuSplitCheck.setObjectName(u"exllamaGpuSplitCheck")
+
+        self.gridLayout.addWidget(self.exllamaGpuSplitCheck, 5, 0, 1, 1)
+
+        self.label25 = QLabel(self.exllamaParamTab)
+        self.label25.setObjectName(u"label25")
+
+        self.gridLayout.addWidget(self.label25, 1, 0, 1, 1)
+
+        self.label_22 = QLabel(self.exllamaParamTab)
+        self.label_22.setObjectName(u"label_22")
+
+        self.gridLayout.addWidget(self.label_22, 2, 0, 1, 1)
+
+        self.exllamaLora = QLineEdit(self.exllamaParamTab)
+        self.exllamaLora.setObjectName(u"exllamaLora")
+
+        self.gridLayout.addWidget(self.exllamaLora, 6, 1, 1, 1)
+
+        self.numbeamsSlider = QSlider(self.exllamaParamTab)
+        self.numbeamsSlider.setObjectName(u"numbeamsSlider")
+        self.numbeamsSlider.setMinimum(1)
+        self.numbeamsSlider.setMaximum(10)
+        self.numbeamsSlider.setPageStep(1)
+        self.numbeamsSlider.setValue(1)
+        self.numbeamsSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout.addWidget(self.numbeamsSlider, 2, 1, 1, 1)
+
+        self.compressPosEmbedSpin = QSpinBox(self.exllamaParamTab)
+        self.compressPosEmbedSpin.setObjectName(u"compressPosEmbedSpin")
+        self.compressPosEmbedSpin.setMinimum(2)
+        self.compressPosEmbedSpin.setMaximum(8)
+        self.compressPosEmbedSpin.setSingleStep(2)
+        self.compressPosEmbedSpin.setValue(4)
+
+        self.gridLayout.addWidget(self.compressPosEmbedSpin, 7, 1, 1, 1)
+
+        self.label_26 = QLabel(self.exllamaParamTab)
+        self.label_26.setObjectName(u"label_26")
+
+        self.gridLayout.addWidget(self.label_26, 3, 0, 1, 1)
+
+        self.token_repetition_penalty_decaySlider = QSlider(self.exllamaParamTab)
+        self.token_repetition_penalty_decaySlider.setObjectName(u"token_repetition_penalty_decaySlider")
+        self.token_repetition_penalty_decaySlider.setMaximum(512)
+        self.token_repetition_penalty_decaySlider.setSingleStep(16)
+        self.token_repetition_penalty_decaySlider.setPageStep(16)
+        self.token_repetition_penalty_decaySlider.setValue(256)
+        self.token_repetition_penalty_decaySlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout.addWidget(self.token_repetition_penalty_decaySlider, 1, 1, 1, 1)
+
+        self.compressPosEmbedCheck = QCheckBox(self.exllamaParamTab)
+        self.compressPosEmbedCheck.setObjectName(u"compressPosEmbedCheck")
+        self.compressPosEmbedCheck.setCheckable(True)
+        self.compressPosEmbedCheck.setChecked(False)
+
+        self.gridLayout.addWidget(self.compressPosEmbedCheck, 7, 0, 1, 1)
+
+        self.minPSlider = QSlider(self.exllamaParamTab)
+        self.minPSlider.setObjectName(u"minPSlider")
+        self.minPSlider.setMaximum(100)
+        self.minPSlider.setValue(0)
+        self.minPSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout.addWidget(self.minPSlider, 0, 1, 1, 1)
+
+        self.exllamaGpuSplitLine = QLineEdit(self.exllamaParamTab)
+        self.exllamaGpuSplitLine.setObjectName(u"exllamaGpuSplitLine")
+
+        self.gridLayout.addWidget(self.exllamaGpuSplitLine, 5, 1, 1, 1)
+
+        self.exllamaLoraSelect = QToolButton(self.exllamaParamTab)
+        self.exllamaLoraSelect.setObjectName(u"exllamaLoraSelect")
+
+        self.gridLayout.addWidget(self.exllamaLoraSelect, 6, 2, 1, 1)
+
+        self.line_4 = QFrame(self.exllamaParamTab)
+        self.line_4.setObjectName(u"line_4")
+        self.line_4.setFrameShape(QFrame.HLine)
+        self.line_4.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout.addWidget(self.line_4, 4, 1, 1, 1)
+
+        self.parametersTab.addTab(self.exllamaParamTab, "")
 
         self.verticalLayout.addWidget(self.parametersTab)
 
@@ -646,7 +647,6 @@ class Ui_Settings_Dialog(object):
 #if QT_CONFIG(tooltip)
         self.ctxsizeSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Maximum length of the prompt and output combined (in tokens)", None))
 #endif // QT_CONFIG(tooltip)
-        self.ctxsizeSpin.setSuffix("")
         self.label_15.setText(QCoreApplication.translate("Settings_Dialog", u"Temperature:", None))
 #if QT_CONFIG(tooltip)
         self.temperatureSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Degree of randomness or wildness - how much AI is allowed to sway from the most probable prediction", None))
@@ -688,60 +688,6 @@ class Ui_Settings_Dialog(object):
         self.seedSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Seed to use (-1 for random)", None))
 #endif // QT_CONFIG(tooltip)
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.sharedParamTab), QCoreApplication.translate("Settings_Dialog", u"Shared", None))
-        self.exllamaLoraCheck.setText(QCoreApplication.translate("Settings_Dialog", u"LoRA:", None))
-        self.label_19.setText(QCoreApplication.translate("Settings_Dialog", u"Min P:", None))
-#if QT_CONFIG(tooltip)
-        self.beamLengthSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam length value", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.beamLengthSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam length value", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.token_repetition_penalty_decaySpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.numbeamsSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Number of beams. Slower, more VRAm", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.minPSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Minimum P value", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.exllamaGpuSplitCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Split memory across multiple GPUs", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaGpuSplitCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Multi-GPU split:", None))
-        self.label25.setText(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain:", None))
-        self.label_22.setText(QCoreApplication.translate("Settings_Dialog", u"Num beams:", None))
-#if QT_CONFIG(tooltip)
-        self.exllamaLora.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Path to LoRA folder, containing 'adapter_config.json' and 'adapter_model.bin'", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaLora.setPlaceholderText("")
-#if QT_CONFIG(tooltip)
-        self.numbeamsSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Number of beams. Slower, more VRAM", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.compressPosEmbedSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"For longer context models. For 4k context set to 2, for 8k context set to 4, etc.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_26.setText(QCoreApplication.translate("Settings_Dialog", u"Beam length:", None))
-#if QT_CONFIG(tooltip)
-        self.token_repetition_penalty_decaySlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.compressPosEmbedCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"For longer context models. For 4k context set to 2, for 8k context set to 4, etc.", None))
-#endif // QT_CONFIG(tooltip)
-        self.compressPosEmbedCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Compress pos embeddings:", None))
-#if QT_CONFIG(tooltip)
-        self.minPSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.exllamaGpuSplitLine.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Comma-separated list of VRAM (in GB) to use per GPU device for model layers, e.g: - 8,6,4", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaGpuSplitLine.setText("")
-        self.exllamaGpuSplitLine.setPlaceholderText(QCoreApplication.translate("Settings_Dialog", u"8,6", None))
-#if QT_CONFIG(tooltip)
-        self.exllamaLoraSelect.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Select LoRA folder", None))
-#endif // QT_CONFIG(tooltip)
-        self.exllamaLoraSelect.setText(QCoreApplication.translate("Settings_Dialog", u"...", None))
-        self.parametersTab.setTabText(self.parametersTab.indexOf(self.exllamaParamTab), QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
         self.label_16.setText(QCoreApplication.translate("Settings_Dialog", u"Threads:", None))
 #if QT_CONFIG(tooltip)
         self.gpuAccelCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Offload model layers to GPU. llama.cpp must be compiled with GPU acceleration", None))
@@ -817,5 +763,59 @@ class Ui_Settings_Dialog(object):
         self.presencePenaltySlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Repeat alpha presence penalty (0.0 = disabled)", None))
 #endif // QT_CONFIG(tooltip)
         self.parametersTab.setTabText(self.parametersTab.indexOf(self.llamacppParamTab), QCoreApplication.translate("Settings_Dialog", u"llama.cpp", None))
+        self.exllamaLoraCheck.setText(QCoreApplication.translate("Settings_Dialog", u"LoRA:", None))
+        self.label_19.setText(QCoreApplication.translate("Settings_Dialog", u"Min P:", None))
+#if QT_CONFIG(tooltip)
+        self.beamLengthSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam length value", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.beamLengthSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Beam length value", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.token_repetition_penalty_decaySpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.numbeamsSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Number of beams. Slower, more VRAm", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.minPSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Minimum P value", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.exllamaGpuSplitCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Split memory across multiple GPUs", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaGpuSplitCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Multi-GPU split:", None))
+        self.label25.setText(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain:", None))
+        self.label_22.setText(QCoreApplication.translate("Settings_Dialog", u"Num beams:", None))
+#if QT_CONFIG(tooltip)
+        self.exllamaLora.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Path to LoRA folder, containing 'adapter_config.json' and 'adapter_model.bin'", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaLora.setPlaceholderText("")
+#if QT_CONFIG(tooltip)
+        self.numbeamsSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Number of beams. Slower, more VRAM", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.compressPosEmbedSpin.setToolTip(QCoreApplication.translate("Settings_Dialog", u"For longer context models. For 4k context set to 2, for 8k context set to 4, etc.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_26.setText(QCoreApplication.translate("Settings_Dialog", u"Beam length:", None))
+#if QT_CONFIG(tooltip)
+        self.token_repetition_penalty_decaySlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Token repetition penalty sustain", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.compressPosEmbedCheck.setToolTip(QCoreApplication.translate("Settings_Dialog", u"For longer context models. For 4k context set to 2, for 8k context set to 4, etc.", None))
+#endif // QT_CONFIG(tooltip)
+        self.compressPosEmbedCheck.setText(QCoreApplication.translate("Settings_Dialog", u"Compress pos embeddings:", None))
+#if QT_CONFIG(tooltip)
+        self.minPSlider.setToolTip(QCoreApplication.translate("Settings_Dialog", u"If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.exllamaGpuSplitLine.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Comma-separated list of VRAM (in GB) to use per GPU device for model layers, e.g: - 8,6,4", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaGpuSplitLine.setText("")
+        self.exllamaGpuSplitLine.setPlaceholderText(QCoreApplication.translate("Settings_Dialog", u"8,6", None))
+#if QT_CONFIG(tooltip)
+        self.exllamaLoraSelect.setToolTip(QCoreApplication.translate("Settings_Dialog", u"Select LoRA folder", None))
+#endif // QT_CONFIG(tooltip)
+        self.exllamaLoraSelect.setText(QCoreApplication.translate("Settings_Dialog", u"...", None))
+        self.parametersTab.setTabText(self.parametersTab.indexOf(self.exllamaParamTab), QCoreApplication.translate("Settings_Dialog", u"Exllama", None))
     # retranslateUi
 

@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QMainWindow, QMenu, QMenuBar, QPlainTextEdit,
     QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
     QSplitter, QStatusBar, QTabWidget, QTextEdit,
-    QToolBox, QToolButton, QWidget)
+    QToolBox, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -53,119 +53,142 @@ class Ui_MainWindow(object):
         self.splitter.setOrientation(Qt.Horizontal)
         self.frame_2 = QFrame(self.splitter)
         self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setMaximumSize(QSize(300, 16777215))
-        self.frame_2.setFrameShape(QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Raised)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
+        self.frame_2.setMaximumSize(QSize(340, 16777215))
         self.gridLayout_2 = QGridLayout(self.frame_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.mode_tab = QToolBox(self.frame_2)
-        self.mode_tab.setObjectName(u"mode_tab")
-        self.mode_tab.setAutoFillBackground(False)
-        self.instructTab = QWidget()
-        self.instructTab.setObjectName(u"instructTab")
-        self.instructTab.setGeometry(QRect(0, 0, 278, 728))
-        self.gridLayout_9 = QGridLayout(self.instructTab)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.label = QLabel(self.instructTab)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_9.addWidget(self.label, 0, 0, 1, 2)
-
-        self.label_3 = QLabel(self.instructTab)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_9.addWidget(self.label_3, 2, 0, 1, 2)
-
-        self.customResponsePrefixCheck = QCheckBox(self.instructTab)
-        self.customResponsePrefixCheck.setObjectName(u"customResponsePrefixCheck")
-
-        self.gridLayout_9.addWidget(self.customResponsePrefixCheck, 4, 0, 1, 2)
-
-        self.customResponsePrefix = QLineEdit(self.instructTab)
-        self.customResponsePrefix.setObjectName(u"customResponsePrefix")
-
-        self.gridLayout_9.addWidget(self.customResponsePrefix, 5, 0, 1, 2)
-
-        self.label_41 = QLabel(self.instructTab)
-        self.label_41.setObjectName(u"label_41")
-
-        self.gridLayout_9.addWidget(self.label_41, 6, 0, 1, 2)
-
-        self.yourNameLine = QLineEdit(self.instructTab)
-        self.yourNameLine.setObjectName(u"yourNameLine")
-
-        self.gridLayout_9.addWidget(self.yourNameLine, 7, 0, 1, 2)
-
-        self.label_42 = QLabel(self.instructTab)
-        self.label_42.setObjectName(u"label_42")
-
-        self.gridLayout_9.addWidget(self.label_42, 8, 0, 1, 2)
-
-        self.botNameLine = QLineEdit(self.instructTab)
-        self.botNameLine.setObjectName(u"botNameLine")
-
-        self.gridLayout_9.addWidget(self.botNameLine, 9, 0, 1, 2)
-
-        self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_9.addItem(self.verticalSpacer_11, 10, 1, 1, 1)
-
-        self.instructPresetComboBox = QComboBox(self.instructTab)
-        self.instructPresetComboBox.setObjectName(u"instructPresetComboBox")
-
-        self.gridLayout_9.addWidget(self.instructPresetComboBox, 1, 0, 1, 2)
-
-        self.awesomePresetComboBox = QComboBox(self.instructTab)
-        self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
-
-        self.gridLayout_9.addWidget(self.awesomePresetComboBox, 3, 0, 1, 2)
-
-        self.mode_tab.addItem(self.instructTab, u"Instruct")
-        self.characterTab = QWidget()
-        self.characterTab.setObjectName(u"characterTab")
-        self.characterTab.setGeometry(QRect(0, 0, 278, 728))
-        self.gridLayout_8 = QGridLayout(self.characterTab)
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.label_2 = QLabel(self.characterTab)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_8.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.label_43 = QLabel(self.characterTab)
-        self.label_43.setObjectName(u"label_43")
-
-        self.gridLayout_8.addWidget(self.label_43, 2, 0, 1, 2)
-
-        self.yourNameLineChar = QLineEdit(self.characterTab)
-        self.yourNameLineChar.setObjectName(u"yourNameLineChar")
-
-        self.gridLayout_8.addWidget(self.yourNameLineChar, 3, 0, 1, 2)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_8.addItem(self.verticalSpacer, 4, 1, 1, 1)
-
-        self.characterPresetComboBox = QComboBox(self.characterTab)
-        self.characterPresetComboBox.setObjectName(u"characterPresetComboBox")
-
-        self.gridLayout_8.addWidget(self.characterPresetComboBox, 1, 0, 1, 2)
-
-        self.mode_tab.addItem(self.characterTab, u"Character")
-        self.standardTab = QWidget()
-        self.standardTab.setObjectName(u"standardTab")
-        self.standardTab.setGeometry(QRect(0, 0, 278, 728))
-        self.mode_tab.addItem(self.standardTab, u"Standard")
-        self.notebookTab = QWidget()
-        self.notebookTab.setObjectName(u"notebookTab")
-        self.notebookTab.setGeometry(QRect(0, 0, 278, 728))
-        self.mode_tab.addItem(self.notebookTab, u"Notebook")
-
-        self.gridLayout_2.addWidget(self.mode_tab, 0, 0, 1, 1)
-
         self.settingsPathSaveButton = QPushButton(self.frame_2)
         self.settingsPathSaveButton.setObjectName(u"settingsPathSaveButton")
 
         self.gridLayout_2.addWidget(self.settingsPathSaveButton, 1, 0, 1, 1)
+
+        self.mode_tab = QToolBox(self.frame_2)
+        self.mode_tab.setObjectName(u"mode_tab")
+        self.instructTab = QWidget()
+        self.instructTab.setObjectName(u"instructTab")
+        self.instructTab.setGeometry(QRect(0, 0, 322, 730))
+        self.verticalLayout_2 = QVBoxLayout(self.instructTab)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.label = QLabel(self.instructTab)
+        self.label.setObjectName(u"label")
+
+        self.verticalLayout_2.addWidget(self.label)
+
+        self.instructPresetComboBox = QComboBox(self.instructTab)
+        self.instructPresetComboBox.setObjectName(u"instructPresetComboBox")
+
+        self.verticalLayout_2.addWidget(self.instructPresetComboBox)
+
+        self.line = QFrame(self.instructTab)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_2.addWidget(self.line)
+
+        self.label_41 = QLabel(self.instructTab)
+        self.label_41.setObjectName(u"label_41")
+
+        self.verticalLayout_2.addWidget(self.label_41)
+
+        self.yourNameLine = QLineEdit(self.instructTab)
+        self.yourNameLine.setObjectName(u"yourNameLine")
+
+        self.verticalLayout_2.addWidget(self.yourNameLine)
+
+        self.label_42 = QLabel(self.instructTab)
+        self.label_42.setObjectName(u"label_42")
+
+        self.verticalLayout_2.addWidget(self.label_42)
+
+        self.botNameLine = QLineEdit(self.instructTab)
+        self.botNameLine.setObjectName(u"botNameLine")
+
+        self.verticalLayout_2.addWidget(self.botNameLine)
+
+        self.line_2 = QFrame(self.instructTab)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.HLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_2.addWidget(self.line_2)
+
+        self.customResponsePrefixCheck = QCheckBox(self.instructTab)
+        self.customResponsePrefixCheck.setObjectName(u"customResponsePrefixCheck")
+
+        self.verticalLayout_2.addWidget(self.customResponsePrefixCheck)
+
+        self.customResponsePrefix = QLineEdit(self.instructTab)
+        self.customResponsePrefix.setObjectName(u"customResponsePrefix")
+
+        self.verticalLayout_2.addWidget(self.customResponsePrefix)
+
+        self.line_3 = QFrame(self.instructTab)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.HLine)
+        self.line_3.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_2.addWidget(self.line_3)
+
+        self.label_3 = QLabel(self.instructTab)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout_2.addWidget(self.label_3)
+
+        self.awesomePresetComboBox = QComboBox(self.instructTab)
+        self.awesomePresetComboBox.setObjectName(u"awesomePresetComboBox")
+
+        self.verticalLayout_2.addWidget(self.awesomePresetComboBox)
+
+        self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_11)
+
+        self.mode_tab.addItem(self.instructTab, u"Instruct")
+        self.characterTab = QWidget()
+        self.characterTab.setObjectName(u"characterTab")
+        self.characterTab.setGeometry(QRect(0, 0, 322, 730))
+        self.verticalLayout = QVBoxLayout(self.characterTab)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label_2 = QLabel(self.characterTab)
+        self.label_2.setObjectName(u"label_2")
+
+        self.verticalLayout.addWidget(self.label_2)
+
+        self.characterPresetComboBox = QComboBox(self.characterTab)
+        self.characterPresetComboBox.setObjectName(u"characterPresetComboBox")
+
+        self.verticalLayout.addWidget(self.characterPresetComboBox)
+
+        self.label_43 = QLabel(self.characterTab)
+        self.label_43.setObjectName(u"label_43")
+
+        self.verticalLayout.addWidget(self.label_43)
+
+        self.yourNameLineChar = QLineEdit(self.characterTab)
+        self.yourNameLineChar.setObjectName(u"yourNameLineChar")
+
+        self.verticalLayout.addWidget(self.yourNameLineChar)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+        self.mode_tab.addItem(self.characterTab, u"Character")
+        self.standardTab = QWidget()
+        self.standardTab.setObjectName(u"standardTab")
+        self.standardTab.setGeometry(QRect(0, 0, 322, 730))
+        self.mode_tab.addItem(self.standardTab, u"Standard")
+        self.notebookTab = QWidget()
+        self.notebookTab.setObjectName(u"notebookTab")
+        self.notebookTab.setGeometry(QRect(0, 0, 322, 730))
+        self.mode_tab.addItem(self.notebookTab, u"Notebook")
+
+        self.gridLayout_2.addWidget(self.mode_tab, 0, 0, 1, 1)
 
         self.splitter.addWidget(self.frame_2)
         self.tabWidget = QTabWidget(self.splitter)
@@ -219,7 +242,7 @@ class Ui_MainWindow(object):
 
         self.inputText = QPlainTextEdit(self.tabWidgetPage1)
         self.inputText.setObjectName(u"inputText")
-        self.inputText.setMaximumSize(QSize(16777215, 90))
+        self.inputText.setMaximumSize(QSize(16777215, 100))
 
         self.gridLayout.addWidget(self.inputText, 2, 0, 1, 1)
 
@@ -401,7 +424,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.mode_tab.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
 
 
@@ -416,18 +438,18 @@ class Ui_MainWindow(object):
         self.actionNotebook.setText(QCoreApplication.translate("MainWindow", u"Notebook", None))
         self.actionParameters.setText(QCoreApplication.translate("MainWindow", u"Parameters", None))
         self.actionPreferences.setText(QCoreApplication.translate("MainWindow", u"Parameters", None))
+        self.settingsPathSaveButton.setText(QCoreApplication.translate("MainWindow", u"Save settings", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Instruct preset:", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Awesome prompts:", None))
-        self.customResponsePrefixCheck.setText(QCoreApplication.translate("MainWindow", u"Response prefix:", None))
         self.label_41.setText(QCoreApplication.translate("MainWindow", u"User name:", None))
         self.label_42.setText(QCoreApplication.translate("MainWindow", u"Bot name:", None))
+        self.customResponsePrefixCheck.setText(QCoreApplication.translate("MainWindow", u"Response prefix:", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Awesome prompts:", None))
         self.mode_tab.setItemText(self.mode_tab.indexOf(self.instructTab), QCoreApplication.translate("MainWindow", u"Instruct", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Character:", None))
         self.label_43.setText(QCoreApplication.translate("MainWindow", u"Your name:", None))
         self.mode_tab.setItemText(self.mode_tab.indexOf(self.characterTab), QCoreApplication.translate("MainWindow", u"Character", None))
         self.mode_tab.setItemText(self.mode_tab.indexOf(self.standardTab), QCoreApplication.translate("MainWindow", u"Standard", None))
         self.mode_tab.setItemText(self.mode_tab.indexOf(self.notebookTab), QCoreApplication.translate("MainWindow", u"Notebook", None))
-        self.settingsPathSaveButton.setText(QCoreApplication.translate("MainWindow", u"Save settings", None))
 #if QT_CONFIG(tooltip)
         self.stopButton.setToolTip(QCoreApplication.translate("MainWindow", u"Stop generation", None))
 #endif // QT_CONFIG(tooltip)

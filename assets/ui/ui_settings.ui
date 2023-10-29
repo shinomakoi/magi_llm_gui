@@ -75,7 +75,7 @@
           <string>Maximum length of the prompt and output combined (in tokens)</string>
          </property>
          <property name="minimum">
-          <number>512</number>
+          <number>2048</number>
          </property>
          <property name="maximum">
           <number>32768</number>
@@ -87,7 +87,7 @@
           <number>2048</number>
          </property>
          <property name="value">
-          <number>2048</number>
+          <number>4096</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -99,17 +99,17 @@
          <property name="toolTip">
           <string>Maximum length of the prompt and output combined (in tokens)</string>
          </property>
-         <property name="suffix">
-          <string/>
-         </property>
          <property name="minimum">
-          <number>512</number>
+          <number>2048</number>
          </property>
          <property name="maximum">
           <number>32768</number>
          </property>
          <property name="singleStep">
-          <number>64</number>
+          <number>2048</number>
+         </property>
+         <property name="stepType">
+          <enum>QAbstractSpinBox::DefaultStepType</enum>
          </property>
          <property name="value">
           <number>4096</number>
@@ -376,273 +376,6 @@
          </property>
          <property name="value">
           <number>-1</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="exllamaParamTab">
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <attribute name="title">
-       <string>Exllama</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="6" column="0">
-        <widget class="QCheckBox" name="exllamaLoraCheck">
-         <property name="text">
-          <string>LoRA:</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>Min P:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QSlider" name="beamLengthSlider">
-         <property name="toolTip">
-          <string>Beam length value</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>10</number>
-         </property>
-         <property name="pageStep">
-          <number>1</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QSpinBox" name="beamLengthSpin">
-         <property name="toolTip">
-          <string>Beam length value</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>10</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QSpinBox" name="token_repetition_penalty_decaySpin">
-         <property name="toolTip">
-          <string>Token repetition penalty sustain</string>
-         </property>
-         <property name="maximum">
-          <number>512</number>
-         </property>
-         <property name="singleStep">
-          <number>16</number>
-         </property>
-         <property name="value">
-          <number>256</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QSpinBox" name="numbeamsSpin">
-         <property name="toolTip">
-          <string>Number of beams. Slower, more VRAm</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>10</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QSpinBox" name="minPSpin">
-         <property name="toolTip">
-          <string>Minimum P value</string>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QCheckBox" name="exllamaGpuSplitCheck">
-         <property name="toolTip">
-          <string>Split memory across multiple GPUs</string>
-         </property>
-         <property name="text">
-          <string>Multi-GPU split:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label25">
-         <property name="text">
-          <string>Token repetition penalty sustain:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_22">
-         <property name="text">
-          <string>Num beams:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="exllamaLora">
-         <property name="toolTip">
-          <string>Path to LoRA folder, containing 'adapter_config.json' and 'adapter_model.bin'</string>
-         </property>
-         <property name="placeholderText">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QSlider" name="numbeamsSlider">
-         <property name="toolTip">
-          <string>Number of beams. Slower, more VRAM</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>10</number>
-         </property>
-         <property name="pageStep">
-          <number>1</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QSpinBox" name="compressPosEmbedSpin">
-         <property name="toolTip">
-          <string>For longer context models. For 4k context set to 2, for 8k context set to 4, etc.</string>
-         </property>
-         <property name="minimum">
-          <number>2</number>
-         </property>
-         <property name="maximum">
-          <number>8</number>
-         </property>
-         <property name="singleStep">
-          <number>2</number>
-         </property>
-         <property name="value">
-          <number>4</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_26">
-         <property name="text">
-          <string>Beam length:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QSlider" name="token_repetition_penalty_decaySlider">
-         <property name="toolTip">
-          <string>Token repetition penalty sustain</string>
-         </property>
-         <property name="maximum">
-          <number>512</number>
-         </property>
-         <property name="singleStep">
-          <number>16</number>
-         </property>
-         <property name="pageStep">
-          <number>16</number>
-         </property>
-         <property name="value">
-          <number>256</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QCheckBox" name="compressPosEmbedCheck">
-         <property name="toolTip">
-          <string>For longer context models. For 4k context set to 2, for 8k context set to 4, etc.</string>
-         </property>
-         <property name="text">
-          <string>Compress pos embeddings:</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSlider" name="minPSlider">
-         <property name="toolTip">
-          <string>If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.</string>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="value">
-          <number>0</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="exllamaGpuSplitLine">
-         <property name="toolTip">
-          <string>Comma-separated list of VRAM (in GB) to use per GPU device for model layers, e.g: - 8,6,4</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="placeholderText">
-          <string>8,6</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QToolButton" name="exllamaLoraSelect">
-         <property name="toolTip">
-          <string>Select LoRA folder</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="Line" name="line_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -1051,6 +784,273 @@
        </item>
        <item row="17" column="2">
         <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="exllamaParamTab">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <attribute name="title">
+       <string>Exllama</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="exllamaLoraCheck">
+         <property name="text">
+          <string>LoRA:</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Min P:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSlider" name="beamLengthSlider">
+         <property name="toolTip">
+          <string>Beam length value</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="pageStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QSpinBox" name="beamLengthSpin">
+         <property name="toolTip">
+          <string>Beam length value</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QSpinBox" name="token_repetition_penalty_decaySpin">
+         <property name="toolTip">
+          <string>Token repetition penalty sustain</string>
+         </property>
+         <property name="maximum">
+          <number>512</number>
+         </property>
+         <property name="singleStep">
+          <number>16</number>
+         </property>
+         <property name="value">
+          <number>256</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QSpinBox" name="numbeamsSpin">
+         <property name="toolTip">
+          <string>Number of beams. Slower, more VRAm</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QSpinBox" name="minPSpin">
+         <property name="toolTip">
+          <string>Minimum P value</string>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QCheckBox" name="exllamaGpuSplitCheck">
+         <property name="toolTip">
+          <string>Split memory across multiple GPUs</string>
+         </property>
+         <property name="text">
+          <string>Multi-GPU split:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label25">
+         <property name="text">
+          <string>Token repetition penalty sustain:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>Num beams:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="exllamaLora">
+         <property name="toolTip">
+          <string>Path to LoRA folder, containing 'adapter_config.json' and 'adapter_model.bin'</string>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSlider" name="numbeamsSlider">
+         <property name="toolTip">
+          <string>Number of beams. Slower, more VRAM</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="pageStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="compressPosEmbedSpin">
+         <property name="toolTip">
+          <string>For longer context models. For 4k context set to 2, for 8k context set to 4, etc.</string>
+         </property>
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>8</number>
+         </property>
+         <property name="singleStep">
+          <number>2</number>
+         </property>
+         <property name="value">
+          <number>4</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>Beam length:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSlider" name="token_repetition_penalty_decaySlider">
+         <property name="toolTip">
+          <string>Token repetition penalty sustain</string>
+         </property>
+         <property name="maximum">
+          <number>512</number>
+         </property>
+         <property name="singleStep">
+          <number>16</number>
+         </property>
+         <property name="pageStep">
+          <number>16</number>
+         </property>
+         <property name="value">
+          <number>256</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="compressPosEmbedCheck">
+         <property name="toolTip">
+          <string>For longer context models. For 4k context set to 2, for 8k context set to 4, etc.</string>
+         </property>
+         <property name="text">
+          <string>Compress pos embeddings:</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSlider" name="minPSlider">
+         <property name="toolTip">
+          <string>If not set to 1, select only tokens that are at least this much more likely to appear than random tokens, given the prior text.</string>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="exllamaGpuSplitLine">
+         <property name="toolTip">
+          <string>Comma-separated list of VRAM (in GB) to use per GPU device for model layers, e.g: - 8,6,4</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>8,6</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QToolButton" name="exllamaLoraSelect">
+         <property name="toolTip">
+          <string>Select LoRA folder</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="Line" name="line_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
