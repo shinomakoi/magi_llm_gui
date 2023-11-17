@@ -3,6 +3,9 @@ A Qt GUI for large language models for Windows, Linux (and Mac?)
 
 Uses Exllama and llama.cpp as backends.
 
+**NOTICE**
+
+This has been replaced by https://github.com/shinomakoi/AI-Messenger
 
 **Installation:**
 
